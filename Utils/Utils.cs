@@ -89,28 +89,5 @@ namespace Utils
             TextInfo ti = new CultureInfo(lang_name, false).TextInfo;
             return ti.ToTitleCase(text.ToLower());
         }
-      
-        /// <summary>
-        /// For an IEnumerable of string arrays, which string array
-        /// has the greatest total length (sum of lengths of all items
-        /// in the array)?
-        /// </summary>
-        /// <param name="coll"></param>
-        /// <returns></returns>
-        public static int LongestStringArrayInList(IEnumerable<string[]> coll)
-        {
-            return coll.Max(i => (i.Sum(s => s.Length)));
-        }
-
-        /// <summary>
-        /// Returns the item count of the string array with the most
-        /// items.
-        /// </summary>
-        /// <param name="coll"></param>
-        /// <returns></returns>
-        public static int MaxArrayLength(IEnumerable<string[]> coll)
-        {
-            return coll.Max(s => s.Length);
-        }
     }
 }
