@@ -1,0 +1,4 @@
+/* To use, in REPL call #load "load_dao_config.repl" */
+#r "System.Configuration"
+var AppConfig = System.Configuration.ConfigurationManager.OpenExeConfiguration(@"E:\devel\WinForms\ValleyLabelsAndLists\UI\bin\Debug\UI.exe");
+Console.WriteLine($"Loaded {AppConfig.AppSettings.Settings.Count} settings and {AppConfig.ConnectionStrings.ConnectionStrings.Count} connection strings");

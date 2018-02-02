@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="863162e40afb44bfb2d59fd6013b6b2c" Name="Diagram1">
+        <EntityTypeShape EntityType="ValleyLabelsAndListsModel.bag_label_info" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="ValleyLabelsAndListsModel.donor" Width="1.5" PointX="0.75" PointY="3.375" />
+        <EntityTypeShape EntityType="ValleyLabelsAndListsModel.gift_label_info" Width="1.5" PointX="3" PointY="4.5" />
+        <AssociationConnector Association="ValleyLabelsAndListsModel.FK_bag_label_info_0_0" />
+        <AssociationConnector Association="ValleyLabelsAndListsModel.FK_gift_label_info_0_0" />
+        <EntityTypeShape EntityType="ValleyLabelsAndListsModel.services_household_enrollment" Width="1.5" PointX="5.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
