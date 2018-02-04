@@ -10,7 +10,7 @@ The process of generating the label and list documents (referred to hereafter as
 
 HLL is a Winforms app, written in C-Sharp on Visual Studio Community 2017 edition. I’m running it with .NET Framework 4.6.1, but other versions should work as well. The steps required to build it are:
 
-1.  1.  Clone the repository to some convenient folder: git <https://github.com/tonyrein/HolidayLabelsAndLists_Public.git>
+    1.  Clone the repository to some convenient folder: git <https://github.com/tonyrein/HolidayLabelsAndLists_Public.git>
     2.  Open HolidayLabelsAndLists.sln in Visual Studio. Examine the solution and project properties and change any paths to match the system you’re installing it on. You’ll probably need to change:
 
         1.  OutputFolder in DAO → Properties → Settings
