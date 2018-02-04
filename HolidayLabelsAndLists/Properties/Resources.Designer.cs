@@ -72,7 +72,7 @@ namespace HolidayLabelsAndLists.Properties {
         ///
         ///&lt;p&gt;The Holiday Labels and Lists program (&amp;quot;HLL&amp;quot;)&amp;nbsp;is meant to be used in connection with Valley&amp;#39;s holiday programs. It streamlines the process of creating bag and gift labels, master and donor lists, participant lists, and postcard labels from VESTA reports.&lt;/p&gt;
         ///
-        ///&lt;p&gt;The focus of HLL&amp;#39 [rest of string was truncated]&quot;;.
+        ///&lt;p&gt;The focus of HLL&amp;#39;s display  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Doc_HTML {
             get {
