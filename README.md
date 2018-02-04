@@ -10,19 +10,18 @@ The process of generating the label and list documents (referred to hereafter as
 
 HLL is a Winforms app, written in C-Sharp on Visual Studio Community 2017 edition. I’m running it with .NET Framework 4.6.1, but other versions should work as well. The steps required to build it are:
 
-    1.  Clone the repository to some convenient folder: git <https://github.com/tonyrein/HolidayLabelsAndLists_Public.git>
-    2.  Open HolidayLabelsAndLists.sln in Visual Studio. Examine the solution and project properties and change any paths to match the system you’re installing it on. You’ll probably need to change:
+1.  Clone the repository to some convenient folder: git <https://github.com/tonyrein/HolidayLabelsAndLists_Public.git>
+2.  Open HolidayLabelsAndLists.sln in Visual Studio. Examine the solution and project properties and change any paths to match the system you’re installing it on. You’ll probably need to change:
 
-        1.  OutputFolder in DAO → Properties → Settings
-        2.  InitialVestaFolder in HolidayLabelsAndListsHelper → Properties → Settings
+    1.  OutputFolder in DAO → Properties → Settings
+    2.  InitialVestaFolder in HolidayLabelsAndListsHelper → Properties → Settings
 
-    3.  Edit the documentation text (stored as a resource in HolidayLabelsAndLists) to match your environment.
-    4.  Make sure the following NuGet packages are installed (even though VisualStudio tells you they’re already installed, you may have to re-install them):
+3.  Edit the documentation text (stored as a resource in HolidayLabelsAndLists) to match your environment.
+4.  Make sure the following NuGet packages are installed (even though VisualStudio tells you they’re already installed, you may have to re-install them):
 
-        1.  DocX, by Cathal Coffey (<https://github.com/xceedsoftware/docx>). Used to write MS Word output documents.
-        2.  EPPlus, by Jan Kallman (<https://github.com/JanKallman/EPPlus>). Used to write MS Excel output documents.
-        3.  NPOI, by Tony Qu (<https://github.com/tonyqus/npoi>). Used to read the VESTA source reports.
-        4.  SharpZipLib ([http://www.icsharpcode.net](http://www.icsharpcode.net/)). Used by NPOI.
+    1.  DocX, by Cathal Coffey (<https://github.com/xceedsoftware/docx>). Used to write MS Word output documents.
+    2.  EPPlus, by Jan Kallman (<https://github.com/JanKallman/EPPlus>). Used to write MS Excel output documents.
+    3.  NPOI, by Tony Qu (<https://github.com/tonyqus/npoi>). Used to read the VESTA source reports.
+    4.  SharpZipLib ([http://www.icsharpcode.net](http://www.icsharpcode.net/)). Used by NPOI.
 
-    5.  Build the solution (Ctrl-Shift-B). The output will be in &lt;solution folder&gt;\\HolidayLabelsAndLists\\bin\\Release. Double-click on the EXE file to run the program.
-
+5.  Build the solution (Ctrl-Shift-B). The output will be in &lt;solution folder&gt;\\HolidayLabelsAndLists\\bin\\Release. Double-click on the EXE file to run the program.
