@@ -189,10 +189,6 @@ namespace DAO
             {
                 bk = WorkbookFactory.Create(stream);
             }
-            //if (bk == null)
-            //{
-            //    throw new System.Exception("Book is null");
-            //}
             this.LoadSheets(bk);
         }
 
