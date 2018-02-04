@@ -451,25 +451,6 @@ namespace HolidayLabelsAndListsHelper
             return retList.Distinct().OrderBy(d => d.name).ToList();
         }
 
-        //public List<Donor> ActiveDonorsForYear0(string year)
-        //{
-        //    List<Donor> retList = new List<Donor>();
-        //    var q = this.AllHllFiles.Where(h => (h.IsValidHLL) && (h.Year == year));
-        //    var q2 = q.Select(h => h.DonorCode).Distinct();
-        //    foreach(string c in q2.ToList())
-        //    {
-        //        Donor d = context.DonorForDonorCode(c);
-        //        if (d == null) // Uh-oh! This is a new donor.
-        //        {
-        //            // add it to datastore as well as to our return list
-        //            d = new Donor(c, c);
-        //            context.DonorList.Add(d);
-        //        }
-        //        retList.Add(d);
-        //    }
-        //    return retList.OrderBy(d => d.name).ToList();
-        //}
-
         /// <summary>
         /// Return array of distinct values
         /// of Year value in our list of files.
@@ -616,11 +597,6 @@ namespace HolidayLabelsAndListsHelper
 
             }
         }
-
-        //public Dictionary<string, string> FilteredList()
-        //{
-        //    return this.FilteredFiles;
-        //}
 
         public string FullPathForFile(string fn)
         {
