@@ -149,27 +149,27 @@
 
 &lt;h2&gt;How to Use&lt;/h2&gt;
 
-&lt;p&gt;Before using HLL, log in to VESTA and download one or more reports. Make sure to save them as Excel files, and remember where you save them. Then, start HLL, click &amp;quot;Process&amp;nbsp;VESTA Reports.&amp;quot; A standard Windows file selection dialog will open, allowing you to go to the folder containing your VESTA reports and select those reports (either one at a time or multiple files at once).. HLL will then read the repors and use the information in them to create the appropriate label and list files.&lt;/p&gt;
+&lt;p&gt;Before using HLL, log in to VESTA and download one or more reports. Make sure to save them as Excel files, and remember where you save them. Then, start HLL, click &amp;quot;Process&amp;nbsp;VESTA Reports.&amp;quot; A standard Windows file selection dialog will open, allowing you to go to the folder containing your VESTA reports and select those reports (either one at a time or multiple files at once). HLL will then read the reports and use the information in them to create the appropriate label and list files.&lt;/p&gt;
 
 &lt;p&gt;Once the VESTA reports have been processed, the files generated files&amp;nbsp;will show up in HLL under&amp;nbsp;&amp;quot;Available Label&amp;nbsp;and List Files.&amp;quot; Double-click on a file and&amp;nbsp;it will open up in Excel or Word as appropriate, for viewing or printing.&lt;/p&gt;
 
-&lt;p&gt;When you process&amp;nbsp;VESTA reports, if the name of an output label or list file matches a file that already exists, the older file will be renamed. For example, if &amp;quot;Bag_Labels_2016_Clothing_Aht.docx&amp;quot; is already there, the original will be renamed &amp;quot;Bag_Labels_2016_Clothing_Aht.bak0001.docx,&amp;quot; &amp;quot;Bag_Labels_2016_Clothing_Aht.bak0002.docx,&amp;quot; and so on. It&amp;#39;s possible that quite a few backup files could be generated after some time -- if so desired, the backup files can be deleted.&lt;/p&gt;
+&lt;p&gt;When you process&amp;nbsp;VESTA reports, if the name of an output label or list file matches a file that already exists, the older file will be renamed. For example, if &amp;quot;Bag_Labels_2016_Clothing_XYZ.docx&amp;quot; is already there, the original will be renamed &amp;quot;Bag_Labels_2016_Clothing_XYZ.bak0001.docx,&amp;quot; &amp;quot;Bag_Labels_2016_Clothing_XYZ.bak0002.docx,&amp;quot; and so on. It&amp;#39;s possible that quite a few backup files could be generated after some time -- if so desired, the backup files can be deleted.&lt;/p&gt;
 
 &lt;h2&gt;Where Are My Files?&lt;/h2&gt;
 
-&lt;p&gt;HLL puts the files it generates into subfolders under the &amp;quot;CHRISTMAS AND HOLIDAY PROGRAMS&amp;quot; folder on the Valley public drive. Files are sorted by year and by type. For example, for program year 2017, the files will be located as follows:&lt;/p&gt;
+&lt;p&gt;HLL puts the files it generates into subfolders under the ##TOPLEVEL_OUTPUT FOLDER##. Files are sorted by year and by type. For example, for program year 2017, the files will be located as follows:&lt;/p&gt;
 
 &lt;ul&gt;
-	&lt;li&gt;Bag and Gift Labels:&amp;nbsp;CHRISTMAS AND HOLIDAY PROGRAMS\2017\Christmas&lt;/li&gt;
-	&lt;li&gt;Donor and Master Lists:&amp;nbsp;&amp;nbsp;CHRISTMAS AND HOLIDAY PROGRAMS\2017\Christmas&lt;/li&gt;
+	&lt;li&gt;Bag and Gift Labels:&amp;nbssp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
+	&lt;li&gt;Donor and Master Lists:&amp;nbsp;&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
 	&lt;li&gt;Participant Lists and Postcard Labels:
 	&lt;ul&gt;
-		&lt;li&gt;Adopt a Family:&amp;nbsp;&amp;nbsp;CHRISTMAS AND HOLIDAY PROGRAMS\2017\Christmas&lt;/li&gt;
-		&lt;li&gt;Holiday Food Basket:&amp;nbsp;&amp;nbsp;CHRISTMAS AND HOLIDAY PROGRAMS\2017\Christmas&lt;/li&gt;
-		&lt;li&gt;Thanksgiving Basket:&amp;nbsp;&amp;nbsp;CHRISTMAS AND HOLIDAY PROGRAMS\2017\Thanksgiving&lt;/li&gt;
+		&lt;li&gt;Adopt a Family:&amp;nbsp;&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
+		&lt;li&gt;Holiday Food Basket:&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
+		&lt;li&gt;Thanksgiving Basket:&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Thanksgiving&lt;/li&gt;
 	&lt;/ul&gt;
 	&lt;/li&gt;
-	&lt;li&gt;Anything else (eg Fans/Heaters):&amp;nbsp;&amp;nbsp;CHRISTMAS AND HOLIDAY PROGRAMS\2017\Other&lt;/li&gt;
+	&lt;li&gt;Anything else (eg Fans/Heaters):&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Other&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Backup files will be placed in the same folders as the files they&amp;#39;re backing up.&lt;/p&gt;
@@ -197,7 +197,7 @@
 
 &lt;h3&gt;I have a suggestion for how to improve HLL, or I have another question or problem not address in this document.&lt;/h3&gt;
 
-&lt;p&gt;The author of HLL is Tony Rein, a Valley volunteer. He may be around the building (usually on Mondays). If not, you can email him at &lt;a href="mailto:valley.labels@gmail.com"&gt;valley.labels@gmail.com&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The administrator of ##PROGEAM_NAME## is ##ADMIN_NAME##. You can email him at &lt;a href="mailto:##ADMIN_EMAIL##&lt;/a&gt;&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</value>
   </data>
