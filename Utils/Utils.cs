@@ -41,7 +41,8 @@ namespace Utils
         private static Regex rna = new Regex(non_alphanum);
         private static string multiple_spaces = @"[\s]+";
         private static Regex rms = new Regex(multiple_spaces);
-
+        private static string us_zip_start = @"^[0-9]{5}.*"; // string starting with 5 digits
+        private static Regex rzip = new Regex(us_zip_start);
         /// <summary>
         /// 
         /// Transform strings into format suitable for file names
@@ -88,6 +89,35 @@ namespace Utils
         {
             TextInfo ti = new CultureInfo(lang_name, false).TextInfo;
             return ti.ToTitleCase(text.ToLower());
+        }
+
+        /// <summary>
+        /// Given a postal code, reformat it as follows:
+        /// 1. Strip leading and trailing whitespace
+        /// 2. If it starts with five consecutive digits, assume it's a US
+        ///     ZIP code. In this case, return the first five digits.
+        ///     (IE, ignore any ZIP+4 trailing stuff.)
+        /// 3. If it doesn't start with five consecutive digits,
+        ///     assume it's not a US ZIP code and return it
+        ///     unchanged.
+        /// </summary>
+        /// <param name="orig_code"></param>
+        /// <returns></returns>
+        public static string CanonizePostalCode(string orig_code)
+        {
+            if (string.IsNullOrEmpty(orig_code))
+            {
+                return "";
+            }
+            else
+            {
+                orig_code = orig_code.Trim();
+                if (rzip.IsMatch(orig_code))
+                {
+                    orig_code = orig_code.Substring(0, 5);
+                }
+                return orig_code;
+            }
         }
     }
 }
