@@ -262,11 +262,7 @@ namespace DAO
         /// 1. If the name in the record read by the importer exists in the
         /// array below, the corresponding code is used. Otherwise:
         /// 
-        /// 2. If the record read by the importer also has a donor code,
-        /// that code is used.
-        /// 
-        /// 3. As a last resort, a code is generated from the name.
-        /// 
+        /// 2. A code is generated from the name using DAO.Donor.MakeDonorCode()
         /// </summary>
         private static string[][] initial_donors = new string[][]
         {

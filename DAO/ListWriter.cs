@@ -733,7 +733,8 @@ namespace DAO
                 {
                     retList.Add(
                                     new string[] { e.head_of_household, e.phone, e.address,
-                                        e.city, e.state_or_province, e.postal_code }
+                                        e.city, e.state_or_province,
+                                        Utils.TextUtils.CanonizePostalCode(e.postal_code) }
                                 );
                 }
             return retList;
