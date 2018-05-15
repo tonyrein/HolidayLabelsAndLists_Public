@@ -27,8 +27,8 @@ namespace HolidayLabelsAndListsHelper
         /// "Toys," "Other") contained in the data read in from the VESTA
         /// reports.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context" (DBWrapper)></param>
+        /// <returns>array of gift label info and bag label info objects</returns>
         public static string[] RequestTypesInDb(DBWrapper context)
         {
             return (from g in context.GliList select g.request_type).Concat
@@ -39,8 +39,8 @@ namespace HolidayLabelsAndListsHelper
         /// Get list of the service enrollment types contained in the data
         /// read in from the VESTA reports.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context" (DBWrapper)></param>
+        /// <returns>array of string</returns>
         public static string[] ServiceTypesInDb(DBWrapper context)
         {
             return (from s in context.HoEnrList
@@ -55,8 +55,8 @@ namespace HolidayLabelsAndListsHelper
         /// so that the most recent year will be at the top of the
         /// year drop-down in the main window.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context" (DBWrapper)></param>
+        /// <returns>array of int</returns>
         public static int[] YearsInDb(DBWrapper context)
         {
             int[] intArray = (from g in context.GliList
@@ -75,7 +75,7 @@ namespace HolidayLabelsAndListsHelper
         /// Ask OS to open the given file with the
         /// default program.
         /// </summary>
-        /// <param name="filespec"></param>
+        /// <param name="filespec" (string)></param>
         public static void OpenFile(string filespec)
         {
             var process = new System.Diagnostics.Process();
@@ -95,7 +95,9 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Return count of files generated
         /// </summary>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="context" (DBWrapper)></param>
+        /// <returns>int</returns>
         public static int MakeOutputFiles(BackgroundWorker wk, DBWrapper context)
         {
             int retInt = 0;
@@ -118,11 +120,11 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Return the number of files written.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="d"></param>
-        /// <param name="request_types"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="d" (Donor)></param>
+        /// <param name="request_types" (array of string></param>
+        /// <param name="year" (int)></param>
+        /// <returns>int</returns>
         private static int MakeOutputForDonor(BackgroundWorker wk,
             DBWrapper ctx, Donor d, string[] request_types, int year)
         {
@@ -329,6 +331,9 @@ namespace HolidayLabelsAndListsHelper
             FullPath = fullpath;
             BareName = Path.GetFileNameWithoutExtension(fullpath);
             string without_bu_portion = BareName.Split('.')[0];
+            // Parse the file name (without the backup portion). The
+            // elements denoting file type, year, and donor code are
+            // separated by underscores.
             string[] sarray = without_bu_portion.ToUpper().Split('_');
             Type = sarray[0];
             Year = (sarray.Length >= 3) ? sarray[2] : "";
