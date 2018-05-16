@@ -121,6 +121,7 @@ namespace HolidayLabelsAndListsHelper
         /// Return the number of files written.
         /// </summary>
         /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="ctx" (DBWrapper)></param>
         /// <param name="d" (Donor)></param>
         /// <param name="request_types" (array of string></param>
         /// <param name="year" (int)></param>
@@ -140,11 +141,12 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Return the number of files written.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="d"></param>
-        /// <param name="request_types"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="ctx" (DBWrapper)></param>
+        /// <param name="d" (Donor)></param>
+        /// <param name="request_types" (array of string></param>
+        /// <param name="year" (int)></param>
+        /// <returns>int</returns>
         private static int MakeListsForDonor(BackgroundWorker wk,
             DBWrapper ctx, Donor d, string[] request_types, int year)
         {
@@ -166,11 +168,12 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Return the number of files written.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="d"></param>
-        /// <param name="request_types"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="ctx" (DBWrapper)></param>
+        /// <param name="d" (Donor)></param>
+        /// <param name="request_types" (array of string></param>
+        /// <param name="year" (int)></param>
+        /// <returns>int</returns>
         private static int MakeLabelsForDonor(BackgroundWorker wk,
             DBWrapper ctx, Donor d, string[] request_types, int year)
         {
@@ -193,9 +196,10 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Return the number of files written.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="ctx" (DBWrapper)></param>
+        /// <param name="year" (int)></param>
+        /// <returns>int</returns>
         private static int MakeDonorNeutralDocs(BackgroundWorker wk,
             DBWrapper ctx, int year)
         {
@@ -210,9 +214,10 @@ namespace HolidayLabelsAndListsHelper
         /// Make one list for each service type.
         /// Return number of files written.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="ctx" (DBWrapper)></param>
+        /// <param name="year" (int)></param>
+        /// <returns>int</returns>
         private static int MakeParticipantLists(BackgroundWorker wk,
             DBWrapper ctx, int year)
         {
@@ -233,9 +238,10 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Return number of files written
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        /// <param name="wk" (BackgroundWorker)></param>
+        /// <param name="ctx" (DBWrapper)></param>
+        /// <param name="year" (int)></param>
+        /// <returns>int</returns>
         static int MakePostcardLabels(BackgroundWorker wk,
             DBWrapper ctx, int year)
         {
@@ -250,7 +256,14 @@ namespace HolidayLabelsAndListsHelper
             return retInt;
         }
 
-
+        /// <summary>
+        /// Create a BackgroundWorker and assign its
+        /// event handlers
+        /// </summary>
+        /// <param name="work_event_handler"></param>
+        /// <param name="work_completed_handler"></param>
+        /// <param name="progress_handler"></param>
+        /// <returns></returns>
         public static BackgroundWorker MakeWorker(DoWorkEventHandler work_event_handler,
             RunWorkerCompletedEventHandler work_completed_handler,
             ProgressChangedEventHandler progress_handler)
