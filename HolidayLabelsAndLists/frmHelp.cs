@@ -14,6 +14,12 @@ namespace HolidayLabelsAndLists
             InitializeComponent();
         }
 
+        public string HelpText
+        {
+            get { return this.webBrowser1.DocumentText; }
+            set { this.webBrowser1.DocumentText = value; }
+        }
+
         /// <summary>
         /// Fill in the contents of our web browser component.
         /// </summary>
@@ -21,8 +27,8 @@ namespace HolidayLabelsAndLists
         /// <param name="e"></param>
         private void frmHelp_Load(object sender, EventArgs e)
         {
-            string doc_html = Properties.Resources.Doc_HTML;
-            this.webBrowser1.DocumentText = doc_html;
+            //string doc_html = Properties.Resources.Doc_HTML;
+            //this.webBrowser1.DocumentText = doc_html;
         }
     }
 }

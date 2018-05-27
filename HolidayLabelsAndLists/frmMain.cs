@@ -368,9 +368,19 @@ namespace HolidayLabelsAndLists
 
         }
 
+        /// <summary>
+        /// Display general program help.
+        /// The Form property called "Text" actually
+        /// sets a form's title.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            Form helpForm = new frmHelp();
+            frmHelp helpForm = new frmHelp();
+            string doc_html = Properties.Resources.Doc_HTML;
+            helpForm.HelpText = doc_html;
+            helpForm.Text = "HLL Documentation - General"; 
             helpForm.ShowDialog();
         }
 

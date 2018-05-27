@@ -68,6 +68,12 @@
     <Compile Include="frmProgress.Designer.cs">
       <DependentUpon>frmProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSaveFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSaveFiles.Designer.cs">
+      <DependentUpon>frmSaveFiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmHelp.resx">
