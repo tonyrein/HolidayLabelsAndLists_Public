@@ -22,7 +22,7 @@ namespace AppWideResources.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace AppWideResources.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AppWideResources.Properties.Resources", typeof(Resources).Assembly);
@@ -51,12 +51,157 @@ namespace AppWideResources.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bag_Labels.
+        /// </summary>
+        public static string BagLabelBasename {
+            get {
+                return ResourceManager.GetString("BagLabelBasename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Christmas.
+        /// </summary>
+        public static string ChristmasFolderName {
+            get {
+                return ResourceManager.GetString("ChristmasFolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing {0} {1} to file {2}.
+        /// </summary>
+        public static string CountWritingMsg {
+            get {
+                return ResourceManager.GetString("CountWritingMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donor_List_{0}_{1}_{2}.xlsx.
+        /// </summary>
+        public static string DonorListBasefilename {
+            get {
+                return ResourceManager.GetString("DonorListBasefilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} DL {2}.
+        /// </summary>
+        public static string DonorListWorksheetName {
+            get {
+                return ResourceManager.GetString("DonorListWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully created file {0} .
+        /// </summary>
+        public static string FileCreationSuccessMsg {
+            get {
+                return ResourceManager.GetString("FileCreationSuccessMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred trying to work with file {0}.
+        ///The error message was {1}.
+        /// </summary>
+        public static string FileExceptionErrorMsg {
+            get {
+                return ResourceManager.GetString("FileExceptionErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift_Labels.
+        /// </summary>
+        public static string GiftLabelBasename {
+            get {
+                return ResourceManager.GetString("GiftLabelBasename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please include gift receipt..
+        /// </summary>
+        public static string GiftReceiptRequest {
+            get {
+                return ResourceManager.GetString("GiftReceiptRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master_List.
+        /// </summary>
+        public static string MasterListBasename {
+            get {
+                return ResourceManager.GetString("MasterListBasename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --- NO DATA ---.
+        /// </summary>
+        public static string NoDataMsg {
+            get {
+                return ResourceManager.GetString("NoDataMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        public static string OtherFolderName {
+            get {
+                return ResourceManager.GetString("OtherFolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Bpage &amp;P of &amp;N.
+        /// </summary>
+        public static string PageNumbers {
+            get {
+                return ResourceManager.GetString("PageNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant_List.
+        /// </summary>
+        public static string ParticipantListBasename {
+            get {
+                return ResourceManager.GetString("ParticipantListBasename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postcard_Labels.
+        /// </summary>
+        public static string PostcardLabelBasename {
+            get {
+                return ResourceManager.GetString("PostcardLabelBasename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving.
+        /// </summary>
+        public static string ThanksgivingFolderName {
+            get {
+                return ResourceManager.GetString("ThanksgivingFolderName", resourceCulture);
             }
         }
     }
