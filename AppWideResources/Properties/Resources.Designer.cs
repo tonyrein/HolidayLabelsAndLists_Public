@@ -97,6 +97,15 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Donor List, {0}, {1}, {2}.
+        /// </summary>
+        public static string DonorListHeader {
+            get {
+                return ResourceManager.GetString("DonorListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} {1} DL {2}.
         /// </summary>
         public static string DonorListWorksheetName {
@@ -143,11 +152,29 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master_List.
+        ///   Looks up a localized string similar to Master_List_{0}_{1}_{2}.xlsx.
         /// </summary>
-        public static string MasterListBasename {
+        public static string MasterListBasefilename {
             get {
-                return ResourceManager.GetString("MasterListBasename", resourceCulture);
+                return ResourceManager.GetString("MasterListBasefilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master List, {0}, {1}, {2}.
+        /// </summary>
+        public static string MasterListHeader {
+            get {
+                return ResourceManager.GetString("MasterListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} ML {2}.
+        /// </summary>
+        public static string MasterListWorksheetName {
+            get {
+                return ResourceManager.GetString("MasterListWorksheetName", resourceCulture);
             }
         }
         
@@ -179,11 +206,20 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Participant_List.
+        ///   Looks up a localized string similar to Participant_List_{0}_{1}.xlsx.
         /// </summary>
-        public static string ParticipantListBasename {
+        public static string ParticipantListBasefilename {
             get {
-                return ResourceManager.GetString("ParticipantListBasename", resourceCulture);
+                return ResourceManager.GetString("ParticipantListBasefilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant List, {0}, {1}.
+        /// </summary>
+        public static string ParticipantListHeader {
+            get {
+                return ResourceManager.GetString("ParticipantListHeader", resourceCulture);
             }
         }
         

@@ -7,7 +7,6 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.ComponentModel;
-
 using GlobRes = AppWideResources.Properties.Resources;
 
 namespace DAO
@@ -440,8 +439,10 @@ namespace DAO
         {
             return new string[]
             {
-                $"Donor List, {this.RequestType}, {this.Year}",
-                this.Dnr.name
+                string.Format(GlobRes.DonorListHeader,
+                this.RequestType, this.Year, this.Dnr.name)
+                //$"Donor List, {this.RequestType}, {this.Year}",
+                //this.Dnr.name
             };
         }
 
@@ -536,7 +537,6 @@ namespace DAO
         {
             string dc = Utils.TextUtils.CleanString(this.Dnr.code).ToUpper();
             //string name = $"Donor_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
-            StringBuilder sb = new StringBuilder();
             string name = string.Format(GlobRes.DonorListBasefilename,
                 this.Year, this.RequestType, dc);
             return Path.Combine(this.TargetFolder(), name);
@@ -574,8 +574,10 @@ namespace DAO
         {
             return new string[]
             {
-                $"Master List, {this.RequestType}, {this.Year}",
-                this.Dnr.name
+                string.Format(GlobRes.MasterListHeader,
+                this.RequestType, this.Year, this.Dnr.name)
+                //$"Master List, {this.RequestType}, {this.Year}",
+                //this.Dnr.name
             };
         }
 
@@ -620,7 +622,9 @@ namespace DAO
             get
             {
                 string dc = Utils.TextUtils.CleanString(this.Dnr.code);
-                return $"{dc} {this.Year} ML {this.RequestType}";
+                return string.Format(GlobRes.MasterListWorksheetName,
+                    dc, this.Year, this.RequestType);
+                //return $"{dc} {this.Year} ML {this.RequestType}";
             }
         }
 
@@ -632,7 +636,9 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string dc = Utils.TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = $"Master_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
+            string name = string.Format(GlobRes.MasterListBasefilename,
+                this.Year, this.RequestType, dc);
+            //string name = $"Master_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
             return Path.Combine(this.TargetFolder(), name);
         }
 
@@ -760,7 +766,9 @@ namespace DAO
         {
             return new string[]
             {
-                $"Participant List, {this.ServiceType}, {this.Year}"
+                string.Format(GlobRes.ParticipantListHeader,
+                this.ServiceType, this.Year)
+                //$"Participant List, {this.ServiceType}, {this.Year}"
             };
         }
 
@@ -780,12 +788,15 @@ namespace DAO
         /// <returns></returns>
         protected override string GetOutputFileSpec()
         {
-            string name = String.Format(
-                "Participant_List_{0}_{1}{2}",
+            //string name = String.Format(
+            //    "Participant_List_{0}_{1}{2}",
+            //    this.Year,
+            //    Utils.TextUtils.CleanString(this.ServiceType),
+            //    ListWriter.FILE_EXTENSION
+            //    );
+            string name = string.Format(GlobRes.ParticipantListBasefilename,
                 this.Year,
-                Utils.TextUtils.CleanString(this.ServiceType),
-                ListWriter.FILE_EXTENSION
-                );
+                Utils.TextUtils.CleanString(this.ServiceType));
             return Path.Combine(this.TargetFolder(), name);
         }
 

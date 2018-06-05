@@ -162,13 +162,31 @@ The error message was {1}</value>
   <data name="GiftLabelBasename" xml:space="preserve">
     <value>Gift_Labels</value>
   </data>
-  <data name="MasterListBasename" xml:space="preserve">
-    <value>Master_List</value>
+  <data name="MasterListBasefilename" xml:space="preserve">
+    <value>Master_List_{0}_{1}_{2}.xlsx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
   </data>
-  <data name="ParticipantListBasename" xml:space="preserve">
-    <value>Participant_List</value>
+  <data name="ParticipantListBasefilename" xml:space="preserve">
+    <value>Participant_List_{0}_{1}.xlsx</value>
+    <comment>0=year; 1=service type</comment>
   </data>
   <data name="PostcardLabelBasename" xml:space="preserve">
     <value>Postcard_Labels</value>
+  </data>
+  <data name="DonorListHeader" xml:space="preserve">
+    <value>Donor List, {0}, {1}, {2}</value>
+    <comment>0=request type; 1=year; 2=donor name</comment>
+  </data>
+  <data name="MasterListHeader" xml:space="preserve">
+    <value>Master List, {0}, {1}, {2}</value>
+    <comment>0=request type; 1=year; 2=donor name</comment>
+  </data>
+  <data name="MasterListWorksheetName" xml:space="preserve">
+    <value>{0} {1} ML {2}</value>
+    <comment>0=donor code; 1=year; 2=request type</comment>
+  </data>
+  <data name="ParticipantListHeader" xml:space="preserve">
+    <value>Participant List, {0}, {1}</value>
+    <comment>0=service type; 1=year</comment>
   </data>
 </root>
