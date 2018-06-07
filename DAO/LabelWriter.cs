@@ -7,7 +7,7 @@ using System.Text;
 
 using Novacode; //for DocX
 using Utils;
-
+using GlobRes = AppWideResources.Properties.Resources;
 namespace DAO
 {
     /// <summary>
@@ -170,7 +170,11 @@ namespace DAO
                 return 0;
             string fn = Path.GetFileName(this.GetOutputFileSpec());
             int retInt;
-            this.Worker.ReportProgress(0, $"Writing {this.ItemList.Count} labels to file {fn}...");
+            this.Worker.ReportProgress(0,
+                string.Format(GlobRes.CountWritingMsg,
+                    this.ItemList.Count, "labels", fn)
+                    );
+            //this.Worker.ReportProgress(0, $"Writing {this.ItemList.Count} labels to file {fn}...");
             int col_idx = 0;
             DocX doc = null;
             try
@@ -217,16 +221,22 @@ namespace DAO
                 doc.InsertTable(this.table);
                 doc.Save();
                 this.Worker.ReportProgress(0,
-                    $"Successfully created file {fn}...");
+                    string.Format(GlobRes.FileCreationSuccessMsg, fn)
+                    );
+                    //$"Successfully created file {fn}...");
                 // Return 1, indicating that this file was written.
                 retInt = 1;
             }
             catch (Exception e)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"An error occurred trying to work with file {fn}.");
-                sb.AppendLine("The error message was:");
-                sb.AppendLine(e.Message);
+                //sb.AppendLine($"An error occurred trying to work with file {fn}.");
+                //sb.AppendLine("The error message was:");
+                //sb.AppendLine(e.Message);
+                sb.AppendFormat(
+                    GlobRes.FileExceptionErrorMsg,
+                    fn, e.Message
+                );
                 this.Worker.ReportProgress(0, sb.ToString());
                 retInt = 0;
             }
@@ -326,7 +336,8 @@ namespace DAO
             p.Append(top_line).Bold()
                 .AppendLine(gli.request_detail);
             if (this.RequestType == "Clothing")
-                p.AppendLine("Please include gift receipt.");
+                p.AppendLine(GlobRes.GiftReceiptRequest);
+                //p.AppendLine("Please include gift receipt.");
         }
 
         /// <summary>
@@ -338,7 +349,11 @@ namespace DAO
         {
             string cln_rt = TextUtils.CleanString(this.RequestType);
             string cln_dcd = TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = $"Gift_Labels_{this.Year}_{cln_rt}_{cln_dcd}{FILE_EXTENSION}";
+            string name = string.Format(
+                GlobRes.GiftLabelBaseFilename,
+                this.Year, cln_rt, cln_dcd
+                );
+            //string name = $"Gift_Labels_{this.Year}_{cln_rt}_{cln_dcd}{FILE_EXTENSION}";
             return Path.Combine(this.TargetFolder, name);
         }
     }
@@ -438,7 +453,11 @@ namespace DAO
         {
             string cln_rt = TextUtils.CleanString(this.RequestType);
             string cln_dcd = TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = $"Bag_Labels_{this.Year}_{cln_rt}_{cln_dcd}{FILE_EXTENSION}";
+            string name = string.Format(
+                GlobRes.BagLabelBaseFilename,
+                this.Year, cln_rt, cln_dcd
+                );
+            //string name = $"Bag_Labels_{this.Year}_{cln_rt}_{cln_dcd}{FILE_EXTENSION}";
             return Path.Combine(this.TargetFolder, name);
         }
     }
@@ -500,12 +519,17 @@ namespace DAO
         /// <returns></returns>
         protected override string GetOutputFileSpec()
         {
-            string name = String.Format(
-                "Postcard_Labels_{0}_{1}{2}",
+            string name = string.Format(
+                GlobRes.PostcardLabelBaseFilename,
                 this.Year,
-                Utils.TextUtils.CleanString(this.ServiceType),
-                LabelWriter.FILE_EXTENSION
+                Utils.TextUtils.CleanString(this.ServiceType)
                 );
+            //string name = String.Format(
+            //    "Postcard_Labels_{0}_{1}{2}",
+            //    this.Year,
+            //    Utils.TextUtils.CleanString(this.ServiceType),
+            //    LabelWriter.FILE_EXTENSION
+            //    );
             return Path.Combine(this.TargetFolder, name);
         }
 

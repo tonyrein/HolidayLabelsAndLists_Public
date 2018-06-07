@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using DAO;
 using HolidayLabelsAndListsHelper;
 using VestaProcessor;
-
+using GlobRes = AppWideResources.Properties.Resources;
 namespace HolidayLabelsAndLists
 {
     public partial class frmMain : Form
@@ -42,8 +42,10 @@ namespace HolidayLabelsAndLists
             // No matches?
             if (lvAvailableFiles.Items.Count == 0)
             {
-                ListViewItem item = new ListViewItem("No files match the selected criteria.");
-                item.ToolTipText = "Select different criteria for Document Type to View, Year, and/or Donor.";
+                //ListViewItem item = new ListViewItem("No files match the selected criteria.");
+                //item.ToolTipText = "Select different criteria for Document Type to View, Year, and/or Donor.";
+                ListViewItem item = new ListViewItem(GlobRes.NoMatchingFilesMsg);
+                item.ToolTipText = GlobRes.NoMatchingFilesTooltip;
                 lvAvailableFiles.Items.Add(item);
             }
 
@@ -218,12 +220,17 @@ namespace HolidayLabelsAndLists
         }
         private void ShowNoFilesMessage()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("There are no label or list files available for viewing.");
-            sb.AppendLine("Please click \"Process VESTA Reports\"");
-            sb.AppendLine(" and select one or more VESTA reports.");
-            MessageBox.Show(sb.ToString(), "Please Add VESTA Reports", MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            //StringBuilder sb = new StringBuilder();
+            //sb.AppendLine("There are no label or list files available for viewing.");
+            //sb.AppendLine("Please click \"Process VESTA Reports\"");
+            //sb.AppendLine(" and select one or more VESTA reports.");
+            //MessageBox.Show(sb.ToString(), "Please Add VESTA Reports", MessageBoxButtons.OK,
+            //    MessageBoxIcon.Information);
+            MessageBox.Show(
+                GlobRes.NoOutputFilesMsg, GlobRes.NoOutputFilesTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
+
         }
 
 
@@ -319,7 +326,13 @@ namespace HolidayLabelsAndLists
             if (File.Exists(filespec))
                 HllUtils.OpenFile(filespec);
             else
-                MessageBox.Show($"File {filespec} does not exist.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    string.Format(GlobRes.FileNotFoundMsg, filespec),
+                    GlobRes.FileNotFoundTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
+                //MessageBox.Show($"File {filespec} does not exist.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void chbxIncludeBackups_CheckedChanged(object sender, EventArgs e)
@@ -342,9 +355,9 @@ namespace HolidayLabelsAndLists
         /// <param name="e"></param>
         private void btnMaintenance_Click(object sender, EventArgs e)
         {
-            string msg = "Click \"Yes\" to confirm deletion of backup files.";
+            string msg = GlobRes.DelBackupConfirmPrompt;
 
-            var mbRes = MessageBox.Show(msg, "Confirm File Deletion", MessageBoxButtons.YesNo,
+            var mbRes = MessageBox.Show(msg, GlobRes.DelBackupConfirmTitle, MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
             if (mbRes == DialogResult.Yes)
             {
@@ -359,10 +372,16 @@ namespace HolidayLabelsAndLists
                 }
                 catch (Exception fe)
                 {
-                    StringBuilder sb = new StringBuilder("An error occurred while trying to delete");
-                    sb.AppendLine("backup files. The error text is:");
-                    sb.AppendLine(fe.Message);
-                    MessageBox.Show(sb.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //StringBuilder sb = new StringBuilder("An error occurred while trying to delete");
+                    //sb.AppendLine("backup files. The error text is:");
+                    //sb.AppendLine(fe.Message);
+                    //MessageBox.Show(sb.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(
+                        string.Format(GlobRes.DelBackupErrorMsg, fe.Message),
+                        "",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation
+                        );
                 }
             }
 
@@ -380,7 +399,8 @@ namespace HolidayLabelsAndLists
             frmHelp helpForm = new frmHelp();
             string doc_html = Properties.Resources.Doc_HTML;
             helpForm.HelpText = doc_html;
-            helpForm.Text = "HLL Documentation - General"; 
+            helpForm.Text = GlobRes.DocGeneralTitle;
+            //helpForm.Text = "HLL Documentation - General"; 
             helpForm.ShowDialog();
         }
 
@@ -423,11 +443,14 @@ namespace HolidayLabelsAndLists
             int retInt = 0;
             this.context.Clean();
             worker.ReportProgress(0,
-                $"Processing {report_names.Length} VESTA reports...");
+                string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
+                );
+                //$"Processing {report_names.Length} VESTA reports...");
             ImportFromVesta(worker, this.context, report_names);
             if (!worker.CancellationPending)
             {
-                worker.ReportProgress(0, $"Generating output files...");
+
+                worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
                 retInt = HllUtils.MakeOutputFiles(worker, this.context);
             }
             return retInt;
@@ -454,7 +477,7 @@ namespace HolidayLabelsAndLists
                     ProgressForm.Worker = _bgworker;
                     ProgressForm.FormClosed += ProgressForm_FormClosed;
                     ProgressForm.Show();
-                    ProgressForm.AddMessage("Starting now!");
+                    ProgressForm.AddMessage(GlobRes.VestaReportProcessingStartMsg);
                     // start the background work:
                     _bgworker.RunWorkerAsync(report_names);
                 }
@@ -558,20 +581,32 @@ namespace HolidayLabelsAndLists
             {
                 if (e.Error != null)
                 {
-                    StringBuilder sb = new StringBuilder("There was an error during processing of the VESTA reports.");
-                    sb.AppendLine("The error text is:");
-                    sb.AppendLine(e.Error.Message);
-                    ProgressForm.AddMessage(sb.ToString());
+                    //StringBuilder sb = new StringBuilder("There was an error during processing of the VESTA reports.");
+                    //sb.AppendLine("The error text is:");
+                    //sb.AppendLine(e.Error.Message);
+                    //string s = string.Format(GlobRes.VestaReportExceptionMsg,
+                    //    e.Error.Message);
+                    ProgressForm.AddMessage(
+                        string.Format(GlobRes.VestaReportExceptionMsg,
+                            e.Error.Message)
+                            );
                 }
                 else if (e.Cancelled)
                 {
-                    ProgressForm.AddMessage("Processing cancelled. You may now close this window.");
+                    ProgressForm.AddMessage(
+                        GlobRes.ProcessingCancelledMsg + GlobRes.OKToCloseMsg
+                        );
+                    //ProgressForm.AddMessage("Processing cancelled. You may now close this window.");
                 }
                 else
                 {
                     int res = (int)e.Result;
-                    ProgressForm.AddMessage($"Successfully added {res} label and list files.");
-                    ProgressForm.AddMessage("You may now close this window.");
+                    //ProgressForm.AddMessage($"Successfully added {res} label and list files.");
+                    //ProgressForm.AddMessage("You may now close this window.");
+                    ProgressForm.AddMessage(
+                        string.Format(GlobRes.FileAddingSuccessMsg, res)
+                        );
+                    ProgressForm.AddMessage(GlobRes.OKToCloseMsg);
                     if (res > 0)
                         UpdateView();
                 }

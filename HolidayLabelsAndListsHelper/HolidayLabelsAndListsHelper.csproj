@@ -52,6 +52,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AppWideResources\AppWideResources.csproj">
+      <Project>{e689d4c7-b3ff-4dd0-bc8e-88aaf6bce089}</Project>
+      <Name>AppWideResources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DAO\DAO.csproj">
       <Project>{a51e52ee-a6f0-429f-8096-108416f2f9e8}</Project>
       <Name>DAO</Name>

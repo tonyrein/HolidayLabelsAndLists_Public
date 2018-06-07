@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DAO;
 
+using GlobRes = AppWideResources.Properties.Resources;
+
 // TODO: Clean up donor matching code
 namespace HolidayLabelsAndListsHelper
 {
@@ -311,11 +313,12 @@ namespace HolidayLabelsAndListsHelper
         {
             OpenFileDialog d = new OpenFileDialog();
             d.Multiselect = true;
-            d.Filter = "Excel Files (*.XLS;*XLS?)|*.XLS;*.XLS?|All Files (*.*)|*.*";
+            //d.Filter = "Excel Files (*.XLS;*XLS?)|*.XLS;*.XLS?|All Files (*.*)|*.*";
+            d.Filter = GlobRes.FileSpecFilterExcel;
             d.FilterIndex = 1;
             d.CheckFileExists = true;
             d.CheckPathExists = true;
-            d.Title = "Select one or more VESTA Reports";
+            d.Title = GlobRes.VestaReportSelectTitle;
             d.InitialDirectory = Properties.Settings.Default.InitialVestaFolder;
             DialogResult dr = d.ShowDialog();
             if (dr == DialogResult.OK)

@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.IO;
 using DAO;
 
+using GlobRes = AppWideResources.Properties.Resources;
+
 namespace VestaProcessor
 {
     public class VestaImporter
@@ -19,6 +21,10 @@ namespace VestaProcessor
         private string sheet_name;
         private int data_section_count;
 
+
+        //public VestaImporter(BackgroundWorker wk,
+        //    string filespec,
+        //    string sheet_name = GlobRes.ResultsSheetDefaultName)
         public VestaImporter(BackgroundWorker wk, string filespec, string sheet_name = "Report results")
         {
             this.worker = wk;
@@ -30,12 +36,18 @@ namespace VestaProcessor
 
         private void Init()
         {
-            worker.ReportProgress(0, $"Processing report {this.filespec}...");
+            worker.ReportProgress(0,
+                string.Format(GlobRes.StartingEachReportMsg, this.filespec)
+                );
+            //worker.ReportProgress(0, $"Processing report {this.filespec}...");
             valid_VESTA = true;
             WorkbookWrapper bk = new WorkbookWrapper(this.filespec);
             if (bk == null)
             {
-                worker.ReportProgress(0, $"{this.filespec} does not appear to be a valid Excel worksheet.");
+                worker.ReportProgress(0,
+                    string.Format(GlobRes.InvalidWorksheetMsg, this.filespec)
+                    );
+                //worker.ReportProgress(0, $"{this.filespec} does not appear to be a valid Excel worksheet.");
                 valid_VESTA = false;
                 return;
             }
@@ -43,14 +55,20 @@ namespace VestaProcessor
             this.sheet = bk.SheetByName(this.sheet_name);
             if (this.sheet == null)
             {
-                worker.ReportProgress(0, $"{this.sheet_name} not found in {this.filespec}");
+                worker.ReportProgress(0,
+                    string.Format(GlobRes.SheetNotFoundInFileMsg, this.sheet_name, this.filespec)
+                    );
+                //worker.ReportProgress(0, $"{this.sheet_name} not found in {this.filespec}");
                 valid_VESTA = false;
                 return;
             }
             this.report_type = VestaImporterUtils.ReportType(this.sheet);
             if (this.report_type == ReportTypes.Unknown)
             {
-                worker.ReportProgress(0, $"{this.filespec} report type is unknown.");
+                worker.ReportProgress(0,
+                    string.Format(GlobRes.UnknownReportTypeMsg, this.filespec)
+                    );
+                //worker.ReportProgress(0, $"{this.filespec} report type is unknown.");
                 valid_VESTA = false;
                 return;
             }
@@ -142,10 +160,14 @@ namespace VestaProcessor
         {
             if (!worker.CancellationPending)
             {
-                worker.ReportProgress(0, "Searching for data sections in this VESTA report...");
+                worker.ReportProgress(0, GlobRes.SearchingForDataSectionsMsg);
+                //worker.ReportProgress(0, "Searching for data sections in this VESTA report...");
                 this.GetHeaderInfo();
                 this.data_section_count = this.FindDataSections();
-                worker.ReportProgress(0, $"Found {data_section_count} data sections.");
+                worker.ReportProgress(0,
+                    string.Format(GlobRes.CountOfDataSectionsMsg, data_section_count)
+                    );
+                //worker.ReportProgress(0, $"Found {data_section_count} data sections.");
             }
         }
 
@@ -167,18 +189,25 @@ namespace VestaProcessor
                 if (!worker.CancellationPending)
                 {
                     i++;
-                    worker.ReportProgress(0, $"Processing data section {i} of {data_section_count}...");
+                    worker.ReportProgress(0,
+                        string.Format(GlobRes.SectionXOfYMsg, i, data_section_count)
+                        );
+                    //worker.ReportProgress(0, $"Processing data section {i} of {data_section_count}...");
                     section.execute(context);
                 }
             }
             if (i == data_section_count)
             {
-                worker.ReportProgress(0, $"All sections processed OK");
+                worker.ReportProgress(0, GlobRes.AllSectionsProcessedOKMsg);
+                //worker.ReportProgress(0, $"All sections processed OK");
                 return 1;
             }
             else
             {
-                worker.ReportProgress(0, $"Only {i} sections processed OK (out of {data_section_count})");
+                worker.ReportProgress(0,
+                    string.Format(GlobRes.SomeSectionsNotProcessedMsg, i, data_section_count)
+                        );
+                //worker.ReportProgress(0, $"Only {i} sections processed OK (out of {data_section_count})");
                 return 0;
             }
         }

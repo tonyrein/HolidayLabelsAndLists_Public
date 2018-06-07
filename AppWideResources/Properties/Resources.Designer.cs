@@ -61,11 +61,20 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bag_Labels.
+        ///   Looks up a localized string similar to All sections processed OK.
         /// </summary>
-        public static string BagLabelBasename {
+        public static string AllSectionsProcessedOKMsg {
             get {
-                return ResourceManager.GetString("BagLabelBasename", resourceCulture);
+                return ResourceManager.GetString("AllSectionsProcessedOKMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bag_Labels_{0}_{1}_{2}.xlsx.
+        /// </summary>
+        public static string BagLabelBaseFilename {
+            get {
+                return ResourceManager.GetString("BagLabelBaseFilename", resourceCulture);
             }
         }
         
@@ -79,11 +88,65 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found {0} data sections..
+        /// </summary>
+        public static string CountOfDataSectionsMsg {
+            get {
+                return ResourceManager.GetString("CountOfDataSectionsMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Writing {0} {1} to file {2}.
         /// </summary>
         public static string CountWritingMsg {
             get {
                 return ResourceManager.GetString("CountWritingMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found {0} data sections..
+        /// </summary>
+        public static string DataSectionsFoundMsg {
+            get {
+                return ResourceManager.GetString("DataSectionsFoundMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click &quot;Yes&quot; to confirm deletion of backup files..
+        /// </summary>
+        public static string DelBackupConfirmPrompt {
+            get {
+                return ResourceManager.GetString("DelBackupConfirmPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm File Deletion.
+        /// </summary>
+        public static string DelBackupConfirmTitle {
+            get {
+                return ResourceManager.GetString("DelBackupConfirmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to delete backup files. The error text is: {0}.
+        /// </summary>
+        public static string DelBackupErrorMsg {
+            get {
+                return ResourceManager.GetString("DelBackupErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HLLDocumentation - General.
+        /// </summary>
+        public static string DocGeneralTitle {
+            get {
+                return ResourceManager.GetString("DocGeneralTitle", resourceCulture);
             }
         }
         
@@ -115,6 +178,15 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully added {0} label and/or list files.
+        /// </summary>
+        public static string FileAddingSuccessMsg {
+            get {
+                return ResourceManager.GetString("FileAddingSuccessMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully created file {0} .
         /// </summary>
         public static string FileCreationSuccessMsg {
@@ -134,11 +206,47 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gift_Labels.
+        ///   Looks up a localized string similar to File {0} does not exist..
         /// </summary>
-        public static string GiftLabelBasename {
+        public static string FileNotFoundMsg {
             get {
-                return ResourceManager.GetString("GiftLabelBasename", resourceCulture);
+                return ResourceManager.GetString("FileNotFoundMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Not Found.
+        /// </summary>
+        public static string FileNotFoundTitle {
+            get {
+                return ResourceManager.GetString("FileNotFoundTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Files (*.XLS;*XLS?)|*.XLS;*.XLS?.
+        /// </summary>
+        public static string FileSpecFilterExcel {
+            get {
+                return ResourceManager.GetString("FileSpecFilterExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating output files....
+        /// </summary>
+        public static string GeneratingOutputFilesMsg {
+            get {
+                return ResourceManager.GetString("GeneratingOutputFilesMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift_Labels_{0}_{1}_{2}.xlsx.
+        /// </summary>
+        public static string GiftLabelBaseFilename {
+            get {
+                return ResourceManager.GetString("GiftLabelBaseFilename", resourceCulture);
             }
         }
         
@@ -148,6 +256,15 @@ namespace AppWideResources.Properties {
         public static string GiftReceiptRequest {
             get {
                 return ResourceManager.GetString("GiftReceiptRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} does not appear to b e a valid Excel worksheet..
+        /// </summary>
+        public static string InvalidWorksheetMsg {
+            get {
+                return ResourceManager.GetString("InvalidWorksheetMsg", resourceCulture);
             }
         }
         
@@ -188,6 +305,60 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No files match the selected criteria..
+        /// </summary>
+        public static string NoMatchingFilesMsg {
+            get {
+                return ResourceManager.GetString("NoMatchingFilesMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select different criteria for Document Type to View, Year, and/or Donor.
+        /// </summary>
+        public static string NoMatchingFilesTooltip {
+            get {
+                return ResourceManager.GetString("NoMatchingFilesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no label or list files available for viewing.\nPlease click &quot;Process VESTAReports&quot;\nand select one or more reports..
+        /// </summary>
+        public static string NoOutputFilesMsg {
+            get {
+                return ResourceManager.GetString("NoOutputFilesMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Add VESTA Reports.
+        /// </summary>
+        public static string NoOutputFilesTitle {
+            get {
+                return ResourceManager.GetString("NoOutputFilesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may now close this window..
+        /// </summary>
+        public static string OKToCloseMsg {
+            get {
+                return ResourceManager.GetString("OKToCloseMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing report {0}.
+        /// </summary>
+        public static string OpeningReportMsg {
+            get {
+                return ResourceManager.GetString("OpeningReportMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Other.
         /// </summary>
         public static string OtherFolderName {
@@ -224,11 +395,92 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Postcard_Labels.
+        ///   Looks up a localized string similar to Postcard_Labels_{0}_{1}.xlsx.
         /// </summary>
-        public static string PostcardLabelBasename {
+        public static string PostcardLabelBaseFilename {
             get {
-                return ResourceManager.GetString("PostcardLabelBasename", resourceCulture);
+                return ResourceManager.GetString("PostcardLabelBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing cancelled..
+        /// </summary>
+        public static string ProcessingCancelledMsg {
+            get {
+                return ResourceManager.GetString("ProcessingCancelledMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing data section {0} of {1}.
+        /// </summary>
+        public static string ProcessingDataSectionsMsg {
+            get {
+                return ResourceManager.GetString("ProcessingDataSectionsMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report results.
+        /// </summary>
+        public static string ResultsSheetDefaultName {
+            get {
+                return ResourceManager.GetString("ResultsSheetDefaultName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching for data sections in this VESTA report....
+        /// </summary>
+        public static string SearchingForDataSectionsMsg {
+            get {
+                return ResourceManager.GetString("SearchingForDataSectionsMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All sections processed OK.
+        /// </summary>
+        public static string SectionsProcessedSuccessMsg {
+            get {
+                return ResourceManager.GetString("SectionsProcessedSuccessMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing data section {0} of {1}....
+        /// </summary>
+        public static string SectionXOfYMsg {
+            get {
+                return ResourceManager.GetString("SectionXOfYMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} not found in {1}.
+        /// </summary>
+        public static string SheetNotFoundInFileMsg {
+            get {
+                return ResourceManager.GetString("SheetNotFoundInFileMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only {0} sections processed OK (out of {1}).
+        /// </summary>
+        public static string SomeSectionsNotProcessedMsg {
+            get {
+                return ResourceManager.GetString("SomeSectionsNotProcessedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing report {0}.
+        /// </summary>
+        public static string StartingEachReportMsg {
+            get {
+                return ResourceManager.GetString("StartingEachReportMsg", resourceCulture);
             }
         }
         
@@ -238,6 +490,51 @@ namespace AppWideResources.Properties {
         public static string ThanksgivingFolderName {
             get {
                 return ResourceManager.GetString("ThanksgivingFolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} report type is unknown..
+        /// </summary>
+        public static string UnknownReportTypeMsg {
+            get {
+                return ResourceManager.GetString("UnknownReportTypeMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing {0} VESTAReports.
+        /// </summary>
+        public static string VestaReportCountMsg {
+            get {
+                return ResourceManager.GetString("VestaReportCountMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error during processing of the VESTA reports. The error text is:  {0}.
+        /// </summary>
+        public static string VestaReportExceptionMsg {
+            get {
+                return ResourceManager.GetString("VestaReportExceptionMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting processing of VESTA reports....
+        /// </summary>
+        public static string VestaReportProcessingStartMsg {
+            get {
+                return ResourceManager.GetString("VestaReportProcessingStartMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select one or more VESTA Reports.
+        /// </summary>
+        public static string VestaReportSelectTitle {
+            get {
+                return ResourceManager.GetString("VestaReportSelectTitle", resourceCulture);
             }
         }
     }
