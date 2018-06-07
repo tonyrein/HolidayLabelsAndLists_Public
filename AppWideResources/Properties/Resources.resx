@@ -269,9 +269,6 @@ The error message was {1}</value>
   <data name="SearchingForDataSectionsMsg" xml:space="preserve">
     <value>Searching for data sections in this VESTA report...</value>
   </data>
-  <data name="SearchingWithinReportMsg" xml:space="preserve">
-    <value>Searching for data sections in this VESTA report...</value>
-  </data>
   <data name="SectionsProcessedSuccessMsg" xml:space="preserve">
     <value>All sections processed OK</value>
   </data>

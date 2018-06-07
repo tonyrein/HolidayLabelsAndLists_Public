@@ -25,7 +25,7 @@ namespace VestaProcessor
         //public VestaImporter(BackgroundWorker wk,
         //    string filespec,
         //    string sheet_name = GlobRes.ResultsSheetDefaultName)
-        public VestaImporter(BackgroundWorker wk, string filespec, string sheet_name = "Report results")
+        public VestaImporter(BackgroundWorker wk, string filespec, string sheet_name)
         {
             this.worker = wk;
             this.filespec = filespec;

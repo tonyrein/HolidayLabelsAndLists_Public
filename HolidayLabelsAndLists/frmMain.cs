@@ -420,7 +420,7 @@ namespace HolidayLabelsAndLists
             {
                 if (Path.GetExtension(fn) == ".xlsx")
                 {
-                    VestaImporter p = new VestaImporter(wk, fn);
+                    VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
                     retInt += p.execute(context);
                 }
             }
@@ -475,6 +475,7 @@ namespace HolidayLabelsAndLists
                     ProgressForm = new frmProgress();
                     ProgressForm.Done = false;
                     ProgressForm.Worker = _bgworker;
+                    // Hook up "FormClosed" event handler:
                     ProgressForm.FormClosed += ProgressForm_FormClosed;
                     ProgressForm.Show();
                     ProgressForm.AddMessage(GlobRes.VestaReportProcessingStartMsg);
@@ -560,8 +561,8 @@ namespace HolidayLabelsAndLists
         {
             if (e.ProgressPercentage == 100)
                 ProgressForm.Done = true;
-            string s = (string)e.UserState;
-            ProgressForm.AddMessage(s);
+            //string s = (string)e.UserState;
+            ProgressForm.AddMessage((string)e.UserState);
         }
 
         /// <summary>
