@@ -117,7 +117,7 @@ namespace VestaProcessor
         /// 
         /// VESTA report data sections are marked by particular text strings. Which
         /// text strings might be found in a particular report depends on the report
-        /// type -- see VestaProcessor.GetSessionMarkers().
+        /// type -- see SectionMarkers property of this class.
         /// 
         /// </summary>
         private int FindDataSections()

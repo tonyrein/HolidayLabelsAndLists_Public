@@ -153,6 +153,10 @@ namespace HolidayLabelsAndLists
             lvAvailableFiles.Columns[0].Width = -2;
         }
 
+        private void SetButtonState()
+        {
+            btnMaintenance.Enabled = (FileListManager.BackupFilesCount == 0 ? false : true);
+        }
         /// <summary>
         /// Set data sources and initial selections of combo boxes.
         /// 
@@ -237,6 +241,7 @@ namespace HolidayLabelsAndLists
         private void UpdateView()
         {
             PopulateForm(first_run: false);
+            //SetButtonState();
             FileListManager.ApplyFilters();
             if (FileListManager.IsEmpty)
             {
@@ -260,6 +265,7 @@ namespace HolidayLabelsAndLists
                 FileListManager.ApplyFilters();
                 FillFileListView();
                 FormatFileListView();
+                SetButtonState();
             }
         }
         private void frmMain_Load(object sender, EventArgs e)

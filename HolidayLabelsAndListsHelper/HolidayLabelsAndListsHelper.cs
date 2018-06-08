@@ -406,9 +406,11 @@ namespace HolidayLabelsAndListsHelper
 
         private string[] AllFilenames;
         private List<HllFileInfo> AllHllFiles = new List<HllFileInfo>();
-
-        public bool IsEmpty { get { return AllFilenames.Count() == 0; } }
-
+        private List<HllFileInfo> BackupFiles = new List<HllFileInfo>();
+        
+        public int AllFilesCount {  get { return AllFilenames.Count(); } }
+        public bool IsEmpty { get { return AllFilesCount == 0; } }
+        public int BackupFilesCount { get { return BackupFiles.Count(); } }
         private Dictionary<string, HllFileInfo> FilteredFiles = new Dictionary<string, HllFileInfo>();
         private DBWrapper context;
         
@@ -561,6 +563,8 @@ namespace HolidayLabelsAndListsHelper
         {
             string fld = FolderManager.OutputFolder;
             this.AllHllFiles.Clear();
+            this.BackupFiles.Clear();
+
             if (Directory.Exists(fld))
             {
                 // do recursive search for all files with appropriate extensions
@@ -574,7 +578,10 @@ namespace HolidayLabelsAndListsHelper
             {
                 foreach (string fs in this.AllFilenames)
                 {
-                    this.AllHllFiles.Add(new HllFileInfo(fs));
+                    HllFileInfo fi = new HllFileInfo(fs);
+                    this.AllHllFiles.Add(fi);
+                    if (fi.IsBackupFile)
+                        this.BackupFiles.Add(fi);
                 }
             }
         }
@@ -583,21 +590,25 @@ namespace HolidayLabelsAndListsHelper
        
 
         /// <summary>
-        /// Remove backup files from the available files list and from disk.
+        /// Delete files on the BackupFiles list,
+        /// then clear the list.
         /// 
         /// Return number of files deleted.
         /// </summary>
         public int DeleteBackupFiles()
         {
+
             int retInt = 0;
-            foreach (HllFileInfo hfi in AllHllFiles)
-            {
-                if (hfi.IsBackupFile && File.Exists(hfi.FullPath))
+            foreach (HllFileInfo hfi in BackupFiles)
+            { 
+                if (File.Exists(hfi.FullPath))
                 {
+
                     File.Delete(hfi.FullPath);
                     retInt++;
                 }
             }
+            BackupFiles.Clear();
             return retInt;
         }
 
