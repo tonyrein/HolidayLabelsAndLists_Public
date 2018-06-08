@@ -21,10 +21,6 @@ namespace VestaProcessor
         private string sheet_name;
         private int data_section_count;
 
-
-        //public VestaImporter(BackgroundWorker wk,
-        //    string filespec,
-        //    string sheet_name = GlobRes.ResultsSheetDefaultName)
         public VestaImporter(BackgroundWorker wk, string filespec, string sheet_name)
         {
             this.worker = wk;
