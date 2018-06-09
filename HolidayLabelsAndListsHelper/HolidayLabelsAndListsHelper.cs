@@ -618,6 +618,42 @@ namespace HolidayLabelsAndListsHelper
             return retInt;
         }
 
+
+        /// <summary>
+        /// Iterate over lists of regular and backup files
+        /// and delete those which match the list of years
+        /// passed in by the caller.
+        /// 
+        /// Return the count of files deleted.
+        /// </summary>
+        /// <param name="years"></param>
+        /// <returns></returns>
+        int DeleteOldFiles(string[] years)
+        {
+            int retInt = 0;
+            for(int idx = RegularFilesCount - 1; idx >= 0; idx--)
+            {
+                HllFileInfo fi = RegularHllFiles[idx];
+                if ( (years.Contains(fi.Year)) && (File.Exists(fi.FullPath)) )
+                {
+                    File.Delete(fi.FullPath);
+                    RegularHllFiles.RemoveAt(idx);
+                    retInt++;
+                }
+            }
+            for (int idx = BackupFilesCount - 1; idx >= 0; idx--)
+            {
+                HllFileInfo fi = BackupHllFiles[idx];
+                if ((years.Contains(fi.Year)) && (File.Exists(fi.FullPath)))
+                {
+                    File.Delete(fi.FullPath);
+                    BackupHllFiles.RemoveAt(idx);
+                    retInt++;
+                }
+            }
+            return retInt;
+        }
+
         /// <summary>
         /// Clear out the filtered files list. Then, add
         /// each file which is selected by the donor, file type,
