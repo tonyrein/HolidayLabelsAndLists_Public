@@ -30,7 +30,7 @@ namespace HolidayLabelsAndListsHelper
         /// reports.
         /// </summary>
         /// <param name="context" (DBWrapper)></param>
-        /// <returns>array of gift label info and bag label info objects</returns>
+        /// <returns>array of strings representing gift label info and bag label info request types</returns>
         public static string[] RequestTypesInDb(DBWrapper context)
         {
             return (from g in context.GliList select g.request_type).Concat
@@ -313,7 +313,6 @@ namespace HolidayLabelsAndListsHelper
         {
             OpenFileDialog d = new OpenFileDialog();
             d.Multiselect = true;
-            //d.Filter = "Excel Files (*.XLS;*XLS?)|*.XLS;*.XLS?|All Files (*.*)|*.*";
             d.Filter = GlobRes.FileSpecFilterExcel;
             d.FilterIndex = 1;
             d.CheckFileExists = true;
@@ -334,7 +333,7 @@ namespace HolidayLabelsAndListsHelper
     {
         internal string FullPath { get; set; }
         internal string BareName { get; set; } // without folder or extension
-        internal string Type { get; set; }
+        internal string Type { get; set; }      // ie, Master List, Bag Label, Postcard Label, etc.
         internal string Year { get; set; }
         internal string DonorCode { get; set; }
         internal bool IsBackupFile { get; set; }
@@ -386,6 +385,10 @@ namespace HolidayLabelsAndListsHelper
         }
     }
 
+    /// <summary>
+    /// Maintain lists of HllFileInfo objects and
+    /// filters which apply to those lists.
+    /// </summary>
     public class HllFileListManager
     {
         private string _donorfilter;
@@ -541,8 +544,8 @@ namespace HolidayLabelsAndListsHelper
         }
 
         /// <summary>
-        /// Load full list of file specs. The donor, type,
-        /// year, and show backup filters determine which files from
+        /// Load full list of file specs. The donor, type, and
+        /// year filters determine which files from
         /// this list will be displayed to the user.
         /// </summary>
         public HllFileListManager(DBWrapper ctx)
@@ -618,7 +621,7 @@ namespace HolidayLabelsAndListsHelper
         /// <summary>
         /// Clear out the filtered files list. Then, add
         /// each file which is selected by the donor, file type,
-        /// year. The dictionary key
+        /// and year. The dictionary key
         /// for each item will be the file name (without directory)
         /// and the value will be the corresponding HllFileInfo
         /// object.
