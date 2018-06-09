@@ -405,12 +405,14 @@ namespace HolidayLabelsAndListsHelper
         public bool IncludeBackupsFilter { get; set; }
 
         private string[] AllFilenames;
-        private List<HllFileInfo> AllHllFiles = new List<HllFileInfo>();
-        private List<HllFileInfo> BackupFiles = new List<HllFileInfo>();
+        private List<HllFileInfo> RegularHllFiles = new List<HllFileInfo>();
+        private List<HllFileInfo> BackupHllFiles = new List<HllFileInfo>();
         
         public int AllFilesCount {  get { return AllFilenames.Count(); } }
-        public bool IsEmpty { get { return AllFilesCount == 0; } }
-        public int BackupFilesCount { get { return BackupFiles.Count(); } }
+        public bool IsEmpty { get { return (RegularFilesCount == 0) && (BackupFilesCount == 0); } }
+        public int RegularFilesCount {  get { return RegularHllFiles.Count(); } }
+        public int BackupFilesCount { get { return BackupHllFiles.Count(); } }
+        public bool HasBackupFiles {  get { return BackupFilesCount > 0; } }
         private Dictionary<string, HllFileInfo> FilteredFiles = new Dictionary<string, HllFileInfo>();
         private DBWrapper context;
         
@@ -427,7 +429,7 @@ namespace HolidayLabelsAndListsHelper
             // is irrelevant), add its donor to our
             // return list.
             List<string> codes = new List<string>();
-            foreach (HllFileInfo hfi in AllHllFiles)
+            foreach (HllFileInfo hfi in RegularHllFiles)
             {
                 if ( hfi.HasDonor )
                     codes.Add(hfi.DonorCode);
@@ -455,7 +457,7 @@ namespace HolidayLabelsAndListsHelper
         public List<Donor> ActiveDonorsForYear(string year)
         {
             List<Donor> retList = new List<Donor>();
-            foreach(HllFileInfo hfi in AllHllFiles)
+            foreach(HllFileInfo hfi in RegularHllFiles)
             {
                 if (hfi.IsValidHLL && hfi.HasDonor && hfi.Year == year)
                 {
@@ -486,7 +488,7 @@ namespace HolidayLabelsAndListsHelper
         public string[] ActiveYears()
         {
             List<string> allyears = new List<string>();
-            foreach (HllFileInfo hfi in AllHllFiles)
+            foreach (HllFileInfo hfi in RegularHllFiles)
             {
                 if (hfi.IsValidHLL)
                     allyears.Add(hfi.Year);
@@ -526,8 +528,8 @@ namespace HolidayLabelsAndListsHelper
         {
             if (!hfi.IsValidHLL)
                 return false;
-            if (hfi.IsBackupFile && this.IncludeBackupsFilter == false)
-                return false;
+            //if (hfi.IsBackupFile && this.IncludeBackupsFilter == false)
+            //    return false;
             if (!YearMatches(hfi))
                 return false;
             if (!TypeMatches(hfi))
@@ -554,16 +556,16 @@ namespace HolidayLabelsAndListsHelper
         /// Get names of all files in and under output folder that
         /// have the appropriate extension.
         /// 
-        /// TODO: Change AllFilenames to List<string> to simplify
-        /// error checking -- more robust if we don't have to
-        /// re-initialize every time the size changes!
+        /// For each of those files, make an HllFileInfo object
+        /// and add that object to either the RegularHllFiles or the
+        /// BackupHllFiles list.
         /// 
         /// </summary>
         public void LoadSourceFileList()
         {
             string fld = FolderManager.OutputFolder;
-            this.AllHllFiles.Clear();
-            this.BackupFiles.Clear();
+            this.RegularHllFiles.Clear();
+            this.BackupHllFiles.Clear();
 
             if (Directory.Exists(fld))
             {
@@ -574,14 +576,15 @@ namespace HolidayLabelsAndListsHelper
             else
                 this.AllFilenames = new string[0];
 
-            if (!this.IsEmpty)
+            if (this.AllFilenames.Count() > 0)
             {
                 foreach (string fs in this.AllFilenames)
                 {
                     HllFileInfo fi = new HllFileInfo(fs);
-                    this.AllHllFiles.Add(fi);
                     if (fi.IsBackupFile)
-                        this.BackupFiles.Add(fi);
+                        this.BackupHllFiles.Add(fi);
+                    else
+                        this.RegularHllFiles.Add(fi);
                 }
             }
         }
@@ -599,7 +602,7 @@ namespace HolidayLabelsAndListsHelper
         {
 
             int retInt = 0;
-            foreach (HllFileInfo hfi in BackupFiles)
+            foreach (HllFileInfo hfi in BackupHllFiles)
             { 
                 if (File.Exists(hfi.FullPath))
                 {
@@ -608,25 +611,35 @@ namespace HolidayLabelsAndListsHelper
                     retInt++;
                 }
             }
-            BackupFiles.Clear();
+            BackupHllFiles.Clear();
             return retInt;
         }
 
         /// <summary>
         /// Clear out the filtered files list. Then, add
         /// each file which is selected by the donor, file type,
-        /// year, and show backup filters. The dictionary key
+        /// year. The dictionary key
         /// for each item will be the file name (without directory)
-        /// and the value will be the full file spec.
+        /// and the value will be the corresponding HllFileInfo
+        /// object.
         /// </summary>
         public void ApplyFilters()
         {
             this.FilteredFiles.Clear();
-            foreach (HllFileInfo hfi in AllHllFiles)
+            foreach (HllFileInfo hfi in RegularHllFiles)
             {
                 if (PassesFilter(hfi))
                     FilteredFiles[hfi.BareName] = hfi;
 
+            }
+            if (this.IncludeBackupsFilter)
+            {
+                foreach (HllFileInfo hfi in BackupHllFiles)
+                {
+                    if (PassesFilter(hfi))
+                        FilteredFiles[hfi.BareName] = hfi;
+
+                }
             }
         }
 

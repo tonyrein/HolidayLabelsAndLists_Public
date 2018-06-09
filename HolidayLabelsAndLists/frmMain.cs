@@ -153,9 +153,10 @@ namespace HolidayLabelsAndLists
             lvAvailableFiles.Columns[0].Width = -2;
         }
 
-        private void SetButtonState()
+        private void SetButtonAndCheckboxState()
         {
-            btnMaintenance.Enabled = (FileListManager.BackupFilesCount == 0 ? false : true);
+            btnMaintenance.Enabled = FileListManager.HasBackupFiles;
+            chbxIncludeBackups.Enabled = FileListManager.HasBackupFiles;
         }
         /// <summary>
         /// Set data sources and initial selections of combo boxes.
@@ -265,7 +266,7 @@ namespace HolidayLabelsAndLists
                 FileListManager.ApplyFilters();
                 FillFileListView();
                 FormatFileListView();
-                SetButtonState();
+                SetButtonAndCheckboxState();
             }
         }
         private void frmMain_Load(object sender, EventArgs e)
