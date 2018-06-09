@@ -385,12 +385,30 @@ namespace HolidayLabelsAndListsHelper
         }
     }
 
+    public class FilterSet
+    {
+        private string _donorfilter;
+        private string _typefilter;
+        public string YearFilter { get; set; }
+        public string TypeFilter
+        {
+            get { return this._typefilter; }
+            set { this._typefilter = value.ToUpper().Split(' ')[0]; }
+        }
+        public string DonorFilter
+        {
+            get { return this._donorfilter; }
+            set { this._donorfilter = value.ToUpper(); }
+        }
+        public bool IncludeBackupsFilter { get; set; }
+    }
     /// <summary>
     /// Maintain lists of HllFileInfo objects and
     /// filters which apply to those lists.
     /// </summary>
     public class HllFileListManager
     {
+        private FilterSet filterset = new FilterSet();
         private string _donorfilter;
         private string _typefilter;
         public string YearFilter { get; set; }
