@@ -518,15 +518,30 @@ namespace HolidayLabelsAndListsHelper
         /// <returns></returns>
         public string[] ActiveYears()
         {
-            List<string> allyears = new List<string>();
-            foreach (HllFileInfo hfi in RegularHllFiles)
+            HashSet<string> allyears = new HashSet<string>();
+            foreach (HllFileInfo fi in RegularHllFiles)
             {
-                if (hfi.IsValidHLL)
-                    allyears.Add(hfi.Year);
+                if (fi.IsValidHLL) { allyears.Add(fi.Year); }
             }
-            return allyears.Distinct().OrderByDescending(y => y).ToArray();
-
+            foreach (HllFileInfo fi in BackupHllFiles)
+            {
+                if (fi.IsValidHLL) { allyears.Add(fi.Year); }
+            }
+            return allyears.OrderByDescending(y => y).ToArray();
         }
+        //public string[] ActiveYears0()
+        //{
+        //    List<string> allyears = new List<string>();
+        //    foreach (HllFileInfo hfi in RegularHllFiles)
+        //    {
+        //        if (hfi.IsValidHLL)
+        //            allyears.Add(hfi.Year);
+        //    }
+        //    return allyears.Distinct().OrderByDescending(y => y).ToArray();
+
+        //}
+
+
     
         private bool YearMatches(HllFileInfo hfi, string year)
         {
