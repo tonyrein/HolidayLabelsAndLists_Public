@@ -562,8 +562,6 @@ namespace HolidayLabelsAndListsHelper
         {
             if (!hfi.IsValidHLL)
                 return false;
-            //if (hfi.IsBackupFile && this.IncludeBackupsFilter == false)
-            //    return false;
             if (!YearMatches(hfi, filterset.YearFilter))
                 return false;
             if (!TypeMatches(hfi, filterset.TypeFilter))
@@ -730,6 +728,14 @@ namespace HolidayLabelsAndListsHelper
             }
             return retDict;
         }
+
+        /// <summary>
+        /// Given a bare file name, return the full path
+        /// of the corresponding HllFileInfo object, if
+        /// it exists in our FilteredFiles collection.
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <returns></returns>
         public string FullPathForFile(string fn)
         {
             if (this.FilteredFiles.ContainsKey(fn))
