@@ -529,18 +529,6 @@ namespace HolidayLabelsAndListsHelper
             }
             return allyears.OrderByDescending(y => y).ToArray();
         }
-        //public string[] ActiveYears0()
-        //{
-        //    List<string> allyears = new List<string>();
-        //    foreach (HllFileInfo hfi in RegularHllFiles)
-        //    {
-        //        if (hfi.IsValidHLL)
-        //            allyears.Add(hfi.Year);
-        //    }
-        //    return allyears.Distinct().OrderByDescending(y => y).ToArray();
-
-        //}
-
 
     
         private bool YearMatches(HllFileInfo hfi, string year)
@@ -627,10 +615,13 @@ namespace HolidayLabelsAndListsHelper
                 foreach (string fs in this.AllFilenames)
                 {
                     HllFileInfo fi = new HllFileInfo(fs);
-                    if (fi.IsBackupFile)
-                        this.BackupHllFiles.Add(fi);
-                    else
-                        this.RegularHllFiles.Add(fi);
+                    if (fi.IsValidHLL) // Don't bother if it's not a valid file.
+                    {
+                        if (fi.IsBackupFile)
+                            this.BackupHllFiles.Add(fi);
+                        else
+                            this.RegularHllFiles.Add(fi);
+                    }
                 }
             }
         }
@@ -677,9 +668,13 @@ namespace HolidayLabelsAndListsHelper
             for(int idx = RegularFilesCount - 1; idx >= 0; idx--)
             {
                 HllFileInfo fi = RegularHllFiles[idx];
-                if ( (years.Contains(fi.Year)) && (File.Exists(fi.FullPath)) )
+                //if ( (years.Contains(fi.Year)) && (File.Exists(fi.FullPath)) )
+                if (years.Contains(fi.Year))
                 {
-                    File.Delete(fi.FullPath);
+                    if (File.Exists(fi.FullPath))
+                    {
+                        File.Delete(fi.FullPath);
+                    }
                     RegularHllFiles.RemoveAt(idx);
                     retInt++;
                 }
@@ -687,9 +682,12 @@ namespace HolidayLabelsAndListsHelper
             for (int idx = BackupFilesCount - 1; idx >= 0; idx--)
             {
                 HllFileInfo fi = BackupHllFiles[idx];
-                if ((years.Contains(fi.Year)) && (File.Exists(fi.FullPath)))
+                if (years.Contains(fi.Year))
                 {
-                    File.Delete(fi.FullPath);
+                    if (File.Exists(fi.FullPath))
+                    {
+                        File.Delete(fi.FullPath);
+                    }
                     BackupHllFiles.RemoveAt(idx);
                     retInt++;
                 }
