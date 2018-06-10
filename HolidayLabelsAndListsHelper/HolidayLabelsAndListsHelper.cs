@@ -694,6 +694,37 @@ namespace HolidayLabelsAndListsHelper
         }
 
         /// <summary>
+        /// Copies the files matching a given filter set to the
+        /// given destination.
+        /// 
+        /// The destination folder must already exist. The UI
+        /// layer should take care of such issues as creating
+        /// the destination if needed, or permissions errors.
+        /// 
+        /// Returns the count of files copied.
+        /// 
+        /// Figure out how to handle case where some or all of the destination
+        /// files already exist.
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <param name="dest_folder"></param>
+        /// <returns></returns>
+        public int CopyMatchingFiles(FilterSet fs, string dest_folder)
+        {
+            int retInt = 0;
+            Dictionary<string, HllFileInfo> d = FilesMatchingFilter(fs);
+            foreach (HllFileInfo item in d.Values)
+            {
+                if (File.Exists(item.FullPath))
+                {
+                    string name_plus_ext = "";
+                    File.Copy(item.FullPath, dest_folder);
+                    retInt++;
+                }
+            }
+            return retInt;
+        }
+        /// <summary>
         /// Set FilteredFiles to include only those files
         /// matching our FilterSet member.
         /// </summary>
