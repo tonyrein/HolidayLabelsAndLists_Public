@@ -705,6 +705,8 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Returns the count of files copied.
         /// 
+        /// If replace==false and the destination filespec already exists,
+        /// an 
         /// If performance becomes an issue, consider replacing the foreach
         /// loop with Parrallel.ForEach logic.
         /// 

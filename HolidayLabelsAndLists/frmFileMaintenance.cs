@@ -52,7 +52,7 @@ namespace HolidayLabelsAndLists
         {
             // Show Delete BU btn if there are backup files to delete:
             btnDeleteBackups.Enabled = flm.HasBackupFiles;
-            // We can't delete lates year's files -- don't show this
+            // We can't delete latest year's files -- don't show this
             // button unless there are some years we can delete from:
             btnDeleteOld.Enabled = flm.ActiveYears().Count() > 0;
         }
@@ -91,11 +91,25 @@ namespace HolidayLabelsAndLists
             }
         }
 
+        /// <summary>
+        /// TODO: Add code to remind about saving before opening
+        /// dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDeleteOld_Click(object sender, EventArgs e)
         {
             using (frmDeleteOldFiles OldFilesForm = new frmDeleteOldFiles(flm))
             {
                 OldFilesForm.ShowDialog();
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            using (frmSaveFiles SaveForm = new frmSaveFiles(flm))
+            {
+                SaveForm.ShowDialog();
             }
         }
     }

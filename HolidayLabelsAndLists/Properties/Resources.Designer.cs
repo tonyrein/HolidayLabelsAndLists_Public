@@ -61,6 +61,33 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to P:\\HolidayArchives.
+        /// </summary>
+        internal static string ArchiveStartFolder {
+            get {
+                return ResourceManager.GetString("ArchiveStartFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse....
+        /// </summary>
+        internal static string BrowseBtnCaption {
+            get {
+                return ResourceManager.GetString("BrowseBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string CancelBtnCaption {
+            get {
+                return ResourceManager.GetString("CancelBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         internal static string CloseBtnCaption {
@@ -88,6 +115,15 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Destination.
+        /// </summary>
+        internal static string DestLabelText {
+            get {
+                return ResourceManager.GetString("DestLabelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///	&lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
@@ -104,6 +140,15 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string Doc_HTML {
             get {
                 return ResourceManager.GetString("Doc_HTML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document Type(s).
+        /// </summary>
+        internal static string DocTypeLabelText {
+            get {
+                return ResourceManager.GetString("DocTypeLabelText", resourceCulture);
             }
         }
         
@@ -126,6 +171,15 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include Backup Files.
+        /// </summary>
+        internal static string IncludeBackupsChkCaption {
+            get {
+                return ResourceManager.GetString("IncludeBackupsChkCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage Output Files.
         /// </summary>
         internal static string MaintBtnCaption {
@@ -135,11 +189,47 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string SaveBtnCaption {
+            get {
+                return ResourceManager.GetString("SaveBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Files.
         /// </summary>
         internal static string SaveFilesBtnCaption {
             get {
                 return ResourceManager.GetString("SaveFilesBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Files.
+        /// </summary>
+        internal static string SaveFilesFormTitle {
+            get {
+                return ResourceManager.GetString("SaveFilesFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Folder for Document Destination.
+        /// </summary>
+        internal static string SaveFolderDialogTitle {
+            get {
+                return ResourceManager.GetString("SaveFolderDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        internal static string YearLabelText {
+            get {
+                return ResourceManager.GetString("YearLabelText", resourceCulture);
             }
         }
     }

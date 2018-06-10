@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArchiveStartFolder" xml:space="preserve">
+    <value>P:\\HolidayArchives</value>
+  </data>
+  <data name="BrowseBtnCaption" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="CancelBtnCaption" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="CloseBtnCaption" xml:space="preserve">
     <value>Done</value>
   </data>
@@ -125,6 +134,12 @@
   </data>
   <data name="DelOldFilesBtnCaption" xml:space="preserve">
     <value>Delete Files From Previous Years</value>
+  </data>
+  <data name="DestLabelText" xml:space="preserve">
+    <value>Destination</value>
+  </data>
+  <data name="DocTypeLabelText" xml:space="preserve">
+    <value>Document Type(s)</value>
   </data>
   <data name="Doc_HTML" xml:space="preserve">
     <value>&lt;html&gt;
@@ -216,10 +231,25 @@
   <data name="HelpBtnCaption" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="IncludeBackupsChkCaption" xml:space="preserve">
+    <value>Include Backup Files</value>
+  </data>
   <data name="MaintBtnCaption" xml:space="preserve">
     <value>Manage Output Files</value>
   </data>
+  <data name="SaveBtnCaption" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="SaveFilesBtnCaption" xml:space="preserve">
     <value>Save Files</value>
+  </data>
+  <data name="SaveFilesFormTitle" xml:space="preserve">
+    <value>Save Files</value>
+  </data>
+  <data name="SaveFolderDialogTitle" xml:space="preserve">
+    <value>Select Folder for Document Destination</value>
+  </data>
+  <data name="YearLabelText" xml:space="preserve">
+    <value>Year</value>
   </data>
 </root>
