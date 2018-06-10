@@ -409,21 +409,31 @@ namespace HolidayLabelsAndListsHelper
     public class HllFileListManager
     {
         private FilterSet filterset = new FilterSet();
-        private string _donorfilter;
-        private string _typefilter;
-        public string YearFilter { get; set; }
+        //private string _donorfilter;
+        //private string _typefilter;
+        //public string YearFilter { get; set; }
+        public string YearFilter
+        {
+            get { return this.filterset.YearFilter; }
+            set { this.filterset.YearFilter = value; }
+        }
         public string TypeFilter
         {
-            get { return this._typefilter; }
-            set { this._typefilter = value.ToUpper().Split(' ')[0]; }
+            get { return this.filterset.TypeFilter; }
+            set { this.filterset.TypeFilter = value; }
         }
         public string DonorFilter
         {
-            get { return this._donorfilter; }
-            set { this._donorfilter = value.ToUpper(); }
+            get { return this.filterset.DonorFilter; }
+            set { this.filterset.DonorFilter = value; }
         }
 
-        public bool IncludeBackupsFilter { get; set; }
+        public bool IncludeBackupsFilter
+        {
+            get { return this.filterset.IncludeBackupsFilter; }
+            set { this.filterset.IncludeBackupsFilter = value; }
+        }
+        //public bool IncludeBackupsFilter { get; set; }
 
         private string[] AllFilenames;
         private List<HllFileInfo> RegularHllFiles = new List<HllFileInfo>();
@@ -518,24 +528,24 @@ namespace HolidayLabelsAndListsHelper
 
         }
     
-        private bool YearMatches(HllFileInfo hfi)
+        private bool YearMatches(HllFileInfo hfi, string year)
         {
-            return hfi.Year == this.YearFilter;
+            return hfi.Year == year;
         }
 
-        private bool DonorMatches(HllFileInfo hfi)
+        private bool DonorMatches(HllFileInfo hfi, string donor_filter)
         {
-            return hfi.DonorCode == this.DonorFilter;
+            return hfi.DonorCode == donor_filter;
         }
 
-        private bool TypeMatches(HllFileInfo hfi)
+        private bool TypeMatches(HllFileInfo hfi, string type_to_match)
         {
-            if (TypeFilter == "ALL")
+            if (type_to_match == "ALL")
                 return true;
-            if (TypeFilter == "DONOR"
+            if (type_to_match == "DONOR"
                 && (hfi.Type == "DONOR" || hfi.Type == "MASTER"))
                 return true;
-            return hfi.Type == TypeFilter;
+            return hfi.Type == type_to_match;
         }
 
         /// <summary>
@@ -545,20 +555,20 @@ namespace HolidayLabelsAndListsHelper
         /// </summary>
         /// <param name="fullpath"></param>
         /// <returns></returns>
-        private bool PassesFilter(HllFileInfo hfi)
+        private bool PassesFilter(HllFileInfo hfi, FilterSet filterset)
         {
             if (!hfi.IsValidHLL)
                 return false;
             //if (hfi.IsBackupFile && this.IncludeBackupsFilter == false)
             //    return false;
-            if (!YearMatches(hfi))
+            if (!YearMatches(hfi, filterset.YearFilter))
                 return false;
-            if (!TypeMatches(hfi))
+            if (!TypeMatches(hfi, filterset.TypeFilter))
                 return false;
             if (hfi.HasNoDonor)
                 return true;
             else
-                return DonorMatches(hfi);
+                return DonorMatches(hfi, filterset.DonorFilter);
         }
 
         /// <summary>
@@ -673,33 +683,40 @@ namespace HolidayLabelsAndListsHelper
         }
 
         /// <summary>
-        /// Clear out the filtered files list. Then, add
-        /// each file which is selected by the donor, file type,
-        /// and year. The dictionary key
-        /// for each item will be the file name (without directory)
-        /// and the value will be the corresponding HllFileInfo
-        /// object.
+        /// Set FilteredFiles to include only those files
+        /// matching our FilterSet member.
         /// </summary>
         public void ApplyFilters()
         {
-            this.FilteredFiles.Clear();
+            this.FilteredFiles = FilesMatchingFilter(this.filterset);
+        }
+
+        /// <summary>
+        /// Get a collection of HllFileInfo objects matching the given filterset.
+        /// The collection is a Dictionary. The key of each item is the file
+        /// name (without the directory) and the value of each item is
+        /// the corresponding HllFileInfo object.
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <returns></returns>
+        internal Dictionary<string, HllFileInfo> FilesMatchingFilter(FilterSet fs)
+        {
+            Dictionary<string, HllFileInfo> retDict = new Dictionary<string, HllFileInfo>();
             foreach (HllFileInfo hfi in RegularHllFiles)
             {
-                if (PassesFilter(hfi))
-                    FilteredFiles[hfi.BareName] = hfi;
-
+                if (PassesFilter(hfi, fs))
+                    retDict[hfi.BareName] = hfi;
             }
-            if (this.IncludeBackupsFilter)
+            if (fs.IncludeBackupsFilter)
             {
                 foreach (HllFileInfo hfi in BackupHllFiles)
                 {
-                    if (PassesFilter(hfi))
-                        FilteredFiles[hfi.BareName] = hfi;
-
+                    if (PassesFilter(hfi, fs))
+                        retDict[hfi.BareName] = hfi;
                 }
             }
+            return retDict;
         }
-
         public string FullPathForFile(string fn)
         {
             if (this.FilteredFiles.ContainsKey(fn))
