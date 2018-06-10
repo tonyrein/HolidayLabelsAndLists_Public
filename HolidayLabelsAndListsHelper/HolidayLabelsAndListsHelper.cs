@@ -656,6 +656,9 @@ namespace HolidayLabelsAndListsHelper
         /// and delete those which match the list of years
         /// passed in by the caller.
         /// 
+        /// Iterate in descending order so that we can delete items from the
+        /// lists without changing the indices.
+        /// 
         /// Return the count of files deleted.
         /// </summary>
         /// <param name="years"></param>
@@ -666,7 +669,6 @@ namespace HolidayLabelsAndListsHelper
             for(int idx = RegularFilesCount - 1; idx >= 0; idx--)
             {
                 HllFileInfo fi = RegularHllFiles[idx];
-                //if ( (years.Contains(fi.Year)) && (File.Exists(fi.FullPath)) )
                 if (years.Contains(fi.Year))
                 {
                     if (File.Exists(fi.FullPath))
@@ -703,27 +705,31 @@ namespace HolidayLabelsAndListsHelper
         /// 
         /// Returns the count of files copied.
         /// 
-        /// Figure out how to handle case where some or all of the destination
-        /// files already exist.
+        /// If performance becomes an issue, consider replacing the foreach
+        /// loop with Parrallel.ForEach logic.
+        /// 
         /// </summary>
         /// <param name="fs"></param>
         /// <param name="dest_folder"></param>
         /// <returns></returns>
-        public int CopyMatchingFiles(FilterSet fs, string dest_folder)
+        public int CopyMatchingFiles(FilterSet fs, string dest_folder, bool replace=false)
         {
             int retInt = 0;
-            Dictionary<string, HllFileInfo> d = FilesMatchingFilter(fs);
-            foreach (HllFileInfo item in d.Values)
+            //Dictionary<string, HllFileInfo> d = FilesMatchingFilter(fs);
+            foreach (HllFileInfo item in FilesMatchingFilter(fs).Values)
             {
-                if (File.Exists(item.FullPath))
+                string full_path = item.FullPath;
+                if (File.Exists(full_path))
                 {
-                    string name_plus_ext = "";
-                    File.Copy(item.FullPath, dest_folder);
+                    string name_plus_ext = Path.GetFileName(full_path);
+                    string dest = Path.Combine(dest_folder, name_plus_ext);
+                    File.Copy(full_path, dest, replace);
                     retInt++;
                 }
             }
             return retInt;
         }
+
         /// <summary>
         /// Set FilteredFiles to include only those files
         /// matching our FilterSet member.
