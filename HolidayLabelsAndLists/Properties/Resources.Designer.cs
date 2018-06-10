@@ -61,6 +61,33 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string CloseBtnCaption {
+            get {
+                return ResourceManager.GetString("CloseBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Backup Files.
+        /// </summary>
+        internal static string DelBackupsBtnCaption {
+            get {
+                return ResourceManager.GetString("DelBackupsBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Files From Previous Years.
+        /// </summary>
+        internal static string DelOldFilesBtnCaption {
+            get {
+                return ResourceManager.GetString("DelOldFilesBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///	&lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
@@ -77,6 +104,42 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string Doc_HTML {
             get {
                 return ResourceManager.GetString("Doc_HTML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string ExitBtnCaption {
+            get {
+                return ResourceManager.GetString("ExitBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        internal static string HelpBtnCaption {
+            get {
+                return ResourceManager.GetString("HelpBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Output Files.
+        /// </summary>
+        internal static string MaintBtnCaption {
+            get {
+                return ResourceManager.GetString("MaintBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Files.
+        /// </summary>
+        internal static string SaveFilesBtnCaption {
+            get {
+                return ResourceManager.GetString("SaveFilesBtnCaption", resourceCulture);
             }
         }
     }

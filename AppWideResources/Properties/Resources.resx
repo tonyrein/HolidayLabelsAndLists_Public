@@ -306,4 +306,10 @@ The error message was {1}</value>
   <data name="VestaReportSelectTitle" xml:space="preserve">
     <value>Select one or more VESTA Reports</value>
   </data>
+  <data name="DeleteOldFilesTitle" xml:space="preserve">
+    <value>Delete Files From Previous Years</value>
+  </data>
+  <data name="SelectYears" xml:space="preserve">
+    <value>Select Years</value>
+  </data>
 </root>

@@ -8,6 +8,7 @@ using DAO;
 using HolidayLabelsAndListsHelper;
 using VestaProcessor;
 using GlobRes = AppWideResources.Properties.Resources;
+
 namespace HolidayLabelsAndLists
 {
     public partial class frmMain : Form
@@ -26,10 +27,14 @@ namespace HolidayLabelsAndLists
         {
             InitializeComponent();
             FileListManager = new HllFileListManager(context);
+            SetCaptions();
             SetAppState(AppStates.Viewing);
         }
 
-
+        private void SetCaptions()
+        {
+            this.btnMaintenance.Text = Properties.Resources.MaintBtnCaption;
+        }
         private void FillFileListView()
         {
             lvAvailableFiles.Items.Clear();
@@ -155,7 +160,7 @@ namespace HolidayLabelsAndLists
 
         private void SetButtonAndCheckboxState()
         {
-            btnMaintenance.Enabled = FileListManager.HasBackupFiles;
+            //btnMaintenance.Enabled = FileListManager.HasBackupFiles;
             chbxIncludeBackups.Enabled = FileListManager.HasBackupFiles;
         }
         /// <summary>
@@ -360,6 +365,18 @@ namespace HolidayLabelsAndLists
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnMaintenance_Click(object sender, EventArgs e)
+        {
+            using (frmFileMaintenance MaintForm = new frmFileMaintenance(this.FileListManager))
+            {
+                MaintForm.ShowDialog();
+                if (MaintForm.FilesChanged)
+                {
+                    PopulateForm(first_run: false);
+                    UpdateView();
+                }
+            }
+        }
+        private void btnMaintenance_Click0(object sender, EventArgs e)
         {
             string msg = GlobRes.DelBackupConfirmPrompt;
 

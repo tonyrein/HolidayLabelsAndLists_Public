@@ -142,6 +142,15 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Files From Previous Years.
+        /// </summary>
+        public static string DeleteOldFilesTitle {
+            get {
+                return ResourceManager.GetString("DeleteOldFilesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HLLDocumentation - General.
         /// </summary>
         public static string DocGeneralTitle {
@@ -454,6 +463,15 @@ namespace AppWideResources.Properties {
         public static string SectionXOfYMsg {
             get {
                 return ResourceManager.GetString("SectionXOfYMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Years.
+        /// </summary>
+        public static string SelectYears {
+            get {
+                return ResourceManager.GetString("SelectYears", resourceCulture);
             }
         }
         
