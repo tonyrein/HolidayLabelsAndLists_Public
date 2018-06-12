@@ -106,13 +106,6 @@
             // lbxDocType
             // 
             this.lbxDocType.FormattingEnabled = true;
-            this.lbxDocType.Items.AddRange(new object[] {
-            "All Types",
-            "Bag Labels",
-            "Gift Labels",
-            "Donor and Master List",
-            "Participant List",
-            "Postcard Labels"});
             this.lbxDocType.Location = new System.Drawing.Point(53, 40);
             this.lbxDocType.Name = "lbxDocType";
             this.lbxDocType.Size = new System.Drawing.Size(119, 82);

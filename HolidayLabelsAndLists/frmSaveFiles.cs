@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using Microsoft.WindowsAPICodePack.Dialogs;
 
+using DAO;
 using HolidayLabelsAndListsHelper;
 
 namespace HolidayLabelsAndLists
@@ -17,6 +18,7 @@ namespace HolidayLabelsAndLists
     public partial class frmSaveFiles : Form
     {
         private HllFileListManager _flm;
+        private string[] _doc_types;
 
         public frmSaveFiles(HllFileListManager flm)
         {
@@ -45,6 +47,7 @@ namespace HolidayLabelsAndLists
         private void SetLists()
         {
             this.lbxYears.DataSource = _flm.ActiveYears();
+            this.lbxDocType.DataSource = Properties.Resources.DocumentTypes.Split('#');
         }
         private void SetCombos()
         {
@@ -63,6 +66,18 @@ namespace HolidayLabelsAndLists
         private void frmSaveFiles_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private string getDestination()
+        {
+            string retStr = "";
+            Uri internal_base = new Uri(FolderManager.OutputFolder);
+
+            if (internal_base.IsBaseOf(new Uri(retStr)))
+            {
+
+            }
+            return retStr;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

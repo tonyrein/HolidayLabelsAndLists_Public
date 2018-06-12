@@ -27,6 +27,7 @@ namespace HolidayLabelsAndLists
         {
             InitializeComponent();
             FileListManager = new HllFileListManager(context);
+            cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             SetCaptions();
             SetAppState(AppStates.Viewing);
         }
@@ -142,6 +143,7 @@ namespace HolidayLabelsAndLists
 
         private void PopulateTypeToViewCombo(bool set_to_zero = true)
         {
+            //cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             // turn IndexChanged event handler off
             cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
             if (set_to_zero)    

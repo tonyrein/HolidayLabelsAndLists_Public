@@ -141,6 +141,9 @@
   <data name="DocTypeLabelText" xml:space="preserve">
     <value>Document Type(s)</value>
   </data>
+  <data name="DocumentTypes" xml:space="preserve">
+    <value>All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Postcard Labels</value>
+  </data>
   <data name="Doc_HTML" xml:space="preserve">
     <value>&lt;html&gt;
 &lt;head&gt;
@@ -251,5 +254,9 @@
   </data>
   <data name="YearLabelText" xml:space="preserve">
     <value>Year</value>
+  </data>
+  <data name="OutOfBaseMsg" xml:space="preserve">
+    <value>The folder {0} is within HLL's internal storage area. Please choose another folder that is not a subfolder of {1}.</value>
+    <comment>0=chosen folder; 1=top-level of app's storage</comment>
   </data>
 </root>

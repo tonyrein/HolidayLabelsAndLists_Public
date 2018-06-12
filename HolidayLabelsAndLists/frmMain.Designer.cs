@@ -84,13 +84,6 @@
             // 
             this.cmbTypeToView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTypeToView.FormattingEnabled = true;
-            this.cmbTypeToView.Items.AddRange(new object[] {
-            "All Types",
-            "Bag Labels",
-            "Gift Labels",
-            "Donor and Master List",
-            "Participant List",
-            "Postcard Labels"});
             this.cmbTypeToView.Location = new System.Drawing.Point(637, 89);
             this.cmbTypeToView.Margin = new System.Windows.Forms.Padding(4);
             this.cmbTypeToView.Name = "cmbTypeToView";

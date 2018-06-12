@@ -153,6 +153,15 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Postcard Labels.
+        /// </summary>
+        internal static string DocumentTypes {
+            get {
+                return ResourceManager.GetString("DocumentTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string ExitBtnCaption {
@@ -185,6 +194,15 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string MaintBtnCaption {
             get {
                 return ResourceManager.GetString("MaintBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder {0} is within HLL&apos;s internal storage area. Please choose another folder that is not a subfolder of {1}..
+        /// </summary>
+        internal static string OutOfBaseMsg {
+            get {
+                return ResourceManager.GetString("OutOfBaseMsg", resourceCulture);
             }
         }
         
