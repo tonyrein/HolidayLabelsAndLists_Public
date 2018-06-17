@@ -171,6 +171,30 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;
+        ///&lt;html&gt;
+        ///  &lt;head&gt;
+        ///
+        ///    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        ///    &lt;title&gt;Output File Management&lt;/title&gt;
+        ///  &lt;/head&gt;
+        ///  &lt;body&gt;
+        ///    &lt;h1&gt;HLL Output File Management&lt;/h1&gt;
+        ///    The File Management window offers you several functions designed to
+        ///    help you reduce clutter, save disk space, and preserve HLL&apos;s output
+        ///    files (the label and list documents). Here are brief summaries of
+        ///    the functions:&lt;br&gt;
+        ///    &lt;br&gt;
+        ///    &lt;ol&gt;
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FileManagementHTML {
+            get {
+                return ResourceManager.GetString("FileManagementHTML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         internal static string HelpBtnCaption {
@@ -203,6 +227,15 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string OutOfBaseMsg {
             get {
                 return ResourceManager.GetString("OutOfBaseMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Management of Output Files.
+        /// </summary>
+        internal static string OutputFileManagementDocTitle {
+            get {
+                return ResourceManager.GetString("OutputFileManagementDocTitle", resourceCulture);
             }
         }
         

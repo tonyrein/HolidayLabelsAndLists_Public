@@ -112,5 +112,14 @@ namespace HolidayLabelsAndLists
                 SaveForm.ShowDialog();
             }
         }
+
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            frmHelp helpForm = new frmHelp();
+            string doc_html = Properties.Resources.FileManagementHTML;
+            helpForm.HelpText = doc_html;
+            helpForm.Text = Properties.Resources.OutputFileManagementDocTitle;
+            helpForm.ShowDialog();
+        }
     }
 }
