@@ -68,15 +68,56 @@ namespace HolidayLabelsAndLists
 
         }
 
+        private string getFolder(string startFolder, string title)
+        {
+            string retStr;
+            using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
+            {
+                dialog.InitialDirectory = startFolder;
+                dialog.IsFolderPicker = true;
+                dialog.Title = Properties.Resources.SaveFolderDialogTitle;
+                var mbRes = dialog.ShowDialog();
+                retStr = (mbRes == CommonFileDialogResult.Ok) ?
+                    dialog.FileName : "";
+            }
+            return retStr;
+        }
+
         private string getDestination()
         {
             string retStr = "";
-            Uri internal_base = new Uri(FolderManager.OutputFolder);
-
-            if (internal_base.IsBaseOf(new Uri(retStr)))
+            //Uri internal_base = new Uri(FolderManager.OutputFolder);
+            bool retry_loop;
+            do
             {
-
+                retry_loop = false;
+                retStr = getFolder(
+                    Properties.Settings.Default.ArchiveFilesStartFolder,
+                    Properties.Resources.SaveFolderDialogTitle
+                    );
+                if (retStr != "")
+                {
+                    if (retStr.StartsWith(FolderManager.OutputFolder))
+                    {
+                        string dialog_msg = string.Format(Properties.Resources.OutOfBaseMsg,
+                            retStr, FolderManager.OutputFolder);
+                        string dialog_title = Properties.Resources.OutOfBaseTitle;
+                        var mbRes = MessageBox.Show(
+                            dialog_msg, dialog_title,
+                            MessageBoxButtons.RetryCancel,
+                            MessageBoxIcon.Exclamation
+                        );
+                        if (mbRes == DialogResult.Retry)
+                            retry_loop = true;
+                        else
+                        {
+                            retry_loop = false;
+                            retStr = "";
+                        }
+                    }
+                }
             }
+            while (retry_loop);
             return retStr;
         }
 
@@ -87,16 +128,9 @@ namespace HolidayLabelsAndLists
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
-            {
-                dialog.InitialDirectory = Properties.Settings.Default.ArchiveFilesStartFolder;
-                dialog.IsFolderPicker = true;
-                dialog.Title = Properties.Resources.SaveFolderDialogTitle;
-                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-                {
-                    txtDestination.Text = dialog.FileName;
-                }
-            }
+            string dest = getDestination();
+            if (dest != "")
+                txtDestination.Text = dest;
         }
 
         private void lbxDocType_SelectedIndexChanged(object sender, EventArgs e)

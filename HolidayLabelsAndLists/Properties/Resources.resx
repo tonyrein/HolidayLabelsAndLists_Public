@@ -298,6 +298,9 @@
     <value>The folder {0} is within HLL's internal storage area. Please choose another folder that is not a subfolder of {1}.</value>
     <comment>0=chosen folder; 1=top-level of app's storage</comment>
   </data>
+  <data name="OutOfBaseTitle" xml:space="preserve">
+    <value>Please Choose Another Folder</value>
+  </data>
   <data name="OutputFileManagementDocTitle" xml:space="preserve">
     <value>Management of Output Files</value>
   </data>

@@ -231,6 +231,15 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please Choose Another Folder.
+        /// </summary>
+        internal static string OutOfBaseTitle {
+            get {
+                return ResourceManager.GetString("OutOfBaseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Management of Output Files.
         /// </summary>
         internal static string OutputFileManagementDocTitle {
