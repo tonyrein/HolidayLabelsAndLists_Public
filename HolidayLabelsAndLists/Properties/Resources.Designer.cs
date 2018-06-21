@@ -61,7 +61,7 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to P:\\HolidayArchives.
+        ///   Looks up a localized string similar to P:\\HolidayArchives\\.
         /// </summary>
         internal static string ArchiveStartFolder {
             get {

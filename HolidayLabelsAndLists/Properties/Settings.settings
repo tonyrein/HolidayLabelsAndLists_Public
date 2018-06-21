@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ArchiveFilesStartFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">"P:\\HolidayArchives"</Value>
+      <Value Profile="(Default)">P:\HolidayArchives</Value>
     </Setting>
   </Settings>
 </SettingsFile>

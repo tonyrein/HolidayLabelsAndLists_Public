@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -73,9 +74,14 @@ namespace HolidayLabelsAndLists
             string retStr;
             using (CommonOpenFileDialog dialog = new CommonOpenFileDialog())
             {
-                dialog.InitialDirectory = startFolder;
+                if (!Directory.Exists(startFolder))
+                    Directory.CreateDirectory(startFolder);
+                dialog.EnsurePathExists = true;
+                dialog.EnsureFileExists = false;
                 dialog.IsFolderPicker = true;
-                dialog.Title = Properties.Resources.SaveFolderDialogTitle;
+                dialog.Title = title;
+                dialog.InitialDirectory = startFolder;
+                dialog.RestoreDirectory = false;
                 var mbRes = dialog.ShowDialog();
                 retStr = (mbRes == CommonFileDialogResult.Ok) ?
                     dialog.FileName : "";
@@ -86,7 +92,6 @@ namespace HolidayLabelsAndLists
         private string getDestination()
         {
             string retStr = "";
-            //Uri internal_base = new Uri(FolderManager.OutputFolder);
             bool retry_loop;
             do
             {

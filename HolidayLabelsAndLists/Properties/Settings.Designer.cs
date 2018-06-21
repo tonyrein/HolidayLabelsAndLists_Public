@@ -25,7 +25,7 @@ namespace HolidayLabelsAndLists.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"P:\\\\HolidayArchives\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("P:\\HolidayArchives")]
         public string ArchiveFilesStartFolder {
             get {
                 return ((string)(this["ArchiveFilesStartFolder"]));
