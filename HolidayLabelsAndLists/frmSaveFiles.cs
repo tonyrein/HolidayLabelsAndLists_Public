@@ -69,6 +69,20 @@ namespace HolidayLabelsAndLists
 
         }
 
+        /// <summary>
+        /// Present a folder selection dialog.
+        /// 
+        /// If the user clicks the dialog's Cancel button,
+        /// return "". Otherwise, return the selected
+        /// path.
+        /// 
+        /// If the given start folder does not exist, create
+        /// it before displayint the dialog.
+        /// 
+        /// </summary>
+        /// <param name="startFolder"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
         private string getFolder(string startFolder, string title)
         {
             string retStr;
@@ -89,6 +103,20 @@ namespace HolidayLabelsAndLists
             return retStr;
         }
 
+        /// <summary>
+        /// Use getFolder() to get a path from the user.
+        /// If getFolder() returns "" (ie, the user cancelled),
+        /// return "".
+        /// 
+        /// Do not allow the user to select a path that is a subfolder
+        /// of HLL's internal storage -- if getFolder() returns a folder
+        /// that is such a subfolder, tell the user and allow the user
+        /// to either retry or cancel.
+        /// 
+        /// If the user cancels, return "".
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private string getDestination()
         {
             string retStr = "";
