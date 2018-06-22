@@ -119,38 +119,47 @@ namespace HolidayLabelsAndLists
         /// <returns></returns>
         private string getDestination()
         {
-            string retStr = "";
-            bool retry_loop;
-            do
+            string retStr; // = "";
+            //bool retry_loop;
+            //do
+            while(true)
             {
-                retry_loop = false;
                 retStr = getFolder(
                     Properties.Settings.Default.ArchiveFilesStartFolder,
                     Properties.Resources.SaveFolderDialogTitle
                     );
-                if (retStr != "")
+                // quit if user cancelled folder selection. Return
+                // empty string.
+                if (retStr == "")
+                    break;
+                // quit if we have a folder that's not in the
+                // "forbidden zone." Return selected path.
+                if (!retStr.StartsWith(FolderManager.OutputFolder))
+                    break;
+                // Selected path is a subfolder in our internal storage
+                // area. Give user chance to select another path or
+                // to cancel.
+                string dialog_msg = string.Format(Properties.Resources.OutOfBaseMsg,
+                        retStr, FolderManager.OutputFolder);
+                string dialog_title = Properties.Resources.OutOfBaseTitle;
+                var mbRes = MessageBox.Show(
+                    dialog_msg, dialog_title,
+                    MessageBoxButtons.RetryCancel,
+                    MessageBoxIcon.Exclamation
+                );
+                // User wants to retry -- go
+                // to top of loop.
+                if (mbRes == DialogResult.Retry)
+                    continue;
+                else
+                // User cancelled. Set return
+                // string to empty string
+                // and exit loop.
                 {
-                    if (retStr.StartsWith(FolderManager.OutputFolder))
-                    {
-                        string dialog_msg = string.Format(Properties.Resources.OutOfBaseMsg,
-                            retStr, FolderManager.OutputFolder);
-                        string dialog_title = Properties.Resources.OutOfBaseTitle;
-                        var mbRes = MessageBox.Show(
-                            dialog_msg, dialog_title,
-                            MessageBoxButtons.RetryCancel,
-                            MessageBoxIcon.Exclamation
-                        );
-                        if (mbRes == DialogResult.Retry)
-                            retry_loop = true;
-                        else
-                        {
-                            retry_loop = false;
-                            retStr = "";
-                        }
-                    }
+                    retStr = "";
+                    break;
                 }
             }
-            while (retry_loop);
             return retStr;
         }
 
