@@ -119,9 +119,9 @@ namespace HolidayLabelsAndLists
         /// <returns></returns>
         private string getDestination()
         {
-            string retStr; // = "";
-            //bool retry_loop;
-            //do
+            string retStr;
+            // Loop until we either get a good path
+            // or the user cancels.
             while(true)
             {
                 retStr = getFolder(

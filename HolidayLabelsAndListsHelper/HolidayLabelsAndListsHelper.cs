@@ -333,24 +333,25 @@ namespace HolidayLabelsAndListsHelper
     {
         internal string FullPath { get; set; }
         internal string BareName { get; set; } // without folder or extension
-        internal string Type { get; set; }      // ie, Master List, Bag Label, Postcard Label, etc.
+        internal FilterSetTypeFilters Type { get; set; }      // ie, Master List, Bag Label, Postcard Label, etc.
+
         internal string Year { get; set; }
         internal string DonorCode { get; set; }
         internal bool IsBackupFile { get; set; }
         internal bool IsValidHLL { get; set; }
         internal bool HasNoDonor { get; set; }
-        internal bool HasDonor {  get { return !HasNoDonor; } }
+        internal bool HasDonor { get { return !HasNoDonor; } }
 
         internal HllFileInfo(string fullpath)
         {
             FullPath = fullpath;
             BareName = Path.GetFileNameWithoutExtension(fullpath);
             string without_bu_portion = BareName.Split('.')[0];
+            this.Type = new FilterSetTypeFilters(without_bu_portion);
             // Parse the file name (without the backup portion). The
             // elements denoting file type, year, and donor code are
             // separated by underscores.
             string[] sarray = without_bu_portion.ToUpper().Split('_');
-            Type = sarray[0];
             Year = (sarray.Length >= 3) ? sarray[2] : "";
             IsValidHLL = HllUtils.IsValidHllType(Type) && HllUtils.IsValidYear(Year);
             if (!IsValidHLL) // if not, don't bother with donor code, etc.
@@ -362,7 +363,7 @@ namespace HolidayLabelsAndListsHelper
             {
                 IsBackupFile = HllUtils.IsBackupFile(BareName);
                 HasNoDonor = (!HllUtils.TypeHasDonor(Type));
-                if ( ! HasNoDonor)
+                if (!HasNoDonor)
                     DonorCode = DonorCodeFromFileName(sarray);
             }
         }
@@ -385,22 +386,76 @@ namespace HolidayLabelsAndListsHelper
         }
     }
 
+    public class FilterSetTypeFilters
+    { 
+        private enum types
+        {
+            ALL,
+            DONOR_AND_MASTER,
+            PARTICIPANT,
+            BAG,
+            GIFT,
+            POSTCARD,
+        }
+        private types ty;
+        public FilterSetTypeFilters(string s)
+        {
+            s = s.ToUpper();
+            if (s.StartsWith("DONOR_AND_MASTER"))
+            {
+                this.ty = types.DONOR_AND_MASTER;
+            }
+            else
+            {
+                // For other types, only the portion
+                // before the first '_' is significant.
+                s = s.Split('_')[0];
+                // If parsing into one of our types works,
+                // use that. Otherwise set to default of "ALL."
+                if (!Enum.TryParse(s, out this.ty))
+                    this.ty = types.ALL;
+            }
+        }
+        public override string ToString()
+        {
+            return this.ty.ToString();
+        }
+
+        public bool Matches(FilterSetTypeFilters other)
+        {
+            return (this.ty == FilterSetTypeFilters.types.ALL) ||
+            (this.ty == other.ty);
+        }
+    }
+
+
     public class FilterSet
     {
         private string _donorfilter;
-        private string _typefilter;
+        public FilterSetTypeFilters TypeFIlter { get; set; }
         public string YearFilter { get; set; }
-        public string TypeFilter
-        {
-            get { return this._typefilter; }
-            set { this._typefilter = value.ToUpper().Split(' ')[0]; }
-        }
+        
         public string DonorFilter
         {
             get { return this._donorfilter; }
             set { this._donorfilter = value.ToUpper(); }
         }
         public bool IncludeBackupsFilter { get; set; }
+
+        public bool DonorMatches(string donfltr)
+        {
+            return (donfltr.ToUpper() == "ALL") || (this.DonorFilter == donfltr);
+        }
+
+        public bool TypeMatches(FilterSetTypeFilters t)
+        {
+            return this.TypeFIlter.Matches(t);
+        }
+
+        public bool YearMatches(string y)
+        {
+            return this.YearFilter == y;
+        }
     }
     /// <summary>
     /// Maintain lists of HllFileInfo objects and
@@ -417,11 +472,7 @@ namespace HolidayLabelsAndListsHelper
             get { return this.filterset.YearFilter; }
             set { this.filterset.YearFilter = value; }
         }
-        public string TypeFilter
-        {
-            get { return this.filterset.TypeFilter; }
-            set { this.filterset.TypeFilter = value; }
-        }
+        public FilterSetTypeFilters TypeFilter { get; set; 
         public string DonorFilter
         {
             get { return this.filterset.DonorFilter; }

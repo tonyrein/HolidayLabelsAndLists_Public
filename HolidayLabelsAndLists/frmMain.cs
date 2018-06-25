@@ -361,8 +361,7 @@ namespace HolidayLabelsAndLists
 
 
         /// <summary>
-        /// Delete backup files after obtaining confirmation, then
-        /// update available files display.
+        /// Open Output File Maintenance dialog
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -378,35 +377,7 @@ namespace HolidayLabelsAndLists
                 }
             }
         }
-        private void btnMaintenance_Click0(object sender, EventArgs e)
-        {
-            string msg = GlobRes.DelBackupConfirmPrompt;
-
-            var mbRes = MessageBox.Show(msg, GlobRes.DelBackupConfirmTitle, MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-            if (mbRes == DialogResult.Yes)
-            {
-                try
-                {
-                    if (FileListManager.DeleteBackupFiles() > 0)
-                    {
-                        PopulateForm(first_run: false);
-                        UpdateView();
-                    }
-
-                }
-                catch (Exception fe)
-                {
-                    MessageBox.Show(
-                        string.Format(GlobRes.DelBackupErrorMsg, fe.Message),
-                        "",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation
-                        );
-                }
-            }
-
-        }
+       
 
         /// <summary>
         /// Display general program help.
