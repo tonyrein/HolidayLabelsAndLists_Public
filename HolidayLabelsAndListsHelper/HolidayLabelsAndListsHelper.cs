@@ -353,7 +353,7 @@ namespace HolidayLabelsAndListsHelper
             // separated by underscores.
             string[] sarray = without_bu_portion.ToUpper().Split('_');
             Year = (sarray.Length >= 3) ? sarray[2] : "";
-            IsValidHLL = HllUtils.IsValidHllType(Type) && HllUtils.IsValidYear(Year);
+            IsValidHLL = ( Type.IsValid && HllUtils.IsValidYear(Year) );
             if (!IsValidHLL) // if not, don't bother with donor code, etc.
             {
                 IsBackupFile = false;
@@ -362,7 +362,7 @@ namespace HolidayLabelsAndListsHelper
             else
             {
                 IsBackupFile = HllUtils.IsBackupFile(BareName);
-                HasNoDonor = (!HllUtils.TypeHasDonor(Type));
+                HasNoDonor = (! Type.HasDonor() );
                 if (!HasNoDonor)
                     DonorCode = DonorCodeFromFileName(sarray);
             }
@@ -387,8 +387,8 @@ namespace HolidayLabelsAndListsHelper
     }
 
     public class FilterSetTypeFilters
-    { 
-        private enum types
+    {
+        public enum types
         {
             ALL,
             DONOR_AND_MASTER,
@@ -396,8 +396,27 @@ namespace HolidayLabelsAndListsHelper
             BAG,
             GIFT,
             POSTCARD,
+            INVALID,
         }
+        private types[] TypesWithDonor = new types[]
+        {
+            types.DONOR_AND_MASTER, types.BAG, types.GIFT
+        };
+        private types[] TypesWithoutDonor = new types[]
+        {
+            types.PARTICIPANT, types.POSTCARD
+        };
         private types ty;
+        public bool HasDonor()
+        {
+            return TypesWithDonor.Contains(this.ty);
+        }
+
+        public bool HasNoDonor()
+        {
+            return TypesWithDonor.Contains(this.ty);
+        }
+
         public FilterSetTypeFilters(string s)
         {
             s = s.ToUpper();
@@ -411,9 +430,9 @@ namespace HolidayLabelsAndListsHelper
                 // before the first '_' is significant.
                 s = s.Split('_')[0];
                 // If parsing into one of our types works,
-                // use that. Otherwise set to default of "ALL."
+                // use that. Otherwise set to INVALID
                 if (!Enum.TryParse(s, out this.ty))
-                    this.ty = types.ALL;
+                    this.ty = types.INVALID;
             }
         }
         public override string ToString()
@@ -421,6 +440,7 @@ namespace HolidayLabelsAndListsHelper
             return this.ty.ToString();
         }
 
+        public bool IsValid {  get { return this.ty != types.INVALID; } }
         public bool Matches(FilterSetTypeFilters other)
         {
             return (this.ty == FilterSetTypeFilters.types.ALL) ||
@@ -472,7 +492,7 @@ namespace HolidayLabelsAndListsHelper
             get { return this.filterset.YearFilter; }
             set { this.filterset.YearFilter = value; }
         }
-        public FilterSetTypeFilters TypeFilter { get; set; 
+        public FilterSetTypeFilters TypeFilter { get; set; }
         public string DonorFilter
         {
             get { return this.filterset.DonorFilter; }
@@ -592,16 +612,20 @@ namespace HolidayLabelsAndListsHelper
             return hfi.DonorCode == donor_filter;
         }
 
-        private bool TypeMatches(HllFileInfo hfi, string type_to_match)
-        {
-            if (type_to_match == "ALL")
-                return true;
-            if (type_to_match == "DONOR"
-                && (hfi.Type == "DONOR" || hfi.Type == "MASTER"))
-                return true;
-            return hfi.Type == type_to_match;
-        }
+        //private bool TypeMatches(HllFileInfo hfi, string type_to_match)
+        //{
+        //    if (type_to_match == "ALL")
+        //        return true;
+        //    if (type_to_match == "DONOR"
+        //        && (hfi.Type == "DONOR" || hfi.Type == "MASTER"))
+        //        return true;
+        //    return hfi.Type == type_to_match;
+        //}
 
+        private bool TypeMatches(HllFileInfo hfi, FilterSetTypeFilters tf)
+        {
+            return hfi.Type.Matches(tf);
+        }
         /// <summary>
         /// The UI allows users to select which files to see in the list. Filtering
         /// is possible by year, donor, and file type, and users can also choose
@@ -613,10 +637,14 @@ namespace HolidayLabelsAndListsHelper
         {
             if (!hfi.IsValidHLL)
                 return false;
-            if (!YearMatches(hfi, filterset.YearFilter))
+            if (hfi.Year != this.filterset.YearFilter)
                 return false;
-            if (!TypeMatches(hfi, filterset.TypeFilter))
+            //if (!YearMatches(hfi, filterset.YearFilter))
+            //    return false;
+            if (! hfi.Type.Matches(this.filterset.TypeFIlter)) 
                 return false;
+            //if (!TypeMatches(hfi, filterset.TypeFilter))
+                //return false;
             if (hfi.HasNoDonor)
                 return true;
             else

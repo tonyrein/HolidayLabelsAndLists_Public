@@ -198,7 +198,8 @@ namespace HolidayLabelsAndLists
         private void SetTypeFilter()
         {
             // Is it safe to assume this won't be null?
-            FileListManager.TypeFilter = cmbTypeToView.Text;
+            //FileListManager.TypeFilter = cmbTypeToView.Text;
+            FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.Text);
         }
 
         /// <summary>
@@ -301,10 +302,12 @@ namespace HolidayLabelsAndLists
         {
             SetTypeFilter();
             // Disable donor combo when file type is one where donors aren't relevant.
-            if (HllUtils.TypeHasDonor(FileListManager.TypeFilter))
-                cmbDonor.Enabled = true;
-            else
-                cmbDonor.Enabled = false;
+            //if (HllUtils.TypeHasDonor(FileListManager.TypeFilter))
+            //    cmbDonor.Enabled = true;
+            cmbDonor.Enabled = FileListManager.TypeFilter.HasDonor();
+            //    cmbDonor.Enabled = true;
+            //else
+            //    cmbDonor.Enabled = false;
 
             this.FileListManager.ApplyFilters();
             this.PopulateForm(first_run: false);

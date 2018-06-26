@@ -103,6 +103,7 @@ namespace HolidayLabelsAndLists
             {
                 OldFilesForm.ShowDialog();
             }
+            this.Focus();
         }
 
         private void btnSave_Click(object sender, EventArgs e)

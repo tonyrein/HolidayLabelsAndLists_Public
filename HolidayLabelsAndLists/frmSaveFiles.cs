@@ -19,7 +19,7 @@ namespace HolidayLabelsAndLists
     public partial class frmSaveFiles : Form
     {
         private HllFileListManager _flm;
-        private string[] _doc_types;
+        //private string[] _doc_types;
 
         public frmSaveFiles(HllFileListManager flm)
         {
