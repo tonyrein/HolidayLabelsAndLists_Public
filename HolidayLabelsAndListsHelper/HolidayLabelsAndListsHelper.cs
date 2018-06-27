@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DAO;
+using Utils;
 
 using GlobRes = AppWideResources.Properties.Resources;
 
@@ -400,7 +401,7 @@ namespace HolidayLabelsAndListsHelper
         }
         private types[] TypesWithDonor = new types[]
         {
-            types.DONOR_AND_MASTER, types.BAG, types.GIFT
+            types.ALL, types.DONOR_AND_MASTER, types.BAG, types.GIFT
         };
         private types[] TypesWithoutDonor = new types[]
         {
@@ -419,6 +420,7 @@ namespace HolidayLabelsAndListsHelper
 
         public FilterSetTypeFilters(string s)
         {
+            s = Utils.TextUtils.CleanString(s);
             s = s.ToUpper();
             if (s.StartsWith("DONOR_AND_MASTER"))
             {
@@ -492,7 +494,11 @@ namespace HolidayLabelsAndListsHelper
             get { return this.filterset.YearFilter; }
             set { this.filterset.YearFilter = value; }
         }
-        public FilterSetTypeFilters TypeFilter { get; set; }
+        public FilterSetTypeFilters TypeFilter
+        {
+            get { return this.filterset.TypeFIlter;  }
+            set { this.filterset.TypeFIlter = value; }
+        }
         public string DonorFilter
         {
             get { return this.filterset.DonorFilter; }
@@ -641,7 +647,8 @@ namespace HolidayLabelsAndListsHelper
                 return false;
             //if (!YearMatches(hfi, filterset.YearFilter))
             //    return false;
-            if (! hfi.Type.Matches(this.filterset.TypeFIlter)) 
+            //if (! hfi.Type.Matches(this.filterset.TypeFIlter)) 
+            if (! this.filterset.TypeFIlter.Matches(hfi.Type))
                 return false;
             //if (!TypeMatches(hfi, filterset.TypeFilter))
                 //return false;

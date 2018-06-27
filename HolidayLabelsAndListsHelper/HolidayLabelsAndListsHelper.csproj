@@ -60,6 +60,10 @@
       <Project>{a51e52ee-a6f0-429f-8096-108416f2f9e8}</Project>
       <Name>DAO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{c524d67c-4e3c-458c-9e1f-98d069e98461}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
