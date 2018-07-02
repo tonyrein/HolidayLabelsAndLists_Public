@@ -174,7 +174,6 @@ namespace DAO
                 string.Format(GlobRes.CountWritingMsg,
                     this.ItemList.Count, "labels", fn)
                     );
-            //this.Worker.ReportProgress(0, $"Writing {this.ItemList.Count} labels to file {fn}...");
             int col_idx = 0;
             DocX doc = null;
             try
@@ -223,16 +222,11 @@ namespace DAO
                 this.Worker.ReportProgress(0,
                     string.Format(GlobRes.FileCreationSuccessMsg, fn)
                     );
-                    //$"Successfully created file {fn}...");
-                // Return 1, indicating that this file was written.
                 retInt = 1;
             }
             catch (Exception e)
             {
                 StringBuilder sb = new StringBuilder();
-                //sb.AppendLine($"An error occurred trying to work with file {fn}.");
-                //sb.AppendLine("The error message was:");
-                //sb.AppendLine(e.Message);
                 sb.AppendFormat(
                     GlobRes.FileExceptionErrorMsg,
                     fn, e.Message
@@ -337,7 +331,6 @@ namespace DAO
                 .AppendLine(gli.request_detail);
             if (this.RequestType == "Clothing")
                 p.AppendLine(GlobRes.GiftReceiptRequest);
-                //p.AppendLine("Please include gift receipt.");
         }
 
         /// <summary>
@@ -353,7 +346,6 @@ namespace DAO
                 GlobRes.GiftLabelBaseFilename,
                 this.Year, cln_rt, cln_dcd
                 );
-            //string name = $"Gift_Labels_{this.Year}_{cln_rt}_{cln_dcd}{FILE_EXTENSION}";
             return Path.Combine(this.TargetFolder, name);
         }
     }
@@ -524,12 +516,6 @@ namespace DAO
                 this.Year,
                 Utils.TextUtils.CleanString(this.ServiceType)
                 );
-            //string name = String.Format(
-            //    "Postcard_Labels_{0}_{1}{2}",
-            //    this.Year,
-            //    Utils.TextUtils.CleanString(this.ServiceType),
-            //    LabelWriter.FILE_EXTENSION
-            //    );
             return Path.Combine(this.TargetFolder, name);
         }
 
