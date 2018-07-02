@@ -423,7 +423,6 @@ namespace HolidayLabelsAndListsHelper
             s = Utils.TextUtils.CleanString(s);
             s = s.ToUpper();
             if (s.StartsWith("DONOR") || s.StartsWith("MASTER") )
-            //if (s.StartsWith("DONOR_AND_MASTER"))
             {
                 this.ty = types.DONOR_AND_MASTER;
             }
@@ -487,9 +486,6 @@ namespace HolidayLabelsAndListsHelper
     public class HllFileListManager
     {
         private FilterSet filterset = new FilterSet();
-        //private string _donorfilter;
-        //private string _typefilter;
-        //public string YearFilter { get; set; }
         public string YearFilter
         {
             get { return this.filterset.YearFilter; }
@@ -511,7 +507,6 @@ namespace HolidayLabelsAndListsHelper
             get { return this.filterset.IncludeBackupsFilter; }
             set { this.filterset.IncludeBackupsFilter = value; }
         }
-        //public bool IncludeBackupsFilter { get; set; }
 
         private string[] AllFilenames;
         private List<HllFileInfo> RegularHllFiles = new List<HllFileInfo>();
@@ -619,16 +614,6 @@ namespace HolidayLabelsAndListsHelper
             return hfi.DonorCode == donor_filter;
         }
 
-        //private bool TypeMatches(HllFileInfo hfi, string type_to_match)
-        //{
-        //    if (type_to_match == "ALL")
-        //        return true;
-        //    if (type_to_match == "DONOR"
-        //        && (hfi.Type == "DONOR" || hfi.Type == "MASTER"))
-        //        return true;
-        //    return hfi.Type == type_to_match;
-        //}
-
         private bool TypeMatches(HllFileInfo hfi, FilterSetTypeFilters tf)
         {
             return hfi.Type.Matches(tf);
@@ -646,13 +631,8 @@ namespace HolidayLabelsAndListsHelper
                 return false;
             if (hfi.Year != this.filterset.YearFilter)
                 return false;
-            //if (!YearMatches(hfi, filterset.YearFilter))
-            //    return false;
-            //if (! hfi.Type.Matches(this.filterset.TypeFIlter)) 
             if (! this.filterset.TypeFIlter.Matches(hfi.Type))
                 return false;
-            //if (!TypeMatches(hfi, filterset.TypeFilter))
-                //return false;
             if (hfi.HasNoDonor)
                 return true;
             else
@@ -841,6 +821,10 @@ namespace HolidayLabelsAndListsHelper
         /// The collection is a Dictionary. The key of each item is the file
         /// name (without the directory) and the value of each item is
         /// the corresponding HllFileInfo object.
+        /// 
+        /// This is so that UI lists can use bare filenames as keys
+        /// to the associated HllFileInfo objects.
+        /// 
         /// </summary>
         /// <param name="fs"></param>
         /// <returns></returns>
