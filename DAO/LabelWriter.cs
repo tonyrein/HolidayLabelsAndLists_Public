@@ -449,7 +449,6 @@ namespace DAO
                 GlobRes.BagLabelBaseFilename,
                 this.Year, cln_rt, cln_dcd
                 );
-            //string name = $"Bag_Labels_{this.Year}_{cln_rt}_{cln_dcd}{FILE_EXTENSION}";
             return Path.Combine(this.TargetFolder, name);
         }
     }
