@@ -782,40 +782,22 @@ namespace HolidayLabelsAndListsHelper
         }
 
         /// <summary>
-        /// Copies the files matching a given filter set to the
-        /// given destination.
-        /// 
-        /// The destination folder must already exist. The UI
-        /// layer should take care of such issues as creating
-        /// the destination if needed, or permissions errors.
-        /// 
-        /// Returns the count of files copied.
-        /// 
-        /// If replace==false and the destination filespec already exists,
-        /// an 
-        /// If performance becomes an issue, consider replacing the foreach
-        /// loop with Parrallel.ForEach logic.
-        /// 
+        /// Get list of full filespecs of 
+        /// files matching the given filterset.
         /// </summary>
         /// <param name="fs"></param>
-        /// <param name="dest_folder"></param>
         /// <returns></returns>
-        public int CopyMatchingFiles(FilterSet fs, string dest_folder, bool replace=false)
+        public List<string> FilePathsMatchingFilter(FilterSet fs)
         {
-            int retInt = 0;
-            //Dictionary<string, HllFileInfo> d = FilesMatchingFilter(fs);
-            foreach (HllFileInfo item in FilesMatchingFilter(fs).Values)
+            List<string> retList = new List<string>();
+            foreach(HllFileInfo item in this.MatchingHFis(fs))
             {
-                string full_path = item.FullPath;
-                if (File.Exists(full_path))
+                if (File.Exists(item.FullPath))
                 {
-                    string name_plus_ext = Path.GetFileName(full_path);
-                    string dest = Path.Combine(dest_folder, name_plus_ext);
-                    File.Copy(full_path, dest, replace);
-                    retInt++;
+                    retList.Add(item.FullPath);
                 }
             }
-            return retInt;
+            return retList;
         }
 
         /// <summary>
@@ -825,6 +807,32 @@ namespace HolidayLabelsAndListsHelper
         public void ApplyFilters()
         {
             this.FilteredFiles = FilesMatchingFilter(this.filterset);
+        }
+
+        /// <summary>
+        /// Return list of HllFileInfo objects matching
+        /// the given filterset.
+        /// 
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <returns></returns>
+        private List<HllFileInfo> MatchingHFis(FilterSet fs)
+        {
+            List<HllFileInfo> retList = new List<HllFileInfo>();
+            foreach (HllFileInfo hfi in RegularHllFiles)
+            {
+                if (PassesFilter(hfi, fs))
+                    retList.Add(hfi);
+            }
+            if (fs.IncludeBackupsFilter)
+            {
+                foreach (HllFileInfo hfi in BackupHllFiles)
+                {
+                    if (PassesFilter(hfi, fs))
+                        retList.Add(hfi);
+                }
+            }
+            return retList;
         }
 
         /// <summary>
@@ -838,18 +846,10 @@ namespace HolidayLabelsAndListsHelper
         internal Dictionary<string, HllFileInfo> FilesMatchingFilter(FilterSet fs)
         {
             Dictionary<string, HllFileInfo> retDict = new Dictionary<string, HllFileInfo>();
-            foreach (HllFileInfo hfi in RegularHllFiles)
+
+            foreach(HllFileInfo hfi in this.MatchingHFis(fs))
             {
-                if (PassesFilter(hfi, fs))
-                    retDict[hfi.BareName] = hfi;
-            }
-            if (fs.IncludeBackupsFilter)
-            {
-                foreach (HllFileInfo hfi in BackupHllFiles)
-                {
-                    if (PassesFilter(hfi, fs))
-                        retDict[hfi.BareName] = hfi;
-                }
+                retDict[hfi.BareName] = hfi;
             }
             return retDict;
         }
@@ -871,7 +871,12 @@ namespace HolidayLabelsAndListsHelper
 
         /// <summary>
         /// Return an array of file names for use in the UI's
-        /// available files listview.
+        /// available files listview. This array is file names
+        /// only (no paths).
+        /// 
+        /// TODO: change this to return a List<string>, to
+        /// match FilePathsMatchingFilter.
+        /// 
         /// </summary>
         /// <returns></returns>
         public string[] FileNameList()

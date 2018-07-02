@@ -509,7 +509,7 @@ namespace DAO
             p.Append(e.head_of_household).Bold()
                 .AppendLine(e.address)
                 .AppendLine(e.city + ", " + e.state_or_province + "  " + 
-                Utils.TextUtils.CanonizePostalCode(e.postal_code));
+                Utils.TextUtils.CanonicalPostalCode(e.postal_code));
         }
 
         /// <summary>
