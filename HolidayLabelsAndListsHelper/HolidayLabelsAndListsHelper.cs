@@ -422,7 +422,8 @@ namespace HolidayLabelsAndListsHelper
         {
             s = Utils.TextUtils.CleanString(s);
             s = s.ToUpper();
-            if (s.StartsWith("DONOR_AND_MASTER"))
+            if (s.StartsWith("DONOR") || s.StartsWith("MASTER") )
+            //if (s.StartsWith("DONOR_AND_MASTER"))
             {
                 this.ty = types.DONOR_AND_MASTER;
             }
