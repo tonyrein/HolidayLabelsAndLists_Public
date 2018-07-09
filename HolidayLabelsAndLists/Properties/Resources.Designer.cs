@@ -106,11 +106,29 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have chosen to delete all labels and lists, except participant lists, from the years {}. Click \&quot;Yes\&quot; to confirm. Otherwise, click \&quot;No\&quot; or \&quot;Cancel.\&quot;.
+        /// </summary>
+        internal static string DeleteOldConfirmation {
+            get {
+                return ResourceManager.GetString("DeleteOldConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string DelOldBackupsGoButtonCaption {
+            get {
+                return ResourceManager.GetString("DelOldBackupsGoButtonCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Files From Previous Years.
         /// </summary>
-        internal static string DelOldFilesBtnCaption {
+        internal static string DelOldFilesDialogBtnCaption {
             get {
-                return ResourceManager.GetString("DelOldFilesBtnCaption", resourceCulture);
+                return ResourceManager.GetString("DelOldFilesDialogBtnCaption", resourceCulture);
             }
         }
         
@@ -249,6 +267,15 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Really Delete?.
+        /// </summary>
+        internal static string ReallyDeleteQuestion {
+            get {
+                return ResourceManager.GetString("ReallyDeleteQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         internal static string SaveBtnCaption {
@@ -290,6 +317,15 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string YearLabelText {
             get {
                 return ResourceManager.GetString("YearLabelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, Really Delete Those Files.
+        /// </summary>
+        internal static string YesReallyDeleteMsg {
+            get {
+                return ResourceManager.GetString("YesReallyDeleteMsg", resourceCulture);
             }
         }
     }

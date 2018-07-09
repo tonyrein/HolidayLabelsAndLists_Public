@@ -104,6 +104,22 @@ namespace HolidayLabelsAndLists
         }
 
         /// <summary>
+        /// getDestination() will ask the user for a folder name.
+        /// This method takes the folder name and verifies:
+        ///     1. It exists, or can be created
+        ///     2. There is write access to it.
+        ///     3. It's not in the "forbidden" area -
+        ///     that is, it's not a subfolder of HLL's
+        ///     internal storage area.
+        ///     
+        /// </summary>
+        /// <returns></returns>
+        private DialogResult FolderIsSuitableDestination()
+        {
+
+            return DialogResult.OK;
+        }
+        /// <summary>
         /// Use getFolder() to get a path from the user.
         /// If getFolder() returns "" (ie, the user cancelled),
         /// return "".

@@ -418,6 +418,7 @@ namespace HolidayLabelsAndListsHelper
             return TypesWithDonor.Contains(this.ty);
         }
 
+
         public FilterSetTypeFilters(string s)
         {
             s = Utils.TextUtils.CleanString(s);
@@ -443,6 +444,7 @@ namespace HolidayLabelsAndListsHelper
         }
 
         public bool IsValid {  get { return this.ty != types.INVALID; } }
+        public bool IsParticipantList {  get { return this.ty == types.PARTICIPANT; } }
         public bool Matches(FilterSetTypeFilters other)
         {
             return (this.ty == FilterSetTypeFilters.types.ALL) ||
@@ -485,7 +487,7 @@ namespace HolidayLabelsAndListsHelper
     /// </summary>
     public class HllFileListManager
     {
-        private FilterSet filterset = new FilterSet();
+        public FilterSet filterset = new FilterSet();
         public string YearFilter
         {
             get { return this.filterset.YearFilter; }
@@ -726,17 +728,20 @@ namespace HolidayLabelsAndListsHelper
         /// Iterate in descending order so that we can delete items from the
         /// lists without changing the indices.
         /// 
+        /// Do not delete ParticipantList files.
+        /// 
         /// Return the count of files deleted.
         /// </summary>
         /// <param name="years"></param>
         /// <returns></returns>
-        int DeleteOldFiles(string[] years)
+        public int DeleteOldFiles(List<String> years)
         {
             int retInt = 0;
             for(int idx = RegularFilesCount - 1; idx >= 0; idx--)
             {
                 HllFileInfo fi = RegularHllFiles[idx];
-                if (years.Contains(fi.Year))
+                if ( (years.Contains(fi.Year)) &&
+                    ( ! fi.Type.IsParticipantList ) )
                 {
                     if (File.Exists(fi.FullPath))
                     {
@@ -749,7 +754,8 @@ namespace HolidayLabelsAndListsHelper
             for (int idx = BackupFilesCount - 1; idx >= 0; idx--)
             {
                 HllFileInfo fi = BackupHllFiles[idx];
-                if (years.Contains(fi.Year))
+                if ( (years.Contains(fi.Year)) &&
+                    ( ! fi.Type.IsParticipantList ) )
                 {
                     if (File.Exists(fi.FullPath))
                     {

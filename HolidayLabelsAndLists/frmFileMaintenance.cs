@@ -39,7 +39,7 @@ namespace HolidayLabelsAndLists
         private void SetCaptions()
         {
             btnDeleteBackups.Text = Properties.Resources.DelBackupsBtnCaption;
-            btnDeleteOld.Text = Properties.Resources.DelOldFilesBtnCaption;
+            btnDeleteOld.Text = Properties.Resources.DelOldFilesDialogBtnCaption;
             btnDone.Text = Properties.Resources.CloseBtnCaption;
             btnSave.Text = Properties.Resources.SaveFilesBtnCaption;
             btnHelp.Text = Properties.Resources.HelpBtnCaption;

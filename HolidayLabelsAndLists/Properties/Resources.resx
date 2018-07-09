@@ -132,7 +132,7 @@
   <data name="DelBackupsBtnCaption" xml:space="preserve">
     <value>Delete Backup Files</value>
   </data>
-  <data name="DelOldFilesBtnCaption" xml:space="preserve">
+  <data name="DelOldFilesDialogBtnCaption" xml:space="preserve">
     <value>Delete Files From Previous Years</value>
   </data>
   <data name="DestLabelText" xml:space="preserve">
@@ -303,5 +303,17 @@
   </data>
   <data name="OutputFileManagementDocTitle" xml:space="preserve">
     <value>Management of Output Files</value>
+  </data>
+  <data name="DelOldBackupsGoButtonCaption" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteOldConfirmation" xml:space="preserve">
+    <value>You have chosen to delete all labels and lists, except participant lists, from the years {}. Click \"Yes\" to confirm. Otherwise, click \"No\" or \"Cancel.\"</value>
+  </data>
+  <data name="YesReallyDeleteMsg" xml:space="preserve">
+    <value>Yes, Really Delete Those Files</value>
+  </data>
+  <data name="ReallyDeleteQuestion" xml:space="preserve">
+    <value>Really Delete?</value>
   </data>
 </root>
