@@ -156,11 +156,10 @@ namespace HolidayLabelsAndLists.Properties {
         ///    &lt;/head&gt;
         ///    &lt;body style=&quot;cursor: auto;&quot;&gt;
         ///    &lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User
-        ///    Documentation&lt;/h1&gt;&lt;br&gt;
+        ///    Documentation&lt;/h1&gt;
         ///    &lt;hr/&gt;
         ///    &lt;h2&gt;Introduction&lt;/h2&gt;
-        ///    &lt;br&gt;
-        ///    &lt;p&gt;The Holiday Labels and Lists program(&amp;quot;HLL&amp;qu [rest of string was truncated]&quot;;.
+        ///    &lt;p&gt;The Holiday Labels and Lists program(&amp;quot;HL [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Doc_HTML {
             get {
