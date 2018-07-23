@@ -173,7 +173,7 @@ The error message was {1}</value>
     <comment>0=year; 1=service type</comment>
   </data>
   <data name="PostcardLabelBaseFilename" xml:space="preserve">
-    <value>Postcard_Labels_{0}_{1}.xlsx</value>
+    <value>Postcard_Labels_{0}_{1}.docx</value>
     <comment>0=year; 1=service type</comment>
   </data>
   <data name="AllSectionsProcessedOKMsg" xml:space="preserve">

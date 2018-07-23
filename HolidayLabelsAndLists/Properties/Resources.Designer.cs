@@ -106,7 +106,7 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have chosen to delete all labels and lists, except participant lists, from the years {}. Click \&quot;Yes\&quot; to confirm. Otherwise, click \&quot;No\&quot; or \&quot;Cancel.\&quot;.
+        ///   Looks up a localized string similar to You have chosen to delete all labels and lists, except participant lists, from the years {0}. Click &quot;Yes&quot; to confirm. Otherwise, click &quot;No&quot; or &quot;Cancel.&quot;.
         /// </summary>
         internal static string DeleteOldConfirmation {
             get {

@@ -103,6 +103,7 @@ namespace HolidayLabelsAndLists
                 int numFilesDeleted = this.FileListManager.DeleteOldFiles(selectedYearsList);
                 if (numFilesDeleted > 0)
                     this.FilesChanged = true;
+                this.Close();
             }
         }
 

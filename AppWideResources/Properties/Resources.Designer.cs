@@ -404,7 +404,7 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Postcard_Labels_{0}_{1}.xlsx.
+        ///   Looks up a localized string similar to Postcard_Labels_{0}_{1}.docx.
         /// </summary>
         public static string PostcardLabelBaseFilename {
             get {

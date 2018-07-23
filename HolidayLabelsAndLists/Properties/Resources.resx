@@ -224,7 +224,8 @@
     <value>Delete</value>
   </data>
   <data name="DeleteOldConfirmation" xml:space="preserve">
-    <value>You have chosen to delete all labels and lists, except participant lists, from the years {}. Click \"Yes\" to confirm. Otherwise, click \"No\" or \"Cancel.\"</value>
+    <value>You have chosen to delete all labels and lists, except participant lists, from the years {0}. Click "Yes" to confirm. Otherwise, click "No" or "Cancel."</value>
+    <comment>0=comma-separated string with list of years</comment>
   </data>
   <data name="YesReallyDeleteMsg" xml:space="preserve">
     <value>Yes, Really Delete Those Files</value>
