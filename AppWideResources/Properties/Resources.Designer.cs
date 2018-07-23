@@ -251,6 +251,15 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gift_Card_Summary_Labels_{0}.docx.
+        /// </summary>
+        public static string GiftCardSummaryLabelsBaseFilename {
+            get {
+                return ResourceManager.GetString("GiftCardSummaryLabelsBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gift_Labels_{0}_{1}_{2}.docx.
         /// </summary>
         public static string GiftLabelBaseFilename {

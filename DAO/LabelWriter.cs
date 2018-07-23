@@ -523,4 +523,42 @@ namespace DAO
             get { return FolderManager.PostcardsAndParticipantsFolder(Year, ServiceType); }
         }
     }
+
+    class GiftCardSummaryLabelWriter : LabelWriter
+    {
+        public GiftCardSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year,
+            int label_height = 102, int label_width = 3787, int padding_width = 172,
+            int left_margin = 13, int right_margin = 13, int top_margin = 36, int bottom_margin = 0,
+            int num_cols = 5)
+            : base(wk, ctx, year, label_height, label_width, padding_width, left_margin, right_margin,
+                  top_margin, bottom_margin, num_cols)
+        {
+        }
+
+        protected override string TargetFolder
+        {
+            // no ServiceType associated with this label type -- pass
+            // empty string so we'll get back "Other" (the default).
+            get { return FolderManager.PostcardsAndParticipantsFolder(Year, ""); }
+        }
+
+        protected override string GetOutputFileSpec()
+        {
+            string name = string.Format(
+                  GlobRes.GiftCardSummaryLabelsBaseFilename,
+                  this.Year
+                  );
+            return Path.Combine(this.TargetFolder, name);
+        }
+
+        protected override void SetItemList()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void TypeOneRecord(Cell c, object rec)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
