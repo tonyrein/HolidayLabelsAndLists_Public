@@ -142,18 +142,25 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///	&lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
-        ///&lt;/head&gt;
-        ///&lt;body style=&quot;cursor: auto;&quot;&gt;
-        ///&lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User Documentation&lt;/h1&gt;
+        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;
+        ///&lt;html&gt;
+        ///  &lt;head&gt;
         ///
-        ///&lt;h2&gt;Introduction&lt;/h2&gt;
-        ///
-        ///&lt;p&gt;The Holiday Labels and Lists program (&amp;quot;HLL&amp;quot;)&amp;nbsp;is meant to be used in connection with Valley&amp;#39;s holiday programs. It streamlines the process of creating bag and gift labels, master and donor lists, participant lists, and postcard labels from VESTA reports.&lt;/p&gt;
-        ///
-        ///&lt;p&gt;The focus of HLL&amp;#39;s display  [rest of string was truncated]&quot;;.
+        ///    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        ///    &lt;title&gt;HLL_Doc&lt;/title&gt;
+        ///  &lt;/head&gt;
+        ///  &lt;body&gt;
+        ///    &lt;html&gt;&lt;br&gt;
+        ///    &lt;head&gt;&lt;br&gt;
+        ///    &lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
+        ///    &lt;/head&gt;
+        ///    &lt;body style=&quot;cursor: auto;&quot;&gt;
+        ///    &lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User
+        ///    Documentation&lt;/h1&gt;&lt;br&gt;
+        ///    &lt;hr/&gt;
+        ///    &lt;h2&gt;Introduction&lt;/h2&gt;
+        ///    &lt;br&gt;
+        ///    &lt;p&gt;The Holiday Labels and Lists program(&amp;quot;HLL&amp;qu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Doc_HTML {
             get {
@@ -202,9 +209,7 @@ namespace HolidayLabelsAndLists.Properties {
         ///    help you reduce clutter, save disk space, and preserve HLL&apos;s output
         ///    files (the label and list documents). Here are brief summaries of
         ///    the functions:&lt;br&gt;
-        ///    &lt;br&gt;
-        ///    &lt;ol&gt;
-        ///    [rest of string was truncated]&quot;;.
+        ///    &lt;br&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FileManagementHTML {
             get {
@@ -236,6 +241,15 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string MaintBtnCaption {
             get {
                 return ResourceManager.GetString("MaintBtnCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no files old enough to be deleted..
+        /// </summary>
+        internal static string MsgNoOldFiles {
+            get {
+                return ResourceManager.GetString("MsgNoOldFiles", resourceCulture);
             }
         }
         
@@ -308,6 +322,15 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string SaveFolderDialogTitle {
             get {
                 return ResourceManager.GetString("SaveFolderDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to Delete.
+        /// </summary>
+        internal static string TitleNoOldFIles {
+            get {
+                return ResourceManager.GetString("TitleNoOldFIles", resourceCulture);
             }
         }
         

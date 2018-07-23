@@ -144,90 +144,6 @@
   <data name="DocumentTypes" xml:space="preserve">
     <value>All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Postcard Labels</value>
   </data>
-  <data name="Doc_HTML" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt;
-	&lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
-&lt;/head&gt;
-&lt;body style="cursor: auto;"&gt;
-&lt;h1 style="text-align: center;"&gt;Holiday Labels and Lists User Documentation&lt;/h1&gt;
-
-&lt;h2&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;The Holiday Labels and Lists program (&amp;quot;HLL&amp;quot;)&amp;nbsp;is meant to be used in connection with Valley&amp;#39;s holiday programs. It streamlines the process of creating bag and gift labels, master and donor lists, participant lists, and postcard labels from VESTA reports.&lt;/p&gt;
-
-&lt;p&gt;The focus of HLL&amp;#39;s display is the &amp;quot;Available Label and List Files&amp;quot; window. The items listed there are HLL&amp;#39;s &amp;quot;work product;&amp;quot; its reason for being.&lt;/p&gt;
-
-&lt;p&gt;Other items in the program&amp;#39;s window are:&lt;/p&gt;
-
-&lt;ul&gt;
-	&lt;li&gt;Controls used to select which of the available label and list files to view. You can filter the view by file type (participant list, bag labels, etc.), year, and donor, and also select whether or not to view backup files.&lt;/li&gt;
-	&lt;li&gt;Buttons to:
-	&lt;ul&gt;
-		&lt;li&gt;Process VESTA reports (that is, generate more label and list files)&lt;/li&gt;
-		&lt;li&gt;Delete backup files in order to free up disk space&lt;/li&gt;
-		&lt;li&gt;View this help file&lt;/li&gt;
-		&lt;li&gt;Exit the program&lt;/li&gt;
-	&lt;/ul&gt;
-	&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;NOTE:&amp;nbsp;&lt;/strong&gt;HLL does not create the VESTA reports; instead, it uses reports which have already been downloaded from VESTA. Also, HLL does not delete the VESTA reports, or change them in any way -- after you have added them, they will remain wherever you left them. You can even add them again if you want.&lt;/p&gt;
-
-&lt;h2&gt;How to Use&lt;/h2&gt;
-
-&lt;p&gt;Before using HLL, log in to VESTA and download one or more reports. Make sure to save them as Excel files, and remember where you save them. Then, start HLL, click &amp;quot;Process&amp;nbsp;VESTA Reports.&amp;quot; A standard Windows file selection dialog will open, allowing you to go to the folder containing your VESTA reports and select those reports (either one at a time or multiple files at once). HLL will then read the reports and use the information in them to create the appropriate label and list files.&lt;/p&gt;
-
-&lt;p&gt;Once the VESTA reports have been processed, the files generated files&amp;nbsp;will show up in HLL under&amp;nbsp;&amp;quot;Available Label&amp;nbsp;and List Files.&amp;quot; Double-click on a file and&amp;nbsp;it will open up in Excel or Word as appropriate, for viewing or printing.&lt;/p&gt;
-
-&lt;p&gt;When you process&amp;nbsp;VESTA reports, if the name of an output label or list file matches a file that already exists, the older file will be renamed. For example, if &amp;quot;Bag_Labels_2016_Clothing_XYZ.docx&amp;quot; is already there, the original will be renamed &amp;quot;Bag_Labels_2016_Clothing_XYZ.bak0001.docx,&amp;quot; &amp;quot;Bag_Labels_2016_Clothing_XYZ.bak0002.docx,&amp;quot; and so on. It&amp;#39;s possible that quite a few backup files could be generated after some time -- if so desired, the backup files can be deleted.&lt;/p&gt;
-
-&lt;h2&gt;Where Are My Files?&lt;/h2&gt;
-
-&lt;p&gt;HLL puts the files it generates into subfolders under the ##TOPLEVEL_OUTPUT FOLDER##. Files are sorted by year and by type. For example, for program year 2017, the files will be located as follows:&lt;/p&gt;
-
-&lt;ul&gt;
-	&lt;li&gt;Bag and Gift Labels:&amp;nbssp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
-	&lt;li&gt;Donor and Master Lists:&amp;nbsp;&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
-	&lt;li&gt;Participant Lists and Postcard Labels:
-	&lt;ul&gt;
-		&lt;li&gt;Adopt a Family:&amp;nbsp;&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
-		&lt;li&gt;Holiday Food Basket:&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Christmas&lt;/li&gt;
-		&lt;li&gt;Thanksgiving Basket:&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Thanksgiving&lt;/li&gt;
-	&lt;/ul&gt;
-	&lt;/li&gt;
-	&lt;li&gt;Anything else (eg Fans/Heaters):&amp;nbsp;##TOPLEVEL_OUTPUT FOLDER##\2017\Other&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Backup files will be placed in the same folders as the files they&amp;#39;re backing up.&lt;/p&gt;
-
-&lt;p&gt;There is no provision in HLL to delete anything other than backup files. If you want to delete non-backup label or list files, or VESTA reports, you can do that by going to the storage folder&amp;nbsp;via Windows Explorer and manually deleting the files.&lt;/p&gt;
-
-&lt;h2&gt;Usage Tips&lt;/h2&gt;
-
-&lt;ul&gt;
-	&lt;li&gt;Instead of using many small VESTA reports, use a few larger ones. When you ask VESTA for the reports, you have the option of asking for reports for only a single donor and only a single report type (e.g., a Gift Label Report for Mike Albert Leasing). Instead of doing that, ask for a report for Toys and Clothing labels, both Gift and Bag, for all donors at once.&amp;nbsp;Then tell HLL to process that one big file. It will take a while (maybe several minutes) but is a much better use of your time than processing dozens of smaller reports individually!&lt;/li&gt;
-	&lt;li&gt;Delete the backup files every once in a while. This may help the program run a little quicker and will also free up some disk space for other uses.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;Problems? Suggestions? Further Questions?&lt;/h2&gt;
-
-&lt;h3&gt;I only see files for one donor!&lt;/h3&gt;
-
-&lt;p&gt;Use the Donor &amp;quot;drop-down&amp;quot; selecter to pick another donor. If the donor you&amp;#39;re looking for isn&amp;#39;t there, verify that you&amp;#39;ve processed VESTA reports pertaining to that donor. If you&amp;#39;re unsure about a particular VESTA report, processing that report again will do no harm.&lt;/p&gt;
-
-&lt;p&gt;(HLL does not have a &amp;quot;display files for all donors&amp;quot; option -- that would probably not be very comfortable to use because of the clutter.)&lt;/p&gt;
-
-&lt;h3&gt;I don&amp;#39;t see bag/gift/donor/master files for a donor!&lt;/h3&gt;
-
-&lt;p&gt;It may be that that particular donor is not participating in that particular program.&lt;/p&gt;
-
-&lt;h3&gt;I have a suggestion for how to improve HLL, or I have another question or problem not address in this document.&lt;/h3&gt;
-
-&lt;p&gt;The administrator of ##PROGEAM_NAME## is ##ADMIN_NAME##. You can email him at &lt;a href="mailto:##ADMIN_EMAIL##&lt;/a&gt;&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="ExitBtnCaption" xml:space="preserve">
     <value>Exit</value>
   </data>
@@ -315,5 +231,165 @@
   </data>
   <data name="ReallyDeleteQuestion" xml:space="preserve">
     <value>Really Delete?</value>
+  </data>
+  <data name="MsgNoOldFiles" xml:space="preserve">
+    <value>There are no files old enough to be deleted.</value>
+  </data>
+  <data name="TitleNoOldFIles" xml:space="preserve">
+    <value>Nothing to Delete</value>
+  </data>
+  <data name="Doc_HTML" xml:space="preserve">
+    <value>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
+&lt;html&gt;
+  &lt;head&gt;
+
+    &lt;meta http-equiv="content-type" content="text/html; charset=UTF-8"&gt;
+    &lt;title&gt;HLL_Doc&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;html&gt;&lt;br&gt;
+    &lt;head&gt;&lt;br&gt;
+    &lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body style="cursor: auto;"&gt;
+    &lt;h1 style="text-align: center;"&gt;Holiday Labels and Lists User
+    Documentation&lt;/h1&gt;&lt;br&gt;
+    &lt;hr/&gt;
+    &lt;h2&gt;Introduction&lt;/h2&gt;
+    &lt;br&gt;
+    &lt;p&gt;The Holiday Labels and Lists program(&amp;quot;HLL&amp;quot;) is meant to be used in connection
+    with Valley&amp;#39;s holiday programs. It streamlines the process
+    of creating bag and gift labels, master and donor lists, participant
+    lists, and postcard labels from VESTA reports.&lt;/p&gt;&lt;br&gt;
+    &lt;br&gt;
+    &lt;p&gt;The focus of HLL&amp;#39;s display is the
+    &amp;quot;Available Label and List Files&amp;quot; window. The items
+    listed there are HLL&amp;#39;s &amp;quot;work product;&amp;quot; its
+    reason for being.&lt;/p&gt;&lt;br&gt;
+    &lt;p&gt;Other items in the program&amp;#39;s window are:&lt;/p&gt;&lt;br&gt;
+    &lt;ul&gt;&lt;br&gt;
+    &lt;li&gt;Controls used to select which of the
+    available label and list files to view. You can filter the view by
+    file type (participant list, bag labels, etc.), year, and donor, and
+    also select whether or not to view backup files.&lt;/li&gt;
+    &lt;li&gt;Buttons to:&lt;br&gt;
+    &lt;ul&gt;
+    &lt;li&gt;Process VESTA reports (that is, generate more label and list files)&lt;/li&gt;
+    &lt;li&gt;Delete old label and list files in order to free up disk space&lt;/li&gt;
+    &lt;li&gt;View this help file&lt;/li&gt;
+    &lt;li&gt;Exit the program&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;br&gt;
+    &lt;p&gt;&lt;strong&gt;NOTE: &lt;/strong&gt;HLL does not create the VESTA reports; instead, it uses reports which have
+    already been downloaded from VESTA. Also, HLL does not delete the
+    VESTA reports, or change them in any way -- after you have added
+    them, they will remain wherever you left them. You can even add them
+    again if you want.&lt;/p&gt;
+    &lt;br&gt;
+    &lt;h2&gt;How to Use&lt;/h2&gt;
+    &lt;hr/&gt;
+    &lt;p&gt;Before using HLL, log in to VESTA and download one or more
+    reports. Make sure to save them as Excel files, and remember where
+    you save them. Then, start HLL, click
+    &amp;quot;ProcessVESTA Reports.&amp;quot; A standard
+    Windows file selection dialog will open, allowing you to go to the
+    folder containing your VESTA reports and select those reports
+    (either one at a time or multiple files at once). HLL will then read
+    the reports and use the information in them to create the
+    appropriate label and list files.&lt;/p&gt;
+    &lt;br&gt;
+    &lt;p&gt;Once the VESTA reports have been processed, the files
+    generated files&amp;amp;nbsp;will show up in HLL
+    under &amp;quot;Available Label and List Files.&amp;quot; Double-click on a file and it will open up
+    in Excel or Word as appropriate, for viewing or printing.&lt;/p&gt;
+
+    &lt;p&gt;When you process VESTA reports, if the name of an
+    output label or list file matches a file that already exists, the
+    older file will be renamed. For example, if
+    &amp;quot;Bag_Labels_2016_Clothing_XYZ.docx&amp;quot; is already
+    there, the original will be renamed
+    &amp;quot;Bag_Labels_2016_Clothing_XYZ.bak0001.docx,&amp;quot;
+    &amp;quot;Bag_Labels_2016_Clothing_XYZ.bak0002.docx,&amp;quot; and
+    so on.&lt;/p&gt;
+    &lt;br&gt;
+    &lt;p&gt;After some time, it's possible that HLL will have created
+    many label and list documents which are no longer required. In order
+    to free disk space or reduce clutter, HLL allows you to get rid of
+    some of these by clicking the &amp;quot;Delete Files from Previous Years&amp;quot;
+    button. Note that this functionality will not delete any participant
+    lists, no matter how old, and will not delete any files from the two
+    most recent years.
+    &lt;/p&gt;
+    &lt;br&gt;
+    &lt;h2&gt;Where Are My Files?&lt;/h2&gt;&lt;br&gt;
+    &lt;hr/&gt;
+    &lt;p&gt;HLL puts the files it generates into subfolders under the
+    ##TOPLEVEL_OUTPUT FOLDER##. Files are sorted by year and by type.
+    For example, for program year 2017, the files will be located as
+    follows:&lt;/p&gt;
+    &lt;br&gt;
+    &lt;ul&gt;
+		&lt;li&gt;Bag and Gift Labels: ##TOPLEVEL_OUTPUT_FOLDER##\2017\Christmas&lt;/li&gt;
+		&lt;li&gt;Donor and Master Lists: ##TOPLEVEL_OUTPUT_FOLDER##\2017\Christmas&lt;/li&gt;
+		&lt;li&gt;Participant Lists and Postcard Labels:
+			&lt;ul&gt;
+				&lt;li&gt;Adopt a Family: ##TOPLEVEL_OUTPUT_FOLDER##\2017\Christmas&lt;/li&gt;
+				&lt;li&gt;Holiday Food Basket:_##TOPLEVEL_OUTPUT_FOLDER##\2017\Christmas&lt;/li&gt;
+				&lt;li&gt;Thanksgiving Basket: ##TOPLEVEL_OUTPUT_FOLDER##\2017\Thanksgiving&lt;/li&gt;
+			&lt;/ul&gt;
+		&lt;/li&gt;
+		&lt;li&gt;Anything else (eg Fans/Heaters): ##TOPLEVEL_OUTPUT_FOLDER##\2017\Other&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;br&gt;
+    &lt;p&gt;Backup files will be placed in the same folders as the
+    files they&amp;#39;re backing up.&lt;/p&gt;&lt;br&gt;
+    &lt;br&gt;
+    &lt;p&gt;There is no provision in HLL to delete anything other than
+    old files (files older than the most recent two years). To delete
+	 anything else, go to the storagefolder via Windows Explorer and manually delete the
+    files.&lt;/p&gt;
+    &lt;br&gt;
+    &lt;h2&gt;Usage Tips&lt;/h2&gt;
+    &lt;br&gt;
+    &lt;ul&gt;&lt;br&gt;
+		&lt;li&gt;Instead of using many small VESTA reports, use a few larger ones. When you ask VESTA for the reports,
+    you have the option of asking for reports for only a single donor
+    and only a single report type (e.g., a Gift Label Report for Mike
+    Albert Leasing). Instead of doing that, ask for a report for Toys
+    and Clothing labels, both Gift and Bag, for all donors at
+    once. Then tell HLL to process that one big file. It will
+    take a while (maybe several minutes) but is a much better use of
+    your time than processing dozens of smaller reports
+    individually!&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;br&gt;
+    &lt;h2&gt;Problems? Suggestions? Further Questions?&lt;/h2&gt;
+    &lt;hr/&gt;
+    &lt;h3&gt;I only see files for one donor!&lt;/h3&gt;
+    &lt;br&gt;
+    &lt;p&gt;Use the Donor &amp;quot;drop-down&amp;quot; selecter to
+    pick another donor. If the donor you&amp;#39;re looking for
+    isn&amp;#39;t there, verify that you&amp;#39;ve processed VESTA
+    reports pertaining to that donor. If you&amp;#39;re unsure about a
+    particular VESTA report, processing that report again will do no
+    harm.&lt;/p&gt;
+    &lt;p&gt;(HLL does not have a &amp;quot;display files for all
+    donors&amp;quot; option -- that would probably not be very
+    comfortable to use because of the clutter.)&lt;/p&gt;&lt;br&gt;
+    &lt;h3&gt;I don&amp;#39;t see bag/gift/donor/master files for a
+    donor!&lt;/h3&gt;
+    &lt;p&gt;It may be that that particular donor is not participating
+    in that particular program.&lt;/p&gt;
+    &lt;h3&gt;I have a suggestion for how to improve HLL, or I have
+    another question or problem not address in this document.&lt;/h3&gt;
+    &lt;p&gt;The administrator of ##PROGEAM_NAME## is ##ADMIN_NAME##.
+    You can email him at &lt;a
+    href="mailto:##ADMIN_EMAIL##&lt;/a&gt;&lt;/p&gt;&lt;br&gt;
+    &lt;/body&gt;&lt;br&gt;
+    &lt;/html&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</value>
   </data>
 </root>

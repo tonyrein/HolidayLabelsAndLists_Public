@@ -16,6 +16,11 @@ namespace HolidayLabelsAndLists
     public partial class frmDeleteOldFiles : Form
     {
         private HllFileListManager FileListManager;
+        // Let caller (frmMain) know if it needs to update itself:
+        public bool FilesChanged
+        {
+            get; private set;
+        }
         public frmDeleteOldFiles(HllFileListManager flm)
         {
             InitializeComponent();
@@ -43,6 +48,7 @@ namespace HolidayLabelsAndLists
         }
         private void frmDeleteOldFiles_Activated(object sender, EventArgs e)
         {
+            this.FilesChanged = false;
             // ActiveYears() returns an array. This SHOULD be sorted
             // in descending order, but just to make sure we don't
             // inadvertently delete any files from the current or most
@@ -52,6 +58,15 @@ namespace HolidayLabelsAndLists
             Array.Sort(sa);
             Array.Reverse(sa);
             this.lbxYearsToDelete.DataSource = sa.Skip(2).ToArray();
+            // Anything to delete? If not, display a message and close this form.
+            if (this.lbxYearsToDelete.Items.Count < 1)
+            {
+                this.Hide();
+                MessageBox.Show(Properties.Resources.MsgNoOldFiles,
+                    Properties.Resources.TitleNoOldFIles,
+                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                this.Close();
+            }
         }
 
         /// <summary>
@@ -64,11 +79,6 @@ namespace HolidayLabelsAndLists
             btnDelete.Enabled = (lbxYearsToDelete.SelectedItems.Count > 0);
         }
 
-
-        private void DeleteSelectedYears(List<String> yearsToDelete)
-        {
-
-        }
         /// <summary>
         /// Display a confirmation message. If the user
         /// confirms file deletion choice, delete the files.
@@ -84,14 +94,21 @@ namespace HolidayLabelsAndLists
                 selectedYearsList.Add(item.ToString());
             }
             string years = String.Join(", ", selectedYearsList);
-            String msg_tmpl = Properties.Resources.DeleteOldConfirmation;
-            string msg = String.Format(msg_tmpl, years);
+            //String msg_tmpl = Properties.Resources.DeleteOldConfirmation;
+            string msg = String.Format(Properties.Resources.DeleteOldConfirmation, years);
             var msgBoxResp = MessageBox.Show(msg, Properties.Resources.ReallyDeleteQuestion,
                 MessageBoxButtons.YesNoCancel);
             if (msgBoxResp == DialogResult.Yes)
             {
-                this.FileListManager.DeleteOldFiles(selectedYearsList);
+                int numFilesDeleted = this.FileListManager.DeleteOldFiles(selectedYearsList);
+                if (numFilesDeleted > 0)
+                    this.FilesChanged = true;
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

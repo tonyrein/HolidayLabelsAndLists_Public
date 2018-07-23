@@ -34,7 +34,8 @@ namespace HolidayLabelsAndLists
 
         private void SetCaptions()
         {
-            this.btnMaintenance.Text = Properties.Resources.MaintBtnCaption;
+            //this.btnMaintenance.Text = Properties.Resources.MaintBtnCaption;
+            this.btnDeleteOldFiles.Text = Properties.Resources.DelOldFilesDialogBtnCaption;
         }
         private void FillFileListView()
         {
@@ -395,7 +396,7 @@ namespace HolidayLabelsAndLists
             string doc_html = Properties.Resources.Doc_HTML;
             helpForm.HelpText = doc_html;
             helpForm.Text = GlobRes.DocGeneralTitle;
-            helpForm.ShowDialog();
+            helpForm.ShowDialog(this);
         }
 
         /// <summary>
@@ -608,6 +609,19 @@ namespace HolidayLabelsAndLists
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnDeleteOldFiles_Click(object sender, EventArgs e)
+        {
+            using (frmDeleteOldFiles OldFilesForm = new frmDeleteOldFiles(this.FileListManager))
+            {
+                OldFilesForm.ShowDialog(this);
+                if (OldFilesForm.FilesChanged)
+                {
+                    PopulateForm(first_run: false);
+                    UpdateView();
+                }
+            }
         }
     }
 }
