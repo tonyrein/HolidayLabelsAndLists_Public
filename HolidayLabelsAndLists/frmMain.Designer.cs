@@ -40,10 +40,10 @@
             this.cmbDonor = new System.Windows.Forms.ComboBox();
             this.chbxIncludeBackups = new System.Windows.Forms.CheckBox();
             this.btnAddVestaReports = new System.Windows.Forms.Button();
-            this.btnMaintenance = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnClose = new System.Windows.Forms.Button();
+            this.btnDeleteOldFiles = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvAvailableFiles
@@ -84,13 +84,6 @@
             // 
             this.cmbTypeToView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTypeToView.FormattingEnabled = true;
-            this.cmbTypeToView.Items.AddRange(new object[] {
-            "All Types",
-            "Bag Labels",
-            "Gift Labels",
-            "Donor and Master List",
-            "Participant List",
-            "Postcard Labels"});
             this.cmbTypeToView.Location = new System.Drawing.Point(637, 89);
             this.cmbTypeToView.Margin = new System.Windows.Forms.Padding(4);
             this.cmbTypeToView.Name = "cmbTypeToView";
@@ -178,21 +171,9 @@
             this.btnAddVestaReports.UseVisualStyleBackColor = true;
             this.btnAddVestaReports.Click += new System.EventHandler(this.btnAddVestaReports_Click);
             // 
-            // btnMaintenance
-            // 
-            this.btnMaintenance.Location = new System.Drawing.Point(1032, 146);
-            this.btnMaintenance.Margin = new System.Windows.Forms.Padding(4);
-            this.btnMaintenance.Name = "btnMaintenance";
-            this.btnMaintenance.Size = new System.Drawing.Size(113, 64);
-            this.btnMaintenance.TabIndex = 17;
-            this.btnMaintenance.Text = "Delete Backup Files";
-            this.toolTip1.SetToolTip(this.btnMaintenance, "Delete bakxxxx files to free disk space");
-            this.btnMaintenance.UseVisualStyleBackColor = true;
-            this.btnMaintenance.Click += new System.EventHandler(this.btnMaintenance_Click);
-            // 
             // btnHelp
             // 
-            this.btnHelp.Location = new System.Drawing.Point(1032, 234);
+            this.btnHelp.Location = new System.Drawing.Point(1032, 237);
             this.btnHelp.Margin = new System.Windows.Forms.Padding(4);
             this.btnHelp.Name = "btnHelp";
             this.btnHelp.Size = new System.Drawing.Size(113, 64);
@@ -212,14 +193,24 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // btnDeleteOldFiles
+            // 
+            this.btnDeleteOldFiles.Location = new System.Drawing.Point(1032, 148);
+            this.btnDeleteOldFiles.Name = "btnDeleteOldFiles";
+            this.btnDeleteOldFiles.Size = new System.Drawing.Size(113, 69);
+            this.btnDeleteOldFiles.TabIndex = 20;
+            this.btnDeleteOldFiles.Text = "button1";
+            this.btnDeleteOldFiles.UseVisualStyleBackColor = true;
+            this.btnDeleteOldFiles.Click += new System.EventHandler(this.btnDeleteOldFiles_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1166, 604);
+            this.Controls.Add(this.btnDeleteOldFiles);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnHelp);
-            this.Controls.Add(this.btnMaintenance);
             this.Controls.Add(this.btnAddVestaReports);
             this.Controls.Add(this.chbxIncludeBackups);
             this.Controls.Add(this.cmbDonor);
@@ -254,10 +245,10 @@
         private System.Windows.Forms.ColumnHeader clmFileNames;
         private System.Windows.Forms.CheckBox chbxIncludeBackups;
         private System.Windows.Forms.Button btnAddVestaReports;
-        private System.Windows.Forms.Button btnMaintenance;
         private System.Windows.Forms.Button btnHelp;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnDeleteOldFiles;
     }
 }
 

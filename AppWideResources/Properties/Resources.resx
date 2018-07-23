@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ChristmasFolderName" xml:space="preserve">
+    <value>Christmas</value>
+  </data>
+  <data name="ThanksgivingFolderName" xml:space="preserve">
+    <value>Thanksgiving</value>
+  </data>
+  <data name="OtherFolderName" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="CountWritingMsg" xml:space="preserve">
+    <value>Writing {0} {1} to file {2}</value>
+    <comment>0=count; 1="data rows" or "labels"; 2=filename</comment>
+  </data>
+  <data name="FileCreationSuccessMsg" xml:space="preserve">
+    <value>Successfully created file {0} </value>
+    <comment>0=filename</comment>
+  </data>
+  <data name="FileExceptionErrorMsg" xml:space="preserve">
+    <value>An error occurred trying to work with file {0}.
+The error message was {1}</value>
+    <comment>0=filename; 1= error message text</comment>
+  </data>
+  <data name="GiftReceiptRequest" xml:space="preserve">
+    <value>Please include gift receipt.</value>
+  </data>
+  <data name="PageNumbers" xml:space="preserve">
+    <value>&amp;Bpage &amp;P of &amp;N</value>
+  </data>
+  <data name="NoDataMsg" xml:space="preserve">
+    <value>--- NO DATA ---</value>
+  </data>
+  <data name="BagLabelBaseFilename" xml:space="preserve">
+    <value>Bag_Labels_{0}_{1}_{2}.docx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="DonorListBasefilename" xml:space="preserve">
+    <value>Donor_List_{0}_{1}_{2}.xlsx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="DonorListWorksheetName" xml:space="preserve">
+    <value>{0} {1} DL {2}</value>
+    <comment>0=donor name; 1=year; 2=request type</comment>
+  </data>
+  <data name="GiftLabelBaseFilename" xml:space="preserve">
+    <value>Gift_Labels_{0}_{1}_{2}.docx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="MasterListBasefilename" xml:space="preserve">
+    <value>Master_List_{0}_{1}_{2}.xlsx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="ParticipantListBasefilename" xml:space="preserve">
+    <value>Participant_List_{0}_{1}.xlsx</value>
+    <comment>0=year; 1=service type</comment>
+  </data>
+  <data name="PostcardLabelBaseFilename" xml:space="preserve">
+    <value>Postcard_Labels_{0}_{1}.docx</value>
+    <comment>0=year; 1=service type</comment>
+  </data>
+  <data name="AllSectionsProcessedOKMsg" xml:space="preserve">
+    <value>All sections processed OK</value>
+  </data>
+  <data name="CountOfDataSectionsMsg" xml:space="preserve">
+    <value>Found {0} data sections.</value>
+    <comment>0=count</comment>
+  </data>
+  <data name="DataSectionsFoundMsg" xml:space="preserve">
+    <value>Found {0} data sections.</value>
+    <comment>0=count of sections found</comment>
+  </data>
+  <data name="DelBackupConfirmPrompt" xml:space="preserve">
+    <value>Click "Yes" to confirm deletion of backup files.</value>
+  </data>
+  <data name="DelBackupConfirmTitle" xml:space="preserve">
+    <value>Confirm File Deletion</value>
+  </data>
+  <data name="DelBackupErrorMsg" xml:space="preserve">
+    <value>An error occurred while trying to delete backup files. The error text is: {0}</value>
+    <comment>0=error text</comment>
+  </data>
+  <data name="DocGeneralTitle" xml:space="preserve">
+    <value>HLLDocumentation - General</value>
+  </data>
+  <data name="DonorListHeader" xml:space="preserve">
+    <value>Donor List, {0}, {1}, {2}</value>
+    <comment>0=request type; 1=year; 2=donor name</comment>
+  </data>
+  <data name="FileAddingSuccessMsg" xml:space="preserve">
+    <value>Successfully added {0} label and/or list files</value>
+    <comment>0=count of files added</comment>
+  </data>
+  <data name="FileNotFoundMsg" xml:space="preserve">
+    <value>File {0} does not exist.</value>
+    <comment>0=filespec</comment>
+  </data>
+  <data name="FileNotFoundTitle" xml:space="preserve">
+    <value>File Not Found</value>
+  </data>
+  <data name="FileSpecFilterExcel" xml:space="preserve">
+    <value>Excel Files (*.XLS;*XLS?)|*.XLS;*.XLS?</value>
+  </data>
+  <data name="GeneratingOutputFilesMsg" xml:space="preserve">
+    <value>Generating output files...</value>
+  </data>
+  <data name="InvalidWorksheetMsg" xml:space="preserve">
+    <value>{0} does not appear to b e a valid Excel worksheet.</value>
+    <comment>0=filespec</comment>
+  </data>
+  <data name="MasterListHeader" xml:space="preserve">
+    <value>Master List, {0}, {1}, {2}</value>
+    <comment>0=request type; 1=year; 2=donor name</comment>
+  </data>
+  <data name="MasterListWorksheetName" xml:space="preserve">
+    <value>{0} {1} ML {2}</value>
+    <comment>0=donor code; 1=year; 2=request type</comment>
+  </data>
+  <data name="NoMatchingFilesMsg" xml:space="preserve">
+    <value>No files match the selected criteria.</value>
+  </data>
+  <data name="NoMatchingFilesTooltip" xml:space="preserve">
+    <value>Select different criteria for Document Type to View, Year, and/or Donor</value>
+  </data>
+  <data name="NoOutputFilesMsg" xml:space="preserve">
+    <value>There are no label or list files available for viewing.\nPlease click "Process VESTAReports"\nand select one or more reports.</value>
+  </data>
+  <data name="NoOutputFilesTitle" xml:space="preserve">
+    <value>Please Add VESTA Reports</value>
+  </data>
+  <data name="OKToCloseMsg" xml:space="preserve">
+    <value>You may now close this window.</value>
+  </data>
+  <data name="OpeningReportMsg" xml:space="preserve">
+    <value>Processing report {0}</value>
+    <comment>0=filename</comment>
+  </data>
+  <data name="ParticipantListHeader" xml:space="preserve">
+    <value>Participant List, {0}, {1}</value>
+    <comment>0=service type; 1=year</comment>
+  </data>
+  <data name="ProcessingCancelledMsg" xml:space="preserve">
+    <value>Processing cancelled.</value>
+  </data>
+  <data name="ProcessingDataSectionsMsg" xml:space="preserve">
+    <value>Processing data section {0} of {1}</value>
+    <comment>0=current section number; 1=total section count</comment>
+  </data>
+  <data name="ResultsSheetDefaultName" xml:space="preserve">
+    <value>Report results</value>
+  </data>
+  <data name="SearchingForDataSectionsMsg" xml:space="preserve">
+    <value>Searching for data sections in this VESTA report...</value>
+  </data>
+  <data name="SectionsProcessedSuccessMsg" xml:space="preserve">
+    <value>All sections processed OK</value>
+  </data>
+  <data name="SectionXOfYMsg" xml:space="preserve">
+    <value>Processing data section {0} of {1}...</value>
+    <comment>0=current section number; 1= total section count for this report</comment>
+  </data>
+  <data name="SheetNotFoundInFileMsg" xml:space="preserve">
+    <value>{0} not found in {1}</value>
+    <comment>0=sheet name; 1=filespec</comment>
+  </data>
+  <data name="SomeSectionsNotProcessedMsg" xml:space="preserve">
+    <value>Only {0} sections processed OK (out of {1})</value>
+    <comment>0=count of sections processed; 1=total count</comment>
+  </data>
+  <data name="StartingEachReportMsg" xml:space="preserve">
+    <value>Processing report {0}</value>
+    <comment>0=filespec</comment>
+  </data>
+  <data name="UnknownReportTypeMsg" xml:space="preserve">
+    <value>{0} report type is unknown.</value>
+    <comment>0=filespec</comment>
+  </data>
+  <data name="VestaReportCountMsg" xml:space="preserve">
+    <value>Processing {0} VESTAReports</value>
+    <comment>0=count of reports</comment>
+  </data>
+  <data name="VestaReportExceptionMsg" xml:space="preserve">
+    <value>There was an error during processing of the VESTA reports. The error text is:  {0}</value>
+    <comment>0=error text</comment>
+  </data>
+  <data name="VestaReportProcessingStartMsg" xml:space="preserve">
+    <value>Starting processing of VESTA reports...</value>
+  </data>
+  <data name="VestaReportSelectTitle" xml:space="preserve">
+    <value>Select one or more VESTA Reports</value>
+  </data>
+  <data name="DeleteOldFilesTitle" xml:space="preserve">
+    <value>Delete Files From Previous Years</value>
+  </data>
+  <data name="SelectYears" xml:space="preserve">
+    <value>Select Years</value>
+  </data>
+</root>

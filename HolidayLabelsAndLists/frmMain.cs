@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using DAO;
 using HolidayLabelsAndListsHelper;
 using VestaProcessor;
+using GlobRes = AppWideResources.Properties.Resources;
 
 namespace HolidayLabelsAndLists
 {
@@ -26,10 +27,16 @@ namespace HolidayLabelsAndLists
         {
             InitializeComponent();
             FileListManager = new HllFileListManager(context);
+            cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
+            SetCaptions();
             SetAppState(AppStates.Viewing);
         }
 
-
+        private void SetCaptions()
+        {
+            //this.btnMaintenance.Text = Properties.Resources.MaintBtnCaption;
+            this.btnDeleteOldFiles.Text = Properties.Resources.DelOldFilesDialogBtnCaption;
+        }
         private void FillFileListView()
         {
             lvAvailableFiles.Items.Clear();
@@ -42,8 +49,10 @@ namespace HolidayLabelsAndLists
             // No matches?
             if (lvAvailableFiles.Items.Count == 0)
             {
-                ListViewItem item = new ListViewItem("No files match the selected criteria.");
-                item.ToolTipText = "Select different criteria for Document Type to View, Year, and/or Donor.";
+                //ListViewItem item = new ListViewItem("No files match the selected criteria.");
+                //item.ToolTipText = "Select different criteria for Document Type to View, Year, and/or Donor.";
+                ListViewItem item = new ListViewItem(GlobRes.NoMatchingFilesMsg);
+                item.ToolTipText = GlobRes.NoMatchingFilesTooltip;
                 lvAvailableFiles.Items.Add(item);
             }
 
@@ -135,6 +144,7 @@ namespace HolidayLabelsAndLists
 
         private void PopulateTypeToViewCombo(bool set_to_zero = true)
         {
+            //cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             // turn IndexChanged event handler off
             cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
             if (set_to_zero)    
@@ -151,6 +161,11 @@ namespace HolidayLabelsAndLists
             lvAvailableFiles.Columns[0].Width = -2;
         }
 
+        private void SetButtonAndCheckboxState()
+        {
+            //btnMaintenance.Enabled = FileListManager.HasBackupFiles;
+            chbxIncludeBackups.Enabled = FileListManager.HasBackupFiles;
+        }
         /// <summary>
         /// Set data sources and initial selections of combo boxes.
         /// 
@@ -184,7 +199,8 @@ namespace HolidayLabelsAndLists
         private void SetTypeFilter()
         {
             // Is it safe to assume this won't be null?
-            FileListManager.TypeFilter = cmbTypeToView.Text;
+            //FileListManager.TypeFilter = cmbTypeToView.Text;
+            FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.Text);
         }
 
         /// <summary>
@@ -216,17 +232,27 @@ namespace HolidayLabelsAndLists
             SetYearFilter();
             SetShowBackupsFilter();
         }
+
+        /// <summary>
+        /// Display a message box telling the user that there are no
+        /// output (label and list) documents to display and
+        /// directing the user to import some VESTA reports in order
+        /// to create some output documents.
+        /// </summary>
         private void ShowNoFilesMessage()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("There are no label or list files available for viewing.");
-            sb.AppendLine("Please click \"Process VESTA Reports\"");
-            sb.AppendLine(" and select one or more VESTA reports.");
-            MessageBox.Show(sb.ToString(), "Please Add VESTA Reports", MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            MessageBox.Show(
+                GlobRes.NoOutputFilesMsg, GlobRes.NoOutputFilesTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
+
         }
 
 
+        /// <summary>
+        /// After the list of matching files has changed,
+        /// repopulate the form and set the controls.
+        /// </summary>
         private void UpdateView()
         {
             PopulateForm(first_run: false);
@@ -253,6 +279,7 @@ namespace HolidayLabelsAndLists
                 FileListManager.ApplyFilters();
                 FillFileListView();
                 FormatFileListView();
+                SetButtonAndCheckboxState();
             }
         }
         private void frmMain_Load(object sender, EventArgs e)
@@ -276,10 +303,12 @@ namespace HolidayLabelsAndLists
         {
             SetTypeFilter();
             // Disable donor combo when file type is one where donors aren't relevant.
-            if (HllUtils.TypeHasDonor(FileListManager.TypeFilter))
-                cmbDonor.Enabled = true;
-            else
-                cmbDonor.Enabled = false;
+            //if (HllUtils.TypeHasDonor(FileListManager.TypeFilter))
+            //    cmbDonor.Enabled = true;
+            cmbDonor.Enabled = FileListManager.TypeFilter.HasDonor();
+            //    cmbDonor.Enabled = true;
+            //else
+            //    cmbDonor.Enabled = false;
 
             this.FileListManager.ApplyFilters();
             this.PopulateForm(first_run: false);
@@ -307,7 +336,7 @@ namespace HolidayLabelsAndLists
 
         /// <summary>
         /// When user double-clicks on an item in the
-        /// list of available files, tell Windows to open
+        /// list of available files, tell the operating system to open
         /// it with the default application (Word or Excel).
         /// </summary>
         /// <param name="sender"></param>
@@ -319,7 +348,12 @@ namespace HolidayLabelsAndLists
             if (File.Exists(filespec))
                 HllUtils.OpenFile(filespec);
             else
-                MessageBox.Show($"File {filespec} does not exist.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    string.Format(GlobRes.FileNotFoundMsg, filespec),
+                    GlobRes.FileNotFoundTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
         }
 
         private void chbxIncludeBackups_CheckedChanged(object sender, EventArgs e)
@@ -331,47 +365,38 @@ namespace HolidayLabelsAndLists
 
 
         /// <summary>
-        /// Delete backup files after obtaining confirmation, then
-        /// update available files display.
-        /// 
-        /// TODO: Add check for existence of backup files; if there are
-        /// none, disable "Delete Backup Files" button.
-        /// 
+        /// Open Output File Maintenance dialog
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnMaintenance_Click(object sender, EventArgs e)
         {
-            string msg = "Click \"Yes\" to confirm deletion of backup files.";
-
-            var mbRes = MessageBox.Show(msg, "Confirm File Deletion", MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-            if (mbRes == DialogResult.Yes)
+            using (frmFileMaintenance MaintForm = new frmFileMaintenance(this.FileListManager))
             {
-                try
+                MaintForm.ShowDialog();
+                if (MaintForm.FilesChanged)
                 {
-                    if (FileListManager.DeleteBackupFiles() > 0)
-                    {
-                        PopulateForm(first_run: false);
-                        UpdateView();
-                    }
-
-                }
-                catch (Exception fe)
-                {
-                    StringBuilder sb = new StringBuilder("An error occurred while trying to delete");
-                    sb.AppendLine("backup files. The error text is:");
-                    sb.AppendLine(fe.Message);
-                    MessageBox.Show(sb.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    PopulateForm(first_run: false);
+                    UpdateView();
                 }
             }
-
         }
+       
 
+        /// <summary>
+        /// Display general program help.
+        /// The Form property called "Text" actually
+        /// sets a form's title.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            Form helpForm = new frmHelp();
-            helpForm.ShowDialog();
+            frmHelp helpForm = new frmHelp();
+            string doc_html = Properties.Resources.Doc_HTML;
+            helpForm.HelpText = doc_html;
+            helpForm.Text = GlobRes.DocGeneralTitle;
+            helpForm.ShowDialog(this);
         }
 
         /// <summary>
@@ -382,6 +407,10 @@ namespace HolidayLabelsAndLists
         /// <param name="context"></param>
         /// <param name="report_names"></param>
         /// <returns></returns>
+        /// TODO: Move this method out of this class. It doesn't
+        /// refer to anything in frmMain and does no user interaction. It should probably
+        /// be in a helper or utility class -- perhaps VestaImporterUtils?
+        /// 
         private int ImportFromVesta(BackgroundWorker wk,
             DBWrapper context, string[] report_names)
         {
@@ -390,7 +419,7 @@ namespace HolidayLabelsAndLists
             {
                 if (Path.GetExtension(fn) == ".xlsx")
                 {
-                    VestaImporter p = new VestaImporter(wk, fn);
+                    VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
                     retInt += p.execute(context);
                 }
             }
@@ -413,11 +442,13 @@ namespace HolidayLabelsAndLists
             int retInt = 0;
             this.context.Clean();
             worker.ReportProgress(0,
-                $"Processing {report_names.Length} VESTA reports...");
+                string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
+                );
             ImportFromVesta(worker, this.context, report_names);
             if (!worker.CancellationPending)
             {
-                worker.ReportProgress(0, $"Generating output files...");
+
+                worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
                 retInt = HllUtils.MakeOutputFiles(worker, this.context);
             }
             return retInt;
@@ -442,9 +473,10 @@ namespace HolidayLabelsAndLists
                     ProgressForm = new frmProgress();
                     ProgressForm.Done = false;
                     ProgressForm.Worker = _bgworker;
+                    // Hook up "FormClosed" event handler:
                     ProgressForm.FormClosed += ProgressForm_FormClosed;
                     ProgressForm.Show();
-                    ProgressForm.AddMessage("Starting now!");
+                    ProgressForm.AddMessage(GlobRes.VestaReportProcessingStartMsg);
                     // start the background work:
                     _bgworker.RunWorkerAsync(report_names);
                 }
@@ -503,7 +535,6 @@ namespace HolidayLabelsAndLists
                     this.Show();
                     break;
                 case AppStates.ShowingWork:
-                    //this.Hide(); MainForm is already hidden
                     ProgressForm.Done = true;
                     break;
             }
@@ -527,8 +558,7 @@ namespace HolidayLabelsAndLists
         {
             if (e.ProgressPercentage == 100)
                 ProgressForm.Done = true;
-            string s = (string)e.UserState;
-            ProgressForm.AddMessage(s);
+            ProgressForm.AddMessage((string)e.UserState);
         }
 
         /// <summary>
@@ -548,20 +578,24 @@ namespace HolidayLabelsAndLists
             {
                 if (e.Error != null)
                 {
-                    StringBuilder sb = new StringBuilder("There was an error during processing of the VESTA reports.");
-                    sb.AppendLine("The error text is:");
-                    sb.AppendLine(e.Error.Message);
-                    ProgressForm.AddMessage(sb.ToString());
+                    ProgressForm.AddMessage(
+                        string.Format(GlobRes.VestaReportExceptionMsg,
+                            e.Error.Message)
+                            );
                 }
                 else if (e.Cancelled)
                 {
-                    ProgressForm.AddMessage("Processing cancelled. You may now close this window.");
+                    ProgressForm.AddMessage(
+                        GlobRes.ProcessingCancelledMsg + GlobRes.OKToCloseMsg
+                        );
                 }
                 else
                 {
                     int res = (int)e.Result;
-                    ProgressForm.AddMessage($"Successfully added {res} label and list files.");
-                    ProgressForm.AddMessage("You may now close this window.");
+                    ProgressForm.AddMessage(
+                        string.Format(GlobRes.FileAddingSuccessMsg, res)
+                        );
+                    ProgressForm.AddMessage(GlobRes.OKToCloseMsg);
                     if (res > 0)
                         UpdateView();
                 }
@@ -575,6 +609,19 @@ namespace HolidayLabelsAndLists
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnDeleteOldFiles_Click(object sender, EventArgs e)
+        {
+            using (frmDeleteOldFiles OldFilesForm = new frmDeleteOldFiles(this.FileListManager))
+            {
+                OldFilesForm.ShowDialog(this);
+                if (OldFilesForm.FilesChanged)
+                {
+                    PopulateForm(first_run: false);
+                    UpdateView();
+                }
+            }
         }
     }
 }

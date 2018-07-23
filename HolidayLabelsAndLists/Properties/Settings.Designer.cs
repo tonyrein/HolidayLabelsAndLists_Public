@@ -22,5 +22,17 @@ namespace HolidayLabelsAndLists.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("P:\\HolidayArchives")]
+        public string ArchiveFilesStartFolder {
+            get {
+                return ((string)(this["ArchiveFilesStartFolder"]));
+            }
+            set {
+                this["ArchiveFilesStartFolder"] = value;
+            }
+        }
     }
 }

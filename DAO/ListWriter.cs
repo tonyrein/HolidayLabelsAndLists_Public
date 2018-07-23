@@ -7,6 +7,7 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.ComponentModel;
+using GlobRes = AppWideResources.Properties.Resources;
 
 namespace DAO
 {
@@ -178,7 +179,10 @@ namespace DAO
             ExcelPackage pkg = null;
             // Tell the world what we're doing:
             this.Worker.ReportProgress(0,
-                $"Writing {this.DataRows.Count} data rows to file {fn}...");
+                String.Format(GlobRes.CountWritingMsg,
+                    this.DataRows.Count, "data rows", fn)
+                    );
+          //      $"Writing {this.DataRows.Count} data rows to file {fn}...");
             try
             {
                 // Write records to an ExcelWorksheet object attached
@@ -191,15 +195,19 @@ namespace DAO
                 this.DoFormatting();
                 pkg.Save();
                 this.Worker.ReportProgress(0,
-                    $"Successfully created file {fn}...");
+                    String.Format(GlobRes.FileCreationSuccessMsg,fn)
+                    );
                 retInt = 1;
             }
             catch (Exception e)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"An error occurred trying to work with file {fn}.");
-                sb.AppendLine("The error message was:");
-                sb.AppendLine(e.Message);
+                //sb.AppendLine($"An error occurred trying to work with file {fn}.");
+                //sb.AppendLine("The error message was:");
+                //sb.AppendLine(e.Message);
+                sb.AppendFormat(
+                    GlobRes.FileExceptionErrorMsg,
+                    fn, e.Message);
                 this.Worker.ReportProgress(0, sb.ToString());
                 retInt = 0;
             }
@@ -215,7 +223,6 @@ namespace DAO
             // construct a string to be put into the header. Start
             // by turning on Bold and setting font size:
             StringBuilder sb = new StringBuilder("&B&18");
-
             // Append each header row to sb. Add a new
             // line after each one, except for the last one.
             for (int i = 0; i < this.HeaderRows.Length; i++)
@@ -238,10 +245,9 @@ namespace DAO
             // Now do page numbers on right side of header.
             // The below string results in bold text with,
             // for example, "page 3 of 5."
-            s = "&Bpage &P of &N";
-            this.sh.HeaderFooter.FirstHeader.RightAlignedText = s;
-            this.sh.HeaderFooter.EvenHeader.RightAlignedText = s;
-            this.sh.HeaderFooter.OddHeader.RightAlignedText = s;
+            this.sh.HeaderFooter.FirstHeader.RightAlignedText = GlobRes.PageNumbers;
+            this.sh.HeaderFooter.EvenHeader.RightAlignedText = GlobRes.PageNumbers;
+            this.sh.HeaderFooter.OddHeader.RightAlignedText = GlobRes.PageNumbers;
         }
 
 
@@ -273,7 +279,7 @@ namespace DAO
         protected void TypeNoDataAlert()
         {
             this.CurrentRow = this.TopDataRow;
-            this.WriteRow(new string[] { "--- NO DATA ---" });
+            this.WriteRow(new string[] { GlobRes.NoDataMsg });
         }
 
         /// <summary>
@@ -433,8 +439,10 @@ namespace DAO
         {
             return new string[]
             {
-                $"Donor List, {this.RequestType}, {this.Year}",
-                this.Dnr.name
+                string.Format(GlobRes.DonorListHeader,
+                this.RequestType, this.Year, this.Dnr.name)
+                //$"Donor List, {this.RequestType}, {this.Year}",
+                //this.Dnr.name
             };
         }
 
@@ -515,7 +523,9 @@ namespace DAO
             get
             {
                 string dn = Utils.TextUtils.CleanString(this.Dnr.code);
-                return $"{dn} {this.Year} DL {this.RequestType}";
+                return string.Format(GlobRes.DonorListWorksheetName,
+                    dn, this.Year, this.RequestType);
+                //return $"{dn} {this.Year} DL {this.RequestType}";
             }
         }
 
@@ -523,11 +533,12 @@ namespace DAO
         /// Output filespec is constructed from string "Donor_List",
         /// year, request type, and donor code.
         /// </summary>
-        /// <returns></returns>
         protected override string GetOutputFileSpec()
         {
             string dc = Utils.TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = $"Donor_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
+            //string name = $"Donor_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
+            string name = string.Format(GlobRes.DonorListBasefilename,
+                this.Year, this.RequestType, dc);
             return Path.Combine(this.TargetFolder(), name);
         }
 
@@ -563,8 +574,10 @@ namespace DAO
         {
             return new string[]
             {
-                $"Master List, {this.RequestType}, {this.Year}",
-                this.Dnr.name
+                string.Format(GlobRes.MasterListHeader,
+                this.RequestType, this.Year, this.Dnr.name)
+                //$"Master List, {this.RequestType}, {this.Year}",
+                //this.Dnr.name
             };
         }
 
@@ -609,7 +622,9 @@ namespace DAO
             get
             {
                 string dc = Utils.TextUtils.CleanString(this.Dnr.code);
-                return $"{dc} {this.Year} ML {this.RequestType}";
+                return string.Format(GlobRes.MasterListWorksheetName,
+                    dc, this.Year, this.RequestType);
+                //return $"{dc} {this.Year} ML {this.RequestType}";
             }
         }
 
@@ -621,7 +636,9 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string dc = Utils.TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = $"Master_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
+            string name = string.Format(GlobRes.MasterListBasefilename,
+                this.Year, this.RequestType, dc);
+            //string name = $"Master_List_{this.Year}_{this.RequestType}_{dc}{ListWriter.FILE_EXTENSION}";
             return Path.Combine(this.TargetFolder(), name);
         }
 
@@ -734,7 +751,7 @@ namespace DAO
                     retList.Add(
                                     new string[] { e.head_of_household, e.phone, e.address,
                                         e.city, e.state_or_province,
-                                        Utils.TextUtils.CanonizePostalCode(e.postal_code) }
+                                        Utils.TextUtils.CanonicalPostalCode(e.postal_code) }
                                 );
                 }
             return retList;
@@ -749,7 +766,9 @@ namespace DAO
         {
             return new string[]
             {
-                $"Participant List, {this.ServiceType}, {this.Year}"
+                string.Format(GlobRes.ParticipantListHeader,
+                this.ServiceType, this.Year)
+                //$"Participant List, {this.ServiceType}, {this.Year}"
             };
         }
 
@@ -769,12 +788,15 @@ namespace DAO
         /// <returns></returns>
         protected override string GetOutputFileSpec()
         {
-            string name = String.Format(
-                "Participant_List_{0}_{1}{2}",
+            //string name = String.Format(
+            //    "Participant_List_{0}_{1}{2}",
+            //    this.Year,
+            //    Utils.TextUtils.CleanString(this.ServiceType),
+            //    ListWriter.FILE_EXTENSION
+            //    );
+            string name = string.Format(GlobRes.ParticipantListBasefilename,
                 this.Year,
-                Utils.TextUtils.CleanString(this.ServiceType),
-                ListWriter.FILE_EXTENSION
-                );
+                Utils.TextUtils.CleanString(this.ServiceType));
             return Path.Combine(this.TargetFolder(), name);
         }
 

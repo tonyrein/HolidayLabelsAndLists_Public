@@ -34,7 +34,45 @@ namespace Utils
             while (File.Exists(retName));
             return retName;
         }
+
+
+        /// <summary>
+        /// Copies the files in the given list to the destination..
+        /// 
+        /// The destination folder must already exist. The UI
+        /// layer should take care of such issues as creating
+        /// the destination if needed, or permissions errors.
+        /// 
+        /// Returns the count of files copied.
+        /// 
+        /// If replace==false and the destination filespec already exists,
+        /// an exception will be thrown.
+        /// 
+        /// If performance becomes an issue, consider replacing the foreach
+        /// loop with Parrallel.ForEach logic.
+        /// 
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <param name="dest_folder"></param>
+        /// <returns></returns>
+        public static int CopyListOfFiles(List<string> filespecs, string dest_folder, bool replace = false)
+        {
+            int retInt = 0;
+            //Dictionary<string, HllFileInfo> d = FilesMatchingFilter(fs);
+            foreach (string full_path in filespecs)
+            {
+                if (File.Exists(full_path))
+                {
+                    string name_plus_ext = Path.GetFileName(full_path);
+                    string dest = Path.Combine(dest_folder, name_plus_ext);
+                    File.Copy(full_path, dest, replace);
+                    retInt++;
+                }
+            }
+            return retInt;
+        }
     }
+
     public static class TextUtils
     {
         private static string non_alphanum = @"[^0-9a-zA-Z\s]+"; // one or more members of given class
@@ -103,7 +141,7 @@ namespace Utils
         /// </summary>
         /// <param name="orig_code"></param>
         /// <returns></returns>
-        public static string CanonizePostalCode(string orig_code)
+        public static string CanonicalPostalCode(string orig_code)
         {
             if (string.IsNullOrEmpty(orig_code))
             {
