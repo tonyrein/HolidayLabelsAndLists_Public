@@ -157,6 +157,7 @@ namespace VestaProcessor
             // The rest of the fields are simply strings:
             retObj.service_type = row[this.field_indices["Partner Network Service"]];
             retObj.head_of_household = row[this.field_indices["Head of Household"]];
+            retObj.head_of_household_id = row[this.field_indices["client ID"]];
             retObj.phone = row[this.field_indices["Primary Phone"]];
             retObj.address = row[this.field_indices["Address"]];
             retObj.city = row[this.field_indices["City"]];
