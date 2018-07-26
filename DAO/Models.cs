@@ -163,7 +163,7 @@ namespace DAO
             }
         }
         public string head_of_household { get; set; }
-        public string head_of_household_id { get; set; }
+        public string family_id { get; set; }
         public string phone { get; set; }
         public string address { get; set; }
         public string city { get; set; }
