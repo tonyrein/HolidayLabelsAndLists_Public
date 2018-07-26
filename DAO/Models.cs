@@ -169,6 +169,7 @@ namespace DAO
         public string city { get; set; }
         public string state_or_province { get; set; }
         public string postal_code { get; set; }
+        public int gift_card_count { get; set; }
     }
 
 }

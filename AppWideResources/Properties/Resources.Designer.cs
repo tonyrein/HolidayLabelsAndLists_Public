@@ -251,15 +251,6 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gift_Card_Summary_Labels_{0}.docx.
-        /// </summary>
-        public static string GiftCardSummaryLabelsBaseFilename {
-            get {
-                return ResourceManager.GetString("GiftCardSummaryLabelsBaseFilename", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Gift_Labels_{0}_{1}_{2}.docx.
         /// </summary>
         public static string GiftLabelBaseFilename {
@@ -409,6 +400,15 @@ namespace AppWideResources.Properties {
         public static string ParticipantListHeader {
             get {
                 return ResourceManager.GetString("ParticipantListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant_Summary_Labels_{0}.docx.
+        /// </summary>
+        public static string ParticipantSummaryLabelsBaseFilename {
+            get {
+                return ResourceManager.GetString("ParticipantSummaryLabelsBaseFilename", resourceCulture);
             }
         }
         

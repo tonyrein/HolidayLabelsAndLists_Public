@@ -524,9 +524,9 @@ namespace DAO
         }
     }
 
-    class GiftCardSummaryLabelWriter : LabelWriter
+    class ParticipantSummaryLabelWriter : LabelWriter
     {
-        public GiftCardSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year,
+        public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year,
             int label_height = 102, int label_width = 3787, int padding_width = 172,
             int left_margin = 13, int right_margin = 13, int top_margin = 36, int bottom_margin = 0,
             int num_cols = 5)
@@ -545,7 +545,7 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string name = string.Format(
-                  GlobRes.GiftCardSummaryLabelsBaseFilename,
+                  GlobRes.ParticipantSummaryLabelsBaseFilename,
                   this.Year
                   );
             return Path.Combine(this.TargetFolder, name);
