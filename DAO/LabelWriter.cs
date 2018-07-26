@@ -553,7 +553,16 @@ namespace DAO
 
         protected override void SetItemList()
         {
-            throw new NotImplementedException();
+            // Get list of ServicesHouseholdEnrollment objects
+            // for given year. Then, calculate gift card
+            // count for each one:
+            //  participant.gift_card_count = context.GliList.Where(
+            //      g => (g.year == this.Year) &&
+            //           (g.family_id == participant.head_of_household_id)
+            //      ).Count();
+            // Would it be better to do this in a separate CalculateAdditionalFields()
+            // step as part of the import process?
+
         }
 
         protected override void TypeOneRecord(Cell c, object rec)
