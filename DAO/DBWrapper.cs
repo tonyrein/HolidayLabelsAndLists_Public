@@ -35,13 +35,36 @@ namespace DAO
             DonorList = new List<Donor>();
             GliList = new List<GiftLabelInfo>();
             HoEnrList = new List<ServicesHouseholdEnrollment>();
-            foreach(string[] sa in initial_donors)
+            this.Load();
+            int default_donors_added = this.AddDefaultDonors();
+            if (default_donors_added > 0) // list changed -- save changes
             {
-                DonorList.Add(new Donor(sa[0], sa[1]));
+                using (var db = this.GetDatabase())
+                    this.SaveDonors(db);
             }
-
         }
 
+        /// <summary>
+        /// Read the list of initial (default) donors.
+        /// Add any that are not already on our list.
+        /// Return the number added.
+        /// </summary>
+        /// <returns></returns>
+        private int AddDefaultDonors()
+        {
+            int retInt = 0;
+            foreach (string[] sa in initial_donors)
+            {
+                string cd = sa[0]; string nm = sa[1];
+                Donor d = new Donor(sa[0], sa[1]);
+                if (MatchingDonor(d) == null)
+                {
+                    this.DonorList.Add(d);
+                    retInt++;
+                }
+            }
+            return retInt;
+        }
 
         private LiteDatabase GetDatabase()
         {
@@ -75,17 +98,40 @@ namespace DAO
         {
             using (LiteDatabase db = this.GetDatabase())
             {
-                LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
-                foreach(Donor_DAO dao in donor_coll.Find(Query.All()))
-                {
-                    if (DonorForDonorCode(dao.code) == null) // This Donor is not already in list.
-                    {
-                        this.DonorList.Add(new Donor(dao));
-                    }
-                }
+                this.LoadDonors(db);
+                //LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+                //foreach(Donor_DAO dao in donor_coll.Find(Query.All()))
+                //{
+                //    if (MatchingDonor(dao) == null) // This Donor is not already in list.
+                //    {
+                //        this.DonorList.Add(new Donor(dao));
+                //    }
+                //}
             }
                 int retInt = 0;
             return retInt;
+        }
+
+
+        public void SaveDonors(LiteDatabase db)
+        {
+            LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+            foreach (Donor d in this.DonorList)
+            {
+                donor_coll.Upsert(d.dao);
+            }
+        }
+
+        public void LoadDonors(LiteDatabase db)
+        {
+            LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+            foreach (Donor_DAO dao in donor_coll.Find(Query.All()))
+            {
+                if (MatchingDonor(dao) == null) // This Donor is not already in list.
+                {
+                    this.DonorList.Add(new Donor(dao));
+                }
+            }
         }
         /// <summary>
         /// Remove old data in preparation for a new
@@ -156,6 +202,19 @@ namespace DAO
         }
 
         /// <summary>
+        /// Since we know that a Donor_DAO's name is
+        /// already of proper format, we don't have to
+        /// call MakeDonorName() as we do if we're just
+        /// checking against a string.
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <returns></returns>
+        public Donor DonorForDonorName(Donor_DAO dao)
+        {
+            return this.DonorList.FirstOrDefault(d => d.name == dao.name);
+        }
+
+        /// <summary>
         /// Find a donor with the given code.
         /// 
         /// Donor codes are all upper-case, so there is no
@@ -182,6 +241,11 @@ namespace DAO
         public Donor MatchingDonor(Donor d)
         {
             return DonorForDonorName(d);
+        }
+
+        public Donor MatchingDonor(Donor_DAO dao)
+        {
+            return DonorForDonorName(dao);
         }
 
         /// <summary>

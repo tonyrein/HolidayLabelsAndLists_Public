@@ -86,7 +86,7 @@ namespace DAO
             code = _cd;
         }
         public Donor(Donor_DAO dao)
-            : this(dao.name, dao.code)
+            : this(dao.code, dao.name)
         {
         }
 
