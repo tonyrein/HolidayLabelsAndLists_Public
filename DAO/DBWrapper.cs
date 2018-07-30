@@ -61,6 +61,7 @@ namespace DAO
                 {
                     donor_coll.Upsert(d.dao);
                 }
+                
             }
                 int retInt = 0;
             return retInt;
@@ -72,7 +73,18 @@ namespace DAO
         /// <returns></returns>
         public int Load()
         {
-            int retInt = 0;
+            using (LiteDatabase db = this.GetDatabase())
+            {
+                LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+                foreach(Donor_DAO dao in donor_coll.Find(Query.All()))
+                {
+                    if (DonorForDonorCode(dao.code) == null) // This Donor is not already in list.
+                    {
+                        this.DonorList.Add(new Donor(dao));
+                    }
+                }
+            }
+                int retInt = 0;
             return retInt;
         }
         /// <summary>
@@ -109,9 +121,12 @@ namespace DAO
         }
 
         /// <summary>
-        /// Is there a Donor with the given name?
+        /// Is there a Donor in the list with the given name?
         /// 
-        /// NOTE: Match is NOT case-sensetive -- "SMITH" matches "smith"
+        /// NOTE: There is no need to consider case here, since
+        /// the setter for the Donor.name property "canonicalizes"
+        /// the name.
+        /// 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -119,45 +134,54 @@ namespace DAO
         {
             string s = Donor.MakeDonorName(name);
             return DonorList.FirstOrDefault
-                (d => d.name.ToUpper() == s.ToUpper());
+                (d => d.name == s);
+                //(d => d.name.ToUpper() == s.ToUpper());
         }
 
       
         /// <summary>
-        /// Is there already an object in the list that matches
-        /// the passed-in one?
+        /// Is there a Donor in the list with the same
+        /// name as the passed-in one?
         /// 
-        /// Two Donor objects match if their name properties
-        /// are the same.
-        /// 
-        /// NOTE: There is no need to consider case here, since
-        /// the setter for the Donor.name property "canonicalizes"
-        /// the name.
-        /// 
+        /// Since we know that the other donor's name is
+        /// already of proper format, we don't have to
+        /// call MakeDonorName() as we do if we're just
+        /// checking against a string.
         /// </summary>
         /// <param name="other_donor"></param>
         /// <returns></returns>
         public Donor DonorForDonorName(Donor other_donor)
         {
-
-            return DonorList.FirstOrDefault
-                (d => d.name == other_donor.name);
+            return this.DonorList.FirstOrDefault(d => d.name == other_donor.name);
         }
 
         /// <summary>
         /// Find a donor with the given code.
+        /// 
+        /// Donor codes are all upper-case, so there is no
+        /// need to check for case here.
         /// </summary>
         /// <param name="_cd"></param>
         /// <returns>
         /// matching Donor object, or null if no match
-        /// 
-        /// TODO: Figure out if this needs a check for upper/lower case
-        /// 
         /// </returns>
         public Donor DonorForDonorCode(string _cd)
         {
             return DonorList.FirstOrDefault
                 (d => d.code == _cd);
+        }
+
+        /// <summary>
+        /// Is there already an object in the list that matches
+        /// the passed-in one?
+        /// 
+        /// Two Donor objects match if their names are the same.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public Donor MatchingDonor(Donor d)
+        {
+            return DonorForDonorName(d);
         }
 
         /// <summary>
@@ -222,14 +246,37 @@ namespace DAO
         }
 
         /// <summary>
-        /// Check to see if matching object already exists. If so, 
-        /// use the existing donor code. If not, add the new donor
-        /// to the end of the list.
-        /// 
-        /// Return a Donor with the appropriate name and code.
+        /// Check to see if matching object already exists. If so, replace it
+        /// with the new one. If not, add the new one to the end of the list.
         /// </summary>
         /// <param name="newval"></param>
-        public Donor FindOrAddDonor(string newval)
+        public void AddOrUpdateDonor(Donor newval)
+        {
+            Donor d = MatchingDonor(newval);
+            if (d != null)
+            {
+                int idx = DonorList.IndexOf(d);
+                DonorList[idx] = newval;
+            }
+            else
+            {
+                DonorList.Add(newval);
+            }
+        }
+
+        /// <summary>
+        /// Check to see if matching object already exists. If not,
+        /// create a new one.
+        /// 
+        /// A Donor object matches if its name == the value
+        /// passed in.
+        /// 
+        /// Return either the already-existing Donor or the
+        /// newly-created one.
+        /// 
+        /// </summary>
+        /// <param name="newval"></param>
+        public Donor FindOrCreateDonor(string newval)
         {
             Donor retDonor;
             retDonor = DonorForDonorName(newval);

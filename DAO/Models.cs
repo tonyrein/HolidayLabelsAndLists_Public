@@ -89,6 +89,17 @@ namespace DAO
             : this(dao.name, dao.code)
         {
         }
+
+        /// <summary>
+        /// Constructor given only a donor name.
+        /// Use the name to construct a code (done
+        /// in the code property setter).
+        /// </summary>
+        /// <param name="_nm"></param>
+        public Donor(string _nm)
+            : this(_nm, _nm)
+        {
+        }
 }
     public class GiftLabelInfo
     {
