@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using LiteDB;
@@ -41,21 +42,35 @@ namespace DAO
 
         }
 
+
+        private LiteDatabase GetDatabase()
+        {
+            string dbpath = Path.Combine(FolderManager.OutputFolder, Properties.Resources.db_filename);
+            return new LiteDatabase(dbpath);
+        }
         /// <summary>
-        /// Load data from persistent store.
+        /// Save data to persistent store.
         /// </summary>
         /// <returns></returns>
-        public int Load()
+        public int Save()
         {
-            int retInt = 0;
+            using (LiteDatabase db = this.GetDatabase())
+            {
+                LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+                foreach(Donor d in this.DonorList)
+                {
+                    donor_coll.Upsert(d.dao);
+                }
+            }
+                int retInt = 0;
             return retInt;
         }
 
         /// <summary>
-        /// Save data to persistent store
+        /// Load data from persistent store
         /// </summary>
         /// <returns></returns>
-        public int Save()
+        public int Load()
         {
             int retInt = 0;
             return retInt;
