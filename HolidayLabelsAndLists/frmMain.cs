@@ -26,6 +26,7 @@ namespace HolidayLabelsAndLists
         public frmMain()
         {
             InitializeComponent();
+            context.Load();
             FileListManager = new HllFileListManager(context);
             cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             SetCaptions();
@@ -423,6 +424,9 @@ namespace HolidayLabelsAndLists
                     retInt += p.execute(context);
                 }
             }
+            // if we read anything in, save the changes to the database:
+            if (retInt > 0)
+                context.Save();
             return retInt;
         }
 
@@ -440,7 +444,7 @@ namespace HolidayLabelsAndLists
             string[] report_names)
         {
             int retInt = 0;
-            this.context.Clean();
+            //this.context.Clean();
             worker.ReportProgress(0,
                 string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
                 );
