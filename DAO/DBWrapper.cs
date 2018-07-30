@@ -75,26 +75,25 @@ namespace DAO
         /// Save data to persistent store.
         /// </summary>
         /// <returns></returns>
-        public int Save()
+        public void Save()
         {
             using (LiteDatabase db = this.GetDatabase())
             {
-                LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
-                foreach(Donor d in this.DonorList)
-                {
-                    donor_coll.Upsert(d.dao);
-                }
+                this.SaveDonors(db);
+                //LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+                //foreach(Donor d in this.DonorList)
+                //{
+                //    donor_coll.Upsert(d.dao);
+                //}
                 
             }
-                int retInt = 0;
-            return retInt;
         }
 
         /// <summary>
         /// Load data from persistent store
         /// </summary>
         /// <returns></returns>
-        public int Load()
+        public void Load()
         {
             using (LiteDatabase db = this.GetDatabase())
             {
@@ -108,11 +107,16 @@ namespace DAO
                 //    }
                 //}
             }
-                int retInt = 0;
-            return retInt;
         }
 
-
+        /// <summary>
+        /// If performance is an issue:
+        /// Idea 1:
+        ///     Query db first to find items in DonorList which are not
+        ///     already in the collection. Then use InsertBulk()
+        ///     to insert others.
+        /// </summary>
+        /// <param name="db"></param>
         public void SaveDonors(LiteDatabase db)
         {
             LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
@@ -124,12 +128,24 @@ namespace DAO
 
         public void LoadDonors(LiteDatabase db)
         {
-            LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
-            foreach (Donor_DAO dao in donor_coll.Find(Query.All()))
+            LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>("donors");
+            foreach (Donor_DAO dao in coll.Find(Query.All()))
             {
                 if (MatchingDonor(dao) == null) // This Donor is not already in list.
                 {
                     this.DonorList.Add(new Donor(dao));
+                }
+            }
+        }
+
+        public void LoadBagLabelInfo(LiteDatabase db)
+        {
+            LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>("bag_label_info");
+            foreach(BagLabelInfo_DAO dao in coll.Find(Query.All()))
+            {
+                if (MatchingBagLabelInfo(dao) == null)
+                {
+                    this.BliList.Add(new BagLabelInfo(dao));
                 }
             }
         }
@@ -157,15 +173,26 @@ namespace DAO
         /// <returns></returns>
         public BagLabelInfo MatchingBagLabelInfo(BagLabelInfo bli)
         {
-            return BliList.FirstOrDefault
-                (b => (
-                    b.year == bli.year &&
-                    b.request_type == bli.request_type &&
-                    b.family_id == bli.family_id
-                    )
-                );
+            return MatchingBagLabelInfo(bli.dao);
+            //return BliList.FirstOrDefault
+            //    (b => (
+            //        b.year == bli.year &&
+            //        b.request_type == bli.request_type &&
+            //        b.family_id == bli.family_id
+            //        )
+            //    );
         }
 
+        public BagLabelInfo MatchingBagLabelInfo(BagLabelInfo_DAO dao)
+        {
+            return BliList.FirstOrDefault
+                           (b => (
+                               b.year == dao.year &&
+                               b.request_type == dao.request_type &&
+                               b.family_id == dao.family_id
+                               )
+                           );
+        }
         /// <summary>
         /// Is there a Donor in the list with the given name?
         /// 

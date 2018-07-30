@@ -22,27 +22,37 @@ namespace DAO
 {
     public class BagLabelInfo
     {
-        private int _year;
+        private BagLabelInfo_DAO _dao = new BagLabelInfo_DAO();
+        public BagLabelInfo_DAO dao { get { return _dao; } }
         public int year
         {
-            get { return _year; }
+            get { return _dao.year; }
             set
             {
                 if (value < 2000) throw new ArgumentException("bag_label_info year must be >= 2000.");
-                _year = value;
+                _dao.year = value;
             }
         }
-        public string family_id { get; set; }
-        public string family_name { get; set; }
-        public string family_members { get; set; }
-        public string request_type { get; set; }
-        public string donor_code { get; set; }
-        public string donor_name { get; set; }
+        public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
+        public string family_name { get { return dao.family_name; } set { dao.family_name = value; } }
+        public string family_members { get { return dao.family_members; } set { dao.family_members = value; } } 
+        public string request_type { get { return dao.request_type; } set { dao.request_type = value; } }
+        public string donor_code { get { return dao.donor_code; } set { dao.donor_code = value; } }
+        public string donor_name { get { return dao.donor_name; } set { dao.donor_name = value; } }
+        public BagLabelInfo()
+        {
+            this._dao = new BagLabelInfo_DAO();
+        }
+        public BagLabelInfo(BagLabelInfo_DAO dao)
+        {
+            this._dao = dao;
+        }
     }
+
     public class Donor
     {
-        private Donor_DAO _donordao = new Donor_DAO();
-        public Donor_DAO dao { get { return _donordao; } }
+        private Donor_DAO _dao;
+        public Donor_DAO dao { get { return _dao; } }
         public static string MakeDonorName(string s)
         {
             string scr = Utils.TextUtils.CleanString(s);
@@ -55,23 +65,23 @@ namespace DAO
 
         public string code
         {
-            get { return _donordao.code; }
+            get { return _dao.code; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
-                    _donordao.code = Donor.MakeDonorCode(value);
+                    _dao.code = Donor.MakeDonorCode(value);
                 else // generate from name
-                    _donordao.code = MakeDonorCode(name);
+                    _dao.code = MakeDonorCode(name);
             }
         }
         public string name
         {
-            get { return _donordao.name; }
+            get { return _dao.name; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
                 {
-                    _donordao.name = Donor.MakeDonorName(value);
+                    _dao.name = Donor.MakeDonorName(value);
                 }
                 else
                 {
@@ -79,15 +89,20 @@ namespace DAO
                 }
             }
         }
-        public Donor() { }
+        public Donor()
+        {
+            this._dao = new Donor_DAO();
+        }
         public Donor(string _cd, string _nm)
+            : this()
         {
             name = _nm;
             code = _cd;
         }
+
         public Donor(Donor_DAO dao)
-            : this(dao.code, dao.name)
         {
+            this._dao = dao;
         }
 
         /// <summary>
