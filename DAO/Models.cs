@@ -41,6 +41,8 @@ namespace DAO
     }
     public class Donor
     {
+        private Donor_DAO _donordao = new Donor_DAO();
+        public Donor_DAO dao { get { return _donordao; } }
         public static string MakeDonorName(string s)
         {
             string scr = Utils.TextUtils.CleanString(s);
@@ -51,27 +53,25 @@ namespace DAO
             return Utils.TextUtils.CleanString(s).ToUpper();
         }
 
-        private string _code;
-        private string _name;
         public string code
         {
-            get { return _code; }
+            get { return _donordao.code; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
-                    _code = Donor.MakeDonorCode(value);
+                    _donordao.code = Donor.MakeDonorCode(value);
                 else // generate from name
-                    _code = MakeDonorCode(name);
+                    _donordao.code = MakeDonorCode(name);
             }
         }
         public string name
         {
-            get { return _name; }
+            get { return _donordao.name; }
             set
             {
-                if (! String.IsNullOrWhiteSpace(value))
+                if (!String.IsNullOrWhiteSpace(value))
                 {
-                    _name = Donor.MakeDonorName(value);
+                    _donordao.name = Donor.MakeDonorName(value);
                 }
                 else
                 {
@@ -85,7 +85,11 @@ namespace DAO
             name = _nm;
             code = _cd;
         }
-    }
+        public Donor(Donor_DAO dao)
+            : this(dao.name, dao.code)
+        {
+        }
+}
     public class GiftLabelInfo
     {
         private static string[] GENDER_VALUES = new string[] { "F", "M", "NotSpecified" };

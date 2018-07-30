@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-
+using LiteDB;
 
 namespace DAO
 {
@@ -41,6 +41,25 @@ namespace DAO
 
         }
 
+        /// <summary>
+        /// Load data from persistent store.
+        /// </summary>
+        /// <returns></returns>
+        public int Load()
+        {
+            int retInt = 0;
+            return retInt;
+        }
+
+        /// <summary>
+        /// Save data to persistent store
+        /// </summary>
+        /// <returns></returns>
+        public int Save()
+        {
+            int retInt = 0;
+            return retInt;
+        }
         /// <summary>
         /// Remove old data in preparation for a new
         /// processing run. Save any new Donors for
