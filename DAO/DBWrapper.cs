@@ -80,12 +80,15 @@ namespace DAO
             using (LiteDatabase db = this.GetDatabase())
             {
                 this.SaveDonors(db);
+                this.SaveBagLabelInfo(db);
+                this.SaveGiftabelInfo(db);
+                this.SaveServicesHouseholdEnrollment(db);
                 //LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
                 //foreach(Donor d in this.DonorList)
                 //{
                 //    donor_coll.Upsert(d.dao);
                 //}
-                
+
             }
         }
 
@@ -98,6 +101,9 @@ namespace DAO
             using (LiteDatabase db = this.GetDatabase())
             {
                 this.LoadDonors(db);
+                this.LoadBagLabelInfo(db);
+                this.LoadGiftLabelInfo(db);
+                this.LoadServicesHouseholdEnrollment(db);
                 //LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
                 //foreach(Donor_DAO dao in donor_coll.Find(Query.All()))
                 //{
@@ -119,10 +125,39 @@ namespace DAO
         /// <param name="db"></param>
         public void SaveDonors(LiteDatabase db)
         {
-            LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
+            LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>("donors");
             foreach (Donor d in this.DonorList)
             {
-                donor_coll.Upsert(d.dao);
+                coll.Upsert(d.dao);
+            }
+        }
+
+        public void SaveBagLabelInfo(LiteDatabase db)
+        {
+            LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>("bag_label_info");
+            foreach (BagLabelInfo bli in this.BliList)
+            {
+                coll.Upsert(bli.dao);
+            }
+
+        }
+
+        public void SaveGiftabelInfo(LiteDatabase db)
+        {
+            LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>("gift_label_info");
+            foreach (GiftLabelInfo gli in this.GliList)
+            {
+                coll.Upsert(gli.dao);
+            }
+        }
+
+
+        public void SaveServicesHouseholdEnrollment(LiteDatabase db)
+        {
+            LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>("services_enrollment");
+            foreach (ServicesHouseholdEnrollment henroll in this.HoEnrList)
+            {
+                coll.Upsert(henroll.dao);
             }
         }
 
@@ -146,6 +181,30 @@ namespace DAO
                 if (MatchingBagLabelInfo(dao) == null)
                 {
                     this.BliList.Add(new BagLabelInfo(dao));
+                }
+            }
+        }
+
+        public void LoadGiftLabelInfo(LiteDatabase db)
+        {
+            LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>("gift_label_info");
+            foreach (GiftLabelInfo_DAO dao in coll.Find(Query.All()))
+            {
+                if (MatchingGiftLabelInfo(dao) == null)
+                {
+                    this.GliList.Add(new GiftLabelInfo(dao));
+                }
+            }
+        }
+
+        public void LoadServicesHouseholdEnrollment(LiteDatabase db)
+        {
+            LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>("services_enrollment");
+            foreach (ServicesHouseholdEnrollment_DAO dao in coll.Find(Query.All()))
+            {
+                if (MatchingServicesHouseholdEnrollment(dao) == null)
+                {
+                    this.HoEnrList.Add(new ServicesHouseholdEnrollment(dao));
                 }
             }
         }
@@ -267,7 +326,7 @@ namespace DAO
         /// <returns></returns>
         public Donor MatchingDonor(Donor d)
         {
-            return DonorForDonorName(d);
+            return MatchingDonor(d.dao);
         }
 
         public Donor MatchingDonor(Donor_DAO dao)
@@ -275,6 +334,11 @@ namespace DAO
             return DonorForDonorName(dao);
         }
 
+
+        public GiftLabelInfo MatchingGiftLabelInfo(GiftLabelInfo gli)
+        {
+            return MatchingGiftLabelInfo(gli.dao);
+        }
         /// <summary>
         /// Is there already an object in the list that matches
         /// the passed-in one?
@@ -285,16 +349,22 @@ namespace DAO
         /// </summary>
         /// <param name="gli"></param>
         /// <returns></returns>
-        public GiftLabelInfo MatchingGiftLabelInfo(GiftLabelInfo gli)
+        public GiftLabelInfo MatchingGiftLabelInfo(GiftLabelInfo_DAO dao)
         {
             return GliList.FirstOrDefault
                 (g => (
-                    g.year == gli.year &&
-                    g.request_type == gli.request_type &&
-                    g.family_id == gli.family_id &&
-                    g.child_name == gli.child_name
+                    g.year == dao.year &&
+                    g.request_type == dao.request_type &&
+                    g.family_id == dao.family_id &&
+                    g.child_name == dao.child_name
                     )
                 );
+        }
+
+
+        public ServicesHouseholdEnrollment MatchingServicesHouseholdEnrollment(ServicesHouseholdEnrollment henroll)
+        {
+            return MatchingServicesHouseholdEnrollment(henroll.dao);
         }
 
         /// <summary>
@@ -304,15 +374,15 @@ namespace DAO
         /// Two ServicesHouseholdEnrollment objects match if their
         /// years, service types, and heads of household are the same.
         /// </summary>
-        /// <param name="henroll"></param>
+        /// <param name="dao"></param>
         /// <returns></returns>
-        public ServicesHouseholdEnrollment MatchingServicesHouseholdEnrollment(ServicesHouseholdEnrollment henroll)
+        public ServicesHouseholdEnrollment MatchingServicesHouseholdEnrollment(ServicesHouseholdEnrollment_DAO dao)
         {
             return HoEnrList.FirstOrDefault
                 (h =>(
-                    h.year == henroll.year &&
-                    h.service_type == henroll.service_type &&
-                    h.head_of_household == henroll.head_of_household
+                    h.year == dao.year &&
+                    h.service_type == dao.service_type &&
+                    h.head_of_household == dao.head_of_household
                     )
                 );
         }
