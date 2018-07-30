@@ -118,88 +118,108 @@ namespace DAO
 }
     public class GiftLabelInfo
     {
+        private GiftLabelInfo_DAO _dao;
+        public GiftLabelInfo_DAO dao { get { return _dao; } }
         private static string[] GENDER_VALUES = new string[] { "F", "M", "NotSpecified" };
         private int _year;
         private string _child_gender;
         private int _child_age;
         public int year
         {
-            get { return _year; }
+            get { return dao.year; }
             set
             {
                 if (value < 2000) throw new ArgumentException("gift_label_info year must be >= 2000.");
-                _year = value;
+                dao.year = value;
             }
         }
-        public string family_id { get; set; }
-        public string family_name { get; set; }
-        public string child_name { get; set; }
+        public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
+        public string family_name { get { return dao.family_name; } set { dao.family_name = value; } }
+        public string child_name { get { return dao.child_name; } set { dao.child_name = value; } }
         public string child_gender
         {
-            get { return _child_gender; }
+            get { return dao.child_gender; }
             set
             {
                 if (!GENDER_VALUES.Contains(value))
                     throw new ArgumentException("gift_label_info child gender must be F, M, or NotSpecified");
-                _child_gender = value;
+                dao.child_gender = value;
             }
         }
         public int child_age
         {
-            get { return _child_age; }
+            get { return dao.child_age; }
             set
             {
                 if (value < -1)
                     throw new ArgumentException("gift_label_info child age must >= -1");
-                _child_age = value;
+                dao.child_age = value;
             }
         }
-        public string request_type { get; set; }
-        public string request_detail { get; set; }
-        public string donor_code { get; set; }
-        public string donor_name { get; set; }
+        public string request_type { get { return dao.request_type; } set { dao.request_type = value; } }
+        public string request_detail { get { return dao.request_detail; } set { dao.request_detail = value; } }
+        public string donor_code { get { return dao.donor_code; } set { dao.donor_code = value; } }
+        public string donor_name { get { return dao.donor_name; } set { dao.donor_name = value; } }
+
+        public GiftLabelInfo()
+        {
+            this._dao = new GiftLabelInfo_DAO();
+        }
+        public GiftLabelInfo(GiftLabelInfo_DAO dao)
+        {
+            this._dao = dao;
+        }
     }
+
     public class ServicesHouseholdEnrollment
     {
-        private int _year;
-        private int _month;
-        private int _day;
-        public string service_type { get; set; }
+        private ServicesHouseholdEnrollment_DAO _dao;
+        public ServicesHouseholdEnrollment_DAO dao { get { return _dao; } }
+        public string service_type { get { return dao.service_type; } set { dao.service_type = value; } }
         public int year
         {
-            get { return _year; }
+            get { return dao.year; }
             set
             {
                 if (value < 2000) throw new ArgumentException("services_household_enrollment year must be >= 2000.");
-                _year = value;
+                dao.year = value;
             }
         }
         public int month
         {
-            get { return _month; }
+            get { return dao.month; }
             set
             {
                 if (value < 1 || value > 12) throw new ArgumentException("services_household_enrollment month must be between 1 and 12.");
-                _month = value;
+                dao.month = value;
             }
         }
         public int day
         {
-            get { return _day; }
+            get { return dao.day; }
             set
             {
                 if (value < 1 || value > 31) throw new ArgumentException("services_household_enrollment day must be between 1 and 31.");
-                _day = value;
+                dao.day = value;
             }
         }
-        public string head_of_household { get; set; }
-        public string family_id { get; set; }
-        public string phone { get; set; }
-        public string address { get; set; }
-        public string city { get; set; }
-        public string state_or_province { get; set; }
-        public string postal_code { get; set; }
-        public int gift_card_count { get; set; }
+        public string head_of_household { get { return dao.head_of_household; } set { dao.head_of_household = value; } }
+        public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
+        public string phone { get { return dao.phone; } set { dao.phone = value; } }
+        public string address { get { return dao.address; } set { dao.address = value; } }
+        public string city { get { return dao.city; } set { dao.city = value; } }
+        public string state_or_province { get { return dao.state_or_province; } set { dao.state_or_province = value; } }
+        public string postal_code { get { return dao.postal_code; } set { dao.postal_code = value; } }
+        public int gift_card_count { get { return dao.gift_card_count; } set { dao.gift_card_count = value; } }
+
+        public ServicesHouseholdEnrollment()
+        {
+            this._dao = new ServicesHouseholdEnrollment_DAO();
+        }
+        public ServicesHouseholdEnrollment(ServicesHouseholdEnrollment_DAO dao)
+        {
+            this._dao = dao;
+        }
     }
 
 }
