@@ -35,13 +35,13 @@ namespace DAO
             DonorList = new List<Donor>();
             GliList = new List<GiftLabelInfo>();
             HoEnrList = new List<ServicesHouseholdEnrollment>();
-            this.Load();
-            int default_donors_added = this.AddDefaultDonors();
-            if (default_donors_added > 0) // list changed -- save changes
-            {
-                using (var db = this.GetDatabase())
-                    this.SaveDonors(db);
-            }
+            //this.Load();
+            //int default_donors_added = this.AddDefaultDonors();
+            //if (default_donors_added > 0) // list changed -- save changes
+            //{
+            //    using (var db = this.GetDatabase())
+            //        this.SaveDonors(db);
+            //}
         }
 
         /// <summary>
@@ -170,6 +170,11 @@ namespace DAO
                 {
                     this.DonorList.Add(new Donor(dao));
                 }
+            }
+            int default_donors_added = this.AddDefaultDonors();
+            if (default_donors_added > 0) // list changed -- save changes
+            {
+                    this.SaveDonors(db);
             }
         }
 
