@@ -13,6 +13,13 @@ namespace HolidayLabelsAndLists
 {
     public partial class frmMain : Form
     {
+
+        internal class BGWorkerResult
+        {
+            internal int ReportsReadCount { get; set; }
+            internal int FilesGeneratedCount { get; set; }
+        }
+
         private DBWrapper context = new DBWrapper();
         private HllFileListManager FileListManager;
 
@@ -432,15 +439,16 @@ namespace HolidayLabelsAndLists
 
         /// <summary>
         /// Read info from VESTA reports. Store the info in
-        /// a DBWrapper object. Then use the data in the DBWrapper
-        /// to generate output files.
+        /// a DBWrapper object.
+        /// 
+        /// Return number of reports read
         /// 
         /// During processing, display progress messages.
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="report_names"></param>
         /// <returns></returns>
-        private int DoProcessing(BackgroundWorker worker,
+        private int DoImportProcessing(BackgroundWorker worker,
             string[] report_names)
         {
             int retInt = 0;
@@ -448,15 +456,30 @@ namespace HolidayLabelsAndLists
             worker.ReportProgress(0,
                 string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
                 );
-            ImportFromVesta(worker, this.context, report_names);
-            if (!worker.CancellationPending)
-            {
+            retInt = ImportFromVesta(worker, this.context, report_names);
+            //if (!worker.CancellationPending)
+            //{
 
-                worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
-                retInt = HllUtils.MakeOutputFiles(worker, this.context);
-            }
+            //    worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
+            //    retInt = HllUtils.MakeOutputFiles(worker, this.context);
+            //}
             return retInt;
         }
+
+        /// <summary>
+        /// Generate label and list documents. Return number of documents
+        /// created.
+        /// 
+        /// Display progress messages during processing.
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <returns></returns>
+        private int DoOutputProcessing(BackgroundWorker worker)
+        {
+            worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
+            return HllUtils.MakeOutputFiles(worker, this.context);
+        }
+
 
         private void btnAddVestaReports_Click(object sender, EventArgs e)
         {
@@ -553,9 +576,15 @@ namespace HolidayLabelsAndLists
         {
             BackgroundWorker wk = sender as BackgroundWorker;
             string[] args = (string[])e.Argument;
-            e.Result = DoProcessing(wk, args);
+            BGWorkerResult bgRes = new BGWorkerResult();
+            bgRes.ReportsReadCount = DoImportProcessing(wk, args);
             if (wk.CancellationPending)
                 e.Cancel = true;
+            else
+            {
+                bgRes.FilesGeneratedCount = DoOutputProcessing(wk);
+            }
+            e.Result = bgRes;
         }
 
         private void bgworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -595,12 +624,12 @@ namespace HolidayLabelsAndLists
                 }
                 else
                 {
-                    int res = (int)e.Result;
+                    BGWorkerResult bgRes = (BGWorkerResult)e.Result;
                     ProgressForm.AddMessage(
-                        string.Format(GlobRes.FileAddingSuccessMsg, res)
+                        string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount)
                         );
                     ProgressForm.AddMessage(GlobRes.OKToCloseMsg);
-                    if (res > 0)
+                    if (bgRes.FilesGeneratedCount > 0)
                         UpdateView();
                 }
             }
