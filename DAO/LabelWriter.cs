@@ -523,4 +523,51 @@ namespace DAO
             get { return FolderManager.PostcardsAndParticipantsFolder(Year, ServiceType); }
         }
     }
+
+    class ParticipantSummaryLabelWriter : LabelWriter
+    {
+        public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year,
+            int label_height = 102, int label_width = 3787, int padding_width = 172,
+            int left_margin = 13, int right_margin = 13, int top_margin = 36, int bottom_margin = 0,
+            int num_cols = 5)
+            : base(wk, ctx, year, label_height, label_width, padding_width, left_margin, right_margin,
+                  top_margin, bottom_margin, num_cols)
+        {
+        }
+
+        protected override string TargetFolder
+        {
+            // no ServiceType associated with this label type -- pass
+            // empty string so we'll get back "Other" (the default).
+            get { return FolderManager.PostcardsAndParticipantsFolder(Year, ""); }
+        }
+
+        protected override string GetOutputFileSpec()
+        {
+            string name = string.Format(
+                  GlobRes.ParticipantSummaryLabelsBaseFilename,
+                  this.Year
+                  );
+            return Path.Combine(this.TargetFolder, name);
+        }
+
+        protected override void SetItemList()
+        {
+            // Get list of ServicesHouseholdEnrollment objects
+            // for given year. Then, calculate gift card
+            // count for each one:
+            //  participant.gift_card_count = context.GliList.Where(
+            //      g => (g.year == this.Year) &&
+            //           (g.family_id == participant.family_id)
+            //      ).Count();
+            // Would it be better to do this in a separate CalculateAdditionalFields()
+            // step as part of the import process?
+
+        }
+
+        protected override void TypeOneRecord(Cell c, object rec)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

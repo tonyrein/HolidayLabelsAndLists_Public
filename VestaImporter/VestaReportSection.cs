@@ -157,6 +157,7 @@ namespace VestaProcessor
             // The rest of the fields are simply strings:
             retObj.service_type = row[this.field_indices["Partner Network Service"]];
             retObj.head_of_household = row[this.field_indices["Head of Household"]];
+            retObj.family_id = row[this.field_indices["client ID"]];
             retObj.phone = row[this.field_indices["Primary Phone"]];
             retObj.address = row[this.field_indices["Address"]];
             retObj.city = row[this.field_indices["City"]];
@@ -214,7 +215,7 @@ namespace VestaProcessor
             BagLabelInfo workObj = new BagLabelInfo();
             workObj.year = year;
             donor_name = row[this.field_indices["Donor Name"]];
-            Donor d = context.FindOrAddDonor(donor_name);
+            Donor d = context.FindOrCreateDonor(donor_name);
             workObj.donor_code = d.code;
             workObj.donor_name = d.name;
             workObj.family_id = row[this.field_indices["Family ID"]];
@@ -258,7 +259,7 @@ namespace VestaProcessor
             // column, use that to identify this row's donor.
             // Otherwise, use the "Donor Name" column.
             donor_name = row[this.field_indices["Donor Name"]];
-            Donor d = context.FindOrAddDonor(donor_name);
+            Donor d = context.FindOrCreateDonor(donor_name);
             workObj.donor_code = d.code;
             workObj.donor_name = d.name;
             int child_age;

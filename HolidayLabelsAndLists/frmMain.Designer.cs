@@ -199,7 +199,7 @@
             this.btnDeleteOldFiles.Name = "btnDeleteOldFiles";
             this.btnDeleteOldFiles.Size = new System.Drawing.Size(113, 69);
             this.btnDeleteOldFiles.TabIndex = 20;
-            this.btnDeleteOldFiles.Text = "button1";
+            this.btnDeleteOldFiles.Text = "Delete Old Files";
             this.btnDeleteOldFiles.UseVisualStyleBackColor = true;
             this.btnDeleteOldFiles.Click += new System.EventHandler(this.btnDeleteOldFiles_Click);
             // 

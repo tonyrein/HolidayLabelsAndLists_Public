@@ -312,4 +312,8 @@ The error message was {1}</value>
   <data name="SelectYears" xml:space="preserve">
     <value>Select Years</value>
   </data>
+  <data name="ParticipantSummaryLabelsBaseFilename" xml:space="preserve">
+    <value>Participant_Summary_Labels_{0}.docx</value>
+    <comment>0=year</comment>
+  </data>
 </root>

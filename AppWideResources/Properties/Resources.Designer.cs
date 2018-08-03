@@ -404,6 +404,15 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Participant_Summary_Labels_{0}.docx.
+        /// </summary>
+        public static string ParticipantSummaryLabelsBaseFilename {
+            get {
+                return ResourceManager.GetString("ParticipantSummaryLabelsBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postcard_Labels_{0}_{1}.docx.
         /// </summary>
         public static string PostcardLabelBaseFilename {
