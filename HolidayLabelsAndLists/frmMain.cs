@@ -13,11 +13,17 @@ namespace HolidayLabelsAndLists
 {
     public partial class frmMain : Form
     {
-
+        internal enum ProcessingType
+        {
+            IMPORT,
+            GENERATE,
+            BOTH
+        }
         internal class BGWorkerResult
         {
             internal int ReportsReadCount { get; set; }
             internal int FilesGeneratedCount { get; set; }
+            internal ProcessingType Type { get; set; }
         }
 
         private DBWrapper context = new DBWrapper();
@@ -481,7 +487,7 @@ namespace HolidayLabelsAndLists
         }
 
 
-        private void btnAddVestaReports_Click(object sender, EventArgs e)
+        private void btnAddVestaReports_Click0(object sender, EventArgs e)
         {
             string[] report_names = HllUtils.GetVestaReportNames();
             if (report_names != null)
@@ -514,6 +520,74 @@ namespace HolidayLabelsAndLists
                         ProgressForm.Close();
                     throw;
                 }
+            }
+        }
+
+        private void btnAddVestaReports_Click(object sender, EventArgs e)
+        {
+            string[] report_names = HllUtils.GetVestaReportNames();
+            if (report_names != null)
+            {
+                try
+                {
+                    // create an object to handle communication between
+                    // background stuff and progress dialog:
+                    _bgworker = HllUtils.MakeWorker(
+                        new DoWorkEventHandler(bgworker_DoImportWork),
+                        new RunWorkerCompletedEventHandler(bgworker_RunWorkerCompleted),
+                        new ProgressChangedEventHandler(bgworker_ProgressChanged)
+                        );
+                    SetAppState(AppStates.Processing);
+                    // create and configure a progress dialog:
+                    ProgressForm = new frmProgress();
+                    ProgressForm.Done = false;
+                    ProgressForm.Worker = _bgworker;
+                    // Hook up "FormClosed" event handler:
+                    ProgressForm.FormClosed += ProgressForm_FormClosed;
+                    ProgressForm.Show();
+                    ProgressForm.AddMessage(GlobRes.VestaReportProcessingStartMsg);
+                    // start the background work:
+                    _bgworker.RunWorkerAsync(report_names);
+                }
+                catch
+                {
+                    SetAppState(AppStates.Viewing);
+                    if (ProgressForm != null)
+                        ProgressForm.Close();
+                    throw;
+                }
+            }
+        }
+
+        private void btnCreateOutput_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // create an object to handle communication between
+                // background stuff and progress dialog:
+                _bgworker = HllUtils.MakeWorker(
+                    new DoWorkEventHandler(bgworker_DoGenerateWork),
+                    new RunWorkerCompletedEventHandler(bgworker_RunWorkerCompleted),
+                    new ProgressChangedEventHandler(bgworker_ProgressChanged)
+                    );
+                SetAppState(AppStates.Processing);
+                // create and configure a progress dialog:
+                ProgressForm = new frmProgress();
+                ProgressForm.Done = false;
+                ProgressForm.Worker = _bgworker;
+                // Hook up "FormClosed" event handler:
+                ProgressForm.FormClosed += ProgressForm_FormClosed;
+                ProgressForm.Show();
+                ProgressForm.AddMessage(GlobRes.GeneratingOutputFilesMsg);
+                // start the background work:
+                _bgworker.RunWorkerAsync();
+            }
+            catch
+            {
+                SetAppState(AppStates.Viewing);
+                if (ProgressForm != null)
+                    ProgressForm.Close();
+                throw;
             }
         }
 
@@ -577,6 +651,7 @@ namespace HolidayLabelsAndLists
             BackgroundWorker wk = sender as BackgroundWorker;
             string[] args = (string[])e.Argument;
             BGWorkerResult bgRes = new BGWorkerResult();
+            bgRes.Type = ProcessingType.BOTH;
             bgRes.ReportsReadCount = DoImportProcessing(wk, args);
             if (wk.CancellationPending)
                 e.Cancel = true;
@@ -585,6 +660,42 @@ namespace HolidayLabelsAndLists
                 bgRes.FilesGeneratedCount = DoOutputProcessing(wk);
             }
             e.Result = bgRes;
+        }
+
+
+        /// <summary>
+        /// Launch the processing code in a separate thread.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bgworker_DoImportWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker wk = sender as BackgroundWorker;
+            string[] args = (string[])e.Argument;
+            BGWorkerResult bgRes = new BGWorkerResult();
+            bgRes.Type = ProcessingType.IMPORT;
+            bgRes.ReportsReadCount = DoImportProcessing(wk, args);
+            if (wk.CancellationPending)
+                e.Cancel = true;
+            else
+                e.Result = bgRes;
+        }
+
+        /// <summary>
+        /// Launch the processing code in a separate thread.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bgworker_DoGenerateWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker wk = sender as BackgroundWorker;
+            BGWorkerResult bgRes = new BGWorkerResult();
+            bgRes.Type = ProcessingType.GENERATE;
+            bgRes.FilesGeneratedCount = DoOutputProcessing(wk);
+            if (wk.CancellationPending)
+                e.Cancel = true;
+            else
+                e.Result = bgRes;
         }
 
         private void bgworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -625,9 +736,23 @@ namespace HolidayLabelsAndLists
                 else
                 {
                     BGWorkerResult bgRes = (BGWorkerResult)e.Result;
-                    ProgressForm.AddMessage(
-                        string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount)
-                        );
+                    string msg = null;
+                    switch(bgRes.Type)
+                    {
+                        case ProcessingType.GENERATE:
+                            msg = string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
+                            break;
+                        case ProcessingType.IMPORT:
+                            msg = string.Format(GlobRes.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount);
+                            break;
+                        case ProcessingType.BOTH:
+                            msg = string.Format(GlobRes.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount) +
+                                Environment.NewLine +  string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
+                            break;
+                    }
+                    ProgressForm.AddMessage(msg);
+                        //string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount)
+                        //);
                     ProgressForm.AddMessage(GlobRes.OKToCloseMsg);
                     if (bgRes.FilesGeneratedCount > 0)
                         UpdateView();
@@ -656,5 +781,6 @@ namespace HolidayLabelsAndLists
                 }
             }
         }
+
     }
 }

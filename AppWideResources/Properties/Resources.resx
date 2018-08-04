@@ -293,7 +293,7 @@ The error message was {1}</value>
     <comment>0=filespec</comment>
   </data>
   <data name="VestaReportCountMsg" xml:space="preserve">
-    <value>Processing {0} VESTAReports</value>
+    <value>Processing {0} VESTA Reports</value>
     <comment>0=count of reports</comment>
   </data>
   <data name="VestaReportExceptionMsg" xml:space="preserve">
@@ -315,5 +315,9 @@ The error message was {1}</value>
   <data name="ParticipantSummaryLabelsBaseFilename" xml:space="preserve">
     <value>Participant_Summary_Labels_{0}.docx</value>
     <comment>0=year</comment>
+  </data>
+  <data name="VestaReportProcessingSuccessMsg" xml:space="preserve">
+    <value>Successfully imported {0} VESTA Reports</value>
+    <comment>0=count of reports</comment>
   </data>
 </root>
