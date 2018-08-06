@@ -215,6 +215,7 @@
             this.toolTip1.SetToolTip(this.btnCreateOutput, "Select already-downloaded VESTA reports\r\nand generate label and list files from t" +
         "hose\r\nreports.");
             this.btnCreateOutput.UseVisualStyleBackColor = true;
+            this.btnCreateOutput.Click += new System.EventHandler(this.btnCreateOutput_Click);
             // 
             // frmMain
             // 

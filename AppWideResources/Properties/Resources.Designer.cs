@@ -530,7 +530,7 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Processing {0} VESTAReports.
+        ///   Looks up a localized string similar to Processing {0} VESTA Reports.
         /// </summary>
         public static string VestaReportCountMsg {
             get {
@@ -553,6 +553,15 @@ namespace AppWideResources.Properties {
         public static string VestaReportProcessingStartMsg {
             get {
                 return ResourceManager.GetString("VestaReportProcessingStartMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully imported {0} VESTA Reports.
+        /// </summary>
+        public static string VestaReportProcessingSuccessMsg {
+            get {
+                return ResourceManager.GetString("VestaReportProcessingSuccessMsg", resourceCulture);
             }
         }
         
