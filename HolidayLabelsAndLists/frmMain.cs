@@ -259,9 +259,19 @@ namespace HolidayLabelsAndLists
                 GlobRes.NoOutputFilesMsg, GlobRes.NoOutputFilesTitle,
                 MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
-
         }
 
+        /// <summary>
+        /// Display a message box telling the user that VESTA data
+        /// needs to be imported.
+        /// </summary>
+        private void ShowNothingImportedMessage()
+        {
+            MessageBox.Show(
+                GlobRes.NothingImportedMsg, GlobRes.NothingImportedTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
+        }
 
         /// <summary>
         /// After the list of matching files has changed,
