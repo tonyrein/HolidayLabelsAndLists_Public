@@ -19,7 +19,7 @@ namespace AppWideResources.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -332,7 +332,7 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no label or list files available for viewing.\nPlease click &quot;Process VESTAReports&quot;\nand select one or more reports..
+        ///   Looks up a localized string similar to There are no label or list files available for viewing.\nPlease click &quot;Create Labels and Lists&quot;\nand select one or more reports..
         /// </summary>
         public static string NoOutputFilesMsg {
             get {
@@ -341,11 +341,29 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please Add VESTA Reports.
+        ///   Looks up a localized string similar to No Output Files.
         /// </summary>
         public static string NoOutputFilesTitle {
             get {
                 return ResourceManager.GetString("NoOutputFilesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No imported VESTA data found. Please click &quot;Process VESTA Reports&quot; to import data from one or more reports..
+        /// </summary>
+        public static string NothingImportedMsg {
+            get {
+                return ResourceManager.GetString("NothingImportedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Imported VESTA Data.
+        /// </summary>
+        public static string NothingImportedTitle {
+            get {
+                return ResourceManager.GetString("NothingImportedTitle", resourceCulture);
             }
         }
         
@@ -530,7 +548,7 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Processing {0} VESTAReports.
+        ///   Looks up a localized string similar to Processing {0} VESTA Reports.
         /// </summary>
         public static string VestaReportCountMsg {
             get {
@@ -553,6 +571,15 @@ namespace AppWideResources.Properties {
         public static string VestaReportProcessingStartMsg {
             get {
                 return ResourceManager.GetString("VestaReportProcessingStartMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully imported {0} VESTA Reports.
+        /// </summary>
+        public static string VestaReportProcessingSuccessMsg {
+            get {
+                return ResourceManager.GetString("VestaReportProcessingSuccessMsg", resourceCulture);
             }
         }
         
