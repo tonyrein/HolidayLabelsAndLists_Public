@@ -26,7 +26,7 @@ namespace HolidayLabelsAndLists
             internal ProcessingType Type { get; set; }
         }
 
-        private DBWrapper context = new DBWrapper();
+        private DBWrapper Context = new DBWrapper();
         private HllFileListManager FileListManager;
 
         private enum AppStates { Processing, Viewing, ShowingWork };
@@ -39,8 +39,8 @@ namespace HolidayLabelsAndLists
         public frmMain()
         {
             InitializeComponent();
-            context.Load();
-            FileListManager = new HllFileListManager(context);
+            Context.Load();
+            FileListManager = new HllFileListManager(Context);
             cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             SetCaptions();
             SetAppState(AppStates.Viewing);
@@ -281,10 +281,10 @@ namespace HolidayLabelsAndLists
         {
             PopulateForm(first_run: false);
             FileListManager.ApplyFilters();
-            if (FileListManager.IsEmpty)
-            {
-                ShowNoFilesMessage();
-            }
+            //if (FileListManager.IsEmpty)
+            //{
+            //    ShowNoFilesMessage();
+            //}
         }
 
         /// <summary>
@@ -313,8 +313,8 @@ namespace HolidayLabelsAndLists
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            if (FileListManager.IsEmpty)
-                ShowNoFilesMessage();
+            //if (FileListManager.IsEmpty)
+            //    ShowNoFilesMessage();
         }
 
         /// <summary>
@@ -468,16 +468,16 @@ namespace HolidayLabelsAndLists
             string[] report_names)
         {
             int retInt = 0;
-            //this.context.Clean();
+            //this.Context.Clean();
             worker.ReportProgress(0,
                 string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
                 );
-            retInt = ImportFromVesta(worker, this.context, report_names);
+            retInt = ImportFromVesta(worker, this.Context, report_names);
             //if (!worker.CancellationPending)
             //{
 
             //    worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
-            //    retInt = HllUtils.MakeOutputFiles(worker, this.context);
+            //    retInt = HllUtils.MakeOutputFiles(worker, this.Context);
             //}
             return retInt;
         }
@@ -493,7 +493,7 @@ namespace HolidayLabelsAndLists
         private int DoOutputProcessing(BackgroundWorker worker)
         {
             worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
-            return HllUtils.MakeOutputFiles(worker, this.context);
+            return HllUtils.MakeOutputFiles(worker, this.Context);
         }
 
 
@@ -644,6 +644,10 @@ namespace HolidayLabelsAndLists
                     break;
                 case AppStates.Viewing:
                     this.Show();
+                    if (this.Context.DbIsEmpty)
+                        ShowNothingImportedMessage();
+                    else if (this.FileListManager.IsEmpty)
+                        ShowNoFilesMessage();
                     break;
                 case AppStates.ShowingWork:
                     ProgressForm.Done = true;
