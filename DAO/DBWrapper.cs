@@ -23,7 +23,7 @@ namespace DAO
         public List<Donor> DonorList { get; set; }
         public List<GiftLabelInfo> GliList { get; set; }
         public List<ServicesHouseholdEnrollment> HoEnrList { get; set; }
-        public bool DbIsEmpty
+        public bool IsEmpty
         {
             get
             {

@@ -644,7 +644,7 @@ namespace HolidayLabelsAndLists
                     break;
                 case AppStates.Viewing:
                     this.Show();
-                    if (this.Context.DbIsEmpty)
+                    if (this.Context.IsEmpty)
                         ShowNothingImportedMessage();
                     else if (this.FileListManager.IsEmpty)
                         ShowNoFilesMessage();
