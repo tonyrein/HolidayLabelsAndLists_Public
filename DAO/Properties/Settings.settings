@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="OutputFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">P:\CHRISTMAS AND THANKSGIVING PROGRAMS</Value>
+      <Value Profile="(Default)">P:\HLL_INTERNAL</Value>
     </Setting>
   </Settings>
 </SettingsFile>
