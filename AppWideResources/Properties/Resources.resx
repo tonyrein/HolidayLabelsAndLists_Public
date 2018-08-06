@@ -240,10 +240,10 @@ The error message was {1}</value>
     <value>Select different criteria for Document Type to View, Year, and/or Donor</value>
   </data>
   <data name="NoOutputFilesMsg" xml:space="preserve">
-    <value>There are no label or list files available for viewing.\nPlease click "Process VESTAReports"\nand select one or more reports.</value>
+    <value>There are no label or list files available for viewing.\nPlease click "Create Labels and Lists"\nand select one or more reports.</value>
   </data>
   <data name="NoOutputFilesTitle" xml:space="preserve">
-    <value>Please Add VESTA Reports</value>
+    <value>No Output Files</value>
   </data>
   <data name="OKToCloseMsg" xml:space="preserve">
     <value>You may now close this window.</value>
@@ -319,5 +319,11 @@ The error message was {1}</value>
   <data name="VestaReportProcessingSuccessMsg" xml:space="preserve">
     <value>Successfully imported {0} VESTA Reports</value>
     <comment>0=count of reports</comment>
+  </data>
+  <data name="NothingImportedMsg" xml:space="preserve">
+    <value>No imported VESTA data found. Please click "Process VESTA Reports" to import data from one or more reports.</value>
+  </data>
+  <data name="NothingImportedTitle" xml:space="preserve">
+    <value>No Imported VESTA Data</value>
   </data>
 </root>
