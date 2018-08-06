@@ -23,6 +23,15 @@ namespace DAO
         public List<Donor> DonorList { get; set; }
         public List<GiftLabelInfo> GliList { get; set; }
         public List<ServicesHouseholdEnrollment> HoEnrList { get; set; }
+        public bool DbIsEmpty
+        {
+            get
+            {
+                return (this.BliList.Count() == 0) &&
+                    (this.GliList.Count() == 0) &&
+                    (this.HoEnrList.Count() == 0);
+            }
+        }
 
         /// <summary>
         /// Initialize this DBWrapper's data lists to empty lists.
@@ -68,7 +77,10 @@ namespace DAO
 
         private LiteDatabase GetDatabase()
         {
-            string dbpath = Path.Combine(FolderManager.OutputFolder, Properties.Resources.db_filename);
+            string dbdir = FolderManager.OutputFolder;
+            if (!Directory.Exists(dbdir))
+                Directory.CreateDirectory(dbdir);
+            string dbpath = Path.Combine(dbdir, Properties.Resources.db_filename);
             return new LiteDatabase(dbpath);
         }
         /// <summary>
