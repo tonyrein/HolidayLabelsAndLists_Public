@@ -42,9 +42,9 @@
             this.btnAddVestaReports = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnCreateOutput = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnDeleteOldFiles = new System.Windows.Forms.Button();
-            this.btnCreateOutput = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvAvailableFiles
@@ -184,6 +184,19 @@
             this.btnHelp.UseVisualStyleBackColor = true;
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
+            // btnCreateOutput
+            // 
+            this.btnCreateOutput.Location = new System.Drawing.Point(1032, 167);
+            this.btnCreateOutput.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCreateOutput.Name = "btnCreateOutput";
+            this.btnCreateOutput.Size = new System.Drawing.Size(113, 64);
+            this.btnCreateOutput.TabIndex = 21;
+            this.btnCreateOutput.Text = "Create Labels and Lists";
+            this.toolTip1.SetToolTip(this.btnCreateOutput, "Select already-downloaded VESTA reports\r\nand generate label and list files from t" +
+        "hose\r\nreports.");
+            this.btnCreateOutput.UseVisualStyleBackColor = true;
+            this.btnCreateOutput.Click += new System.EventHandler(this.btnCreateOutput_Click);
+            // 
             // btnClose
             // 
             this.btnClose.Location = new System.Drawing.Point(1032, 413);
@@ -203,19 +216,6 @@
             this.btnDeleteOldFiles.Text = "Delete Old Files";
             this.btnDeleteOldFiles.UseVisualStyleBackColor = true;
             this.btnDeleteOldFiles.Click += new System.EventHandler(this.btnDeleteOldFiles_Click);
-            // 
-            // btnCreateOutput
-            // 
-            this.btnCreateOutput.Location = new System.Drawing.Point(1032, 167);
-            this.btnCreateOutput.Margin = new System.Windows.Forms.Padding(4);
-            this.btnCreateOutput.Name = "btnCreateOutput";
-            this.btnCreateOutput.Size = new System.Drawing.Size(113, 64);
-            this.btnCreateOutput.TabIndex = 21;
-            this.btnCreateOutput.Text = "Create Labels and Lists";
-            this.toolTip1.SetToolTip(this.btnCreateOutput, "Select already-downloaded VESTA reports\r\nand generate label and list files from t" +
-        "hose\r\nreports.");
-            this.btnCreateOutput.UseVisualStyleBackColor = true;
-            this.btnCreateOutput.Click += new System.EventHandler(this.btnCreateOutput_Click);
             // 
             // frmMain
             // 
