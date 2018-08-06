@@ -535,6 +535,11 @@ namespace HolidayLabelsAndLists
 
         private void btnAddVestaReports_Click(object sender, EventArgs e)
         {
+            AddVestaReports(sender, e);
+        }
+
+        private void AddVestaReports(object sender, EventArgs e)
+        {
             string[] report_names = HllUtils.GetVestaReportNames();
             if (report_names != null)
             {
@@ -570,6 +575,11 @@ namespace HolidayLabelsAndLists
         }
 
         private void btnCreateOutput_Click(object sender, EventArgs e)
+        {
+            CreateOutput(sender, e);
+        }
+
+        private void CreateOutput(object sender, EventArgs e)
         {
             try
             {
