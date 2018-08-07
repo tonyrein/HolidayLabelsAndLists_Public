@@ -8,7 +8,8 @@ namespace DAO
 {
     /// <summary>
     /// Wrapper around data structures used for temporary
-    /// (in-RAM) storage.
+    /// (in-RAM) storage and for saving to and loading from
+    /// persistent storage.
     /// 
     /// A DBWrapper object contains Lists of instances of the classes
     /// defined in Models.cs:
@@ -44,13 +45,6 @@ namespace DAO
             DonorList = new List<Donor>();
             GliList = new List<GiftLabelInfo>();
             HoEnrList = new List<ServicesHouseholdEnrollment>();
-            //this.Load();
-            //int default_donors_added = this.AddDefaultDonors();
-            //if (default_donors_added > 0) // list changed -- save changes
-            //{
-            //    using (var db = this.GetDatabase())
-            //        this.SaveDonors(db);
-            //}
         }
 
         /// <summary>
@@ -75,6 +69,11 @@ namespace DAO
             return retInt;
         }
 
+        /// <summary>
+        /// Create a connection to the database
+        /// used for persistent storage.
+        /// </summary>
+        /// <returns></returns>
         private LiteDatabase GetDatabase()
         {
             string dbdir = FolderManager.OutputFolder;
@@ -83,6 +82,7 @@ namespace DAO
             string dbpath = Path.Combine(dbdir, Properties.Resources.db_filename);
             return new LiteDatabase(dbpath);
         }
+
         /// <summary>
         /// Save data to persistent store.
         /// </summary>
@@ -95,12 +95,6 @@ namespace DAO
                 this.SaveBagLabelInfo(db);
                 this.SaveGiftabelInfo(db);
                 this.SaveServicesHouseholdEnrollment(db);
-                //LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
-                //foreach(Donor d in this.DonorList)
-                //{
-                //    donor_coll.Upsert(d.dao);
-                //}
-
             }
         }
 
@@ -116,14 +110,6 @@ namespace DAO
                 this.LoadBagLabelInfo(db);
                 this.LoadGiftLabelInfo(db);
                 this.LoadServicesHouseholdEnrollment(db);
-                //LiteCollection<Donor_DAO> donor_coll = db.GetCollection<Donor_DAO>("donors");
-                //foreach(Donor_DAO dao in donor_coll.Find(Query.All()))
-                //{
-                //    if (MatchingDonor(dao) == null) // This Donor is not already in list.
-                //    {
-                //        this.DonorList.Add(new Donor(dao));
-                //    }
-                //}
             }
         }
 
@@ -250,13 +236,6 @@ namespace DAO
         public BagLabelInfo MatchingBagLabelInfo(BagLabelInfo bli)
         {
             return MatchingBagLabelInfo(bli.dao);
-            //return BliList.FirstOrDefault
-            //    (b => (
-            //        b.year == bli.year &&
-            //        b.request_type == bli.request_type &&
-            //        b.family_id == bli.family_id
-            //        )
-            //    );
         }
 
         public BagLabelInfo MatchingBagLabelInfo(BagLabelInfo_DAO dao)
@@ -269,6 +248,7 @@ namespace DAO
                                )
                            );
         }
+        
         /// <summary>
         /// Is there a Donor in the list with the given name?
         /// 
@@ -356,6 +336,7 @@ namespace DAO
         {
             return MatchingGiftLabelInfo(gli.dao);
         }
+        
         /// <summary>
         /// Is there already an object in the list that matches
         /// the passed-in one?
