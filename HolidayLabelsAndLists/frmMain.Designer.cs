@@ -42,6 +42,7 @@
             this.btnAddVestaReports = new System.Windows.Forms.Button();
             this.btnHelp = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnCreateOutput = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnDeleteOldFiles = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -173,7 +174,7 @@
             // 
             // btnHelp
             // 
-            this.btnHelp.Location = new System.Drawing.Point(1032, 237);
+            this.btnHelp.Location = new System.Drawing.Point(812, 413);
             this.btnHelp.Margin = new System.Windows.Forms.Padding(4);
             this.btnHelp.Name = "btnHelp";
             this.btnHelp.Size = new System.Drawing.Size(113, 64);
@@ -183,9 +184,22 @@
             this.btnHelp.UseVisualStyleBackColor = true;
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
+            // btnCreateOutput
+            // 
+            this.btnCreateOutput.Location = new System.Drawing.Point(1032, 167);
+            this.btnCreateOutput.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCreateOutput.Name = "btnCreateOutput";
+            this.btnCreateOutput.Size = new System.Drawing.Size(113, 64);
+            this.btnCreateOutput.TabIndex = 21;
+            this.btnCreateOutput.Text = "Create Labels and Lists";
+            this.toolTip1.SetToolTip(this.btnCreateOutput, "Select already-downloaded VESTA reports\r\nand generate label and list files from t" +
+        "hose\r\nreports.");
+            this.btnCreateOutput.UseVisualStyleBackColor = true;
+            this.btnCreateOutput.Click += new System.EventHandler(this.btnCreateOutput_Click);
+            // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(1032, 322);
+            this.btnClose.Location = new System.Drawing.Point(1032, 413);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(113, 64);
             this.btnClose.TabIndex = 19;
@@ -195,7 +209,7 @@
             // 
             // btnDeleteOldFiles
             // 
-            this.btnDeleteOldFiles.Location = new System.Drawing.Point(1032, 148);
+            this.btnDeleteOldFiles.Location = new System.Drawing.Point(1032, 272);
             this.btnDeleteOldFiles.Name = "btnDeleteOldFiles";
             this.btnDeleteOldFiles.Size = new System.Drawing.Size(113, 69);
             this.btnDeleteOldFiles.TabIndex = 20;
@@ -208,6 +222,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1166, 604);
+            this.Controls.Add(this.btnCreateOutput);
             this.Controls.Add(this.btnDeleteOldFiles);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnHelp);
@@ -249,6 +264,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnDeleteOldFiles;
+        private System.Windows.Forms.Button btnCreateOutput;
     }
 }
 

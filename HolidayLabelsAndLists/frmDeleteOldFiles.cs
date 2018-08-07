@@ -38,14 +38,14 @@ namespace HolidayLabelsAndLists
         {
             this.btnCancel.Text = Properties.Resources.CancelBtnCaption;
             this.btnDelete.Text = Properties.Resources.DelOldBackupsGoButtonCaption;
-
         }
+
         private void SetLabels()
         {
             this.Text = GlobRes.DeleteOldFilesTitle;
             this.groupBox1.Text = GlobRes.SelectYears;
-
         }
+
         private void frmDeleteOldFiles_Activated(object sender, EventArgs e)
         {
             this.FilesChanged = false;
@@ -94,7 +94,6 @@ namespace HolidayLabelsAndLists
                 selectedYearsList.Add(item.ToString());
             }
             string years = String.Join(", ", selectedYearsList);
-            //String msg_tmpl = Properties.Resources.DeleteOldConfirmation;
             string msg = String.Format(Properties.Resources.DeleteOldConfirmation, years);
             var msgBoxResp = MessageBox.Show(msg, Properties.Resources.ReallyDeleteQuestion,
                 MessageBoxButtons.YesNoCancel);

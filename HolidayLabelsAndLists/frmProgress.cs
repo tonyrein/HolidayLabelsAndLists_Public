@@ -13,6 +13,12 @@ namespace HolidayLabelsAndLists
     {
         public BackgroundWorker Worker { get; set; }
         private bool _done;
+
+        /// <summary>
+        /// When the Done property is changed,
+        /// set this form's controls as appropriate
+        /// to the new state.
+        /// </summary>
         public bool Done
         {
             get
@@ -22,9 +28,10 @@ namespace HolidayLabelsAndLists
             set
             {
                 _done = value;
-                SetControls(_done);
+                SetControls();
             }
         }
+
         public frmProgress()
         {
             InitializeComponent();
@@ -44,11 +51,12 @@ namespace HolidayLabelsAndLists
         /// then Close button enabled.
         /// </summary>
         /// <param name="isDone"></param>
-        private void SetControls(bool isDone)
+        private void SetControls()
         {
-            btnCancel.Enabled = !isDone;
-            btnClose.Enabled = isDone;
+            btnCancel.Enabled = !Done;
+            btnClose.Enabled = Done;
         }
+        
         /// <summary>
         /// Append a string to the end of the display
         /// </summary>

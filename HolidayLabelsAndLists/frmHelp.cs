@@ -27,8 +27,6 @@ namespace HolidayLabelsAndLists
         /// <param name="e"></param>
         private void frmHelp_Load(object sender, EventArgs e)
         {
-            //string doc_html = Properties.Resources.Doc_HTML;
-            //this.webBrowser1.DocumentText = doc_html;
         }
     }
 }

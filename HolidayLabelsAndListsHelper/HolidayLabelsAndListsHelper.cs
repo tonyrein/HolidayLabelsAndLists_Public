@@ -10,7 +10,6 @@ using Utils;
 
 using GlobRes = AppWideResources.Properties.Resources;
 
-// TODO: Clean up donor matching code
 namespace HolidayLabelsAndListsHelper
 {
     public static class HllUtils
@@ -363,8 +362,9 @@ namespace HolidayLabelsAndListsHelper
             else
             {
                 IsBackupFile = HllUtils.IsBackupFile(BareName);
-                HasNoDonor = (! Type.HasDonor() );
-                if (!HasNoDonor)
+                if (!Type.HasDonor())
+                    HasNoDonor = true;
+                else
                     DonorCode = DonorCodeFromFileName(sarray);
             }
         }
@@ -413,12 +413,6 @@ namespace HolidayLabelsAndListsHelper
             return TypesWithDonor.Contains(this.ty);
         }
 
-        public bool HasNoDonor()
-        {
-            return TypesWithDonor.Contains(this.ty);
-        }
-
-
         public FilterSetTypeFilters(string s)
         {
             s = Utils.TextUtils.CleanString(s);
@@ -438,6 +432,7 @@ namespace HolidayLabelsAndListsHelper
                     this.ty = types.INVALID;
             }
         }
+
         public override string ToString()
         {
             return this.ty.ToString();

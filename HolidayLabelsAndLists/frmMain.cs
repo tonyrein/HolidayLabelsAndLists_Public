@@ -13,7 +13,20 @@ namespace HolidayLabelsAndLists
 {
     public partial class frmMain : Form
     {
-        private DBWrapper context = new DBWrapper();
+        internal enum ProcessingType
+        {
+            IMPORT,
+            GENERATE,
+            BOTH
+        }
+        internal class BGWorkerResult
+        {
+            internal int ReportsReadCount { get; set; }
+            internal int FilesGeneratedCount { get; set; }
+            internal ProcessingType Type { get; set; }
+        }
+
+        private DBWrapper Context = new DBWrapper();
         private HllFileListManager FileListManager;
 
         private enum AppStates { Processing, Viewing, ShowingWork };
@@ -26,8 +39,8 @@ namespace HolidayLabelsAndLists
         public frmMain()
         {
             InitializeComponent();
-            context.Load();
-            FileListManager = new HllFileListManager(context);
+            Context.Load();
+            FileListManager = new HllFileListManager(Context);
             cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             SetCaptions();
             SetAppState(AppStates.Viewing);
@@ -35,9 +48,13 @@ namespace HolidayLabelsAndLists
 
         private void SetCaptions()
         {
-            //this.btnMaintenance.Text = Properties.Resources.MaintBtnCaption;
             this.btnDeleteOldFiles.Text = Properties.Resources.DelOldFilesDialogBtnCaption;
         }
+
+        /// <summary>
+        /// Fill the listview with the name of each file.
+        /// Set each item's tooltip to the same vallue.
+        /// </summary>
         private void FillFileListView()
         {
             lvAvailableFiles.Items.Clear();
@@ -47,11 +64,10 @@ namespace HolidayLabelsAndLists
                 item.ToolTipText = s;
                 lvAvailableFiles.Items.Add(item);
             }
-            // No matches?
+            // No matches? Then create an item saying so
+            // to display in the file list.
             if (lvAvailableFiles.Items.Count == 0)
             {
-                //ListViewItem item = new ListViewItem("No files match the selected criteria.");
-                //item.ToolTipText = "Select different criteria for Document Type to View, Year, and/or Donor.";
                 ListViewItem item = new ListViewItem(GlobRes.NoMatchingFilesMsg);
                 item.ToolTipText = GlobRes.NoMatchingFilesTooltip;
                 lvAvailableFiles.Items.Add(item);
@@ -63,8 +79,8 @@ namespace HolidayLabelsAndLists
         /// Set cmbYear's list to all of the years contained
         /// in our data's records.
         /// 
-        /// Save the old value, and if reset==false, reselect
-        /// that value when done. If reset==true, select first
+        /// Save the old value, and if set_to_zero==false, reselect
+        /// that value when done. If set_to_zero==true, select first
         /// element in list.
         /// </summary>
         /// <param name="set_to_zero"></param>
@@ -145,7 +161,6 @@ namespace HolidayLabelsAndLists
 
         private void PopulateTypeToViewCombo(bool set_to_zero = true)
         {
-            //cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
             // turn IndexChanged event handler off
             cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
             if (set_to_zero)    
@@ -164,9 +179,9 @@ namespace HolidayLabelsAndLists
 
         private void SetButtonAndCheckboxState()
         {
-            //btnMaintenance.Enabled = FileListManager.HasBackupFiles;
             chbxIncludeBackups.Enabled = FileListManager.HasBackupFiles;
         }
+
         /// <summary>
         /// Set data sources and initial selections of combo boxes.
         /// 
@@ -200,7 +215,6 @@ namespace HolidayLabelsAndLists
         private void SetTypeFilter()
         {
             // Is it safe to assume this won't be null?
-            //FileListManager.TypeFilter = cmbTypeToView.Text;
             FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.Text);
         }
 
@@ -246,9 +260,19 @@ namespace HolidayLabelsAndLists
                 GlobRes.NoOutputFilesMsg, GlobRes.NoOutputFilesTitle,
                 MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
-
         }
 
+        /// <summary>
+        /// Display a message box telling the user that VESTA data
+        /// needs to be imported.
+        /// </summary>
+        private void ShowNothingImportedMessage()
+        {
+            MessageBox.Show(
+                GlobRes.NothingImportedMsg, GlobRes.NothingImportedTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Information
+                );
+        }
 
         /// <summary>
         /// After the list of matching files has changed,
@@ -258,10 +282,6 @@ namespace HolidayLabelsAndLists
         {
             PopulateForm(first_run: false);
             FileListManager.ApplyFilters();
-            if (FileListManager.IsEmpty)
-            {
-                ShowNoFilesMessage();
-            }
         }
 
         /// <summary>
@@ -283,6 +303,7 @@ namespace HolidayLabelsAndLists
                 SetButtonAndCheckboxState();
             }
         }
+
         private void frmMain_Load(object sender, EventArgs e)
         {
             PopulateForm(first_run: true);
@@ -290,8 +311,6 @@ namespace HolidayLabelsAndLists
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            if (FileListManager.IsEmpty)
-                ShowNoFilesMessage();
         }
 
         /// <summary>
@@ -304,13 +323,7 @@ namespace HolidayLabelsAndLists
         {
             SetTypeFilter();
             // Disable donor combo when file type is one where donors aren't relevant.
-            //if (HllUtils.TypeHasDonor(FileListManager.TypeFilter))
-            //    cmbDonor.Enabled = true;
             cmbDonor.Enabled = FileListManager.TypeFilter.HasDonor();
-            //    cmbDonor.Enabled = true;
-            //else
-            //    cmbDonor.Enabled = false;
-
             this.FileListManager.ApplyFilters();
             this.PopulateForm(first_run: false);
         }
@@ -432,33 +445,47 @@ namespace HolidayLabelsAndLists
 
         /// <summary>
         /// Read info from VESTA reports. Store the info in
-        /// a DBWrapper object. Then use the data in the DBWrapper
-        /// to generate output files.
+        /// a DBWrapper object.
+        /// 
+        /// Return number of reports read
         /// 
         /// During processing, display progress messages.
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="report_names"></param>
         /// <returns></returns>
-        private int DoProcessing(BackgroundWorker worker,
+        private int DoImportProcessing(BackgroundWorker worker,
             string[] report_names)
         {
             int retInt = 0;
-            //this.context.Clean();
+            //this.Context.Clean();
             worker.ReportProgress(0,
                 string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
                 );
-            ImportFromVesta(worker, this.context, report_names);
-            if (!worker.CancellationPending)
-            {
-
-                worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
-                retInt = HllUtils.MakeOutputFiles(worker, this.context);
-            }
+            retInt = ImportFromVesta(worker, this.Context, report_names);
             return retInt;
         }
 
+        /// <summary>
+        /// Generate label and list documents. Return number of documents
+        /// created.
+        /// 
+        /// Display progress messages during processing.
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <returns></returns>
+        private int DoOutputProcessing(BackgroundWorker worker)
+        {
+            worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
+            return HllUtils.MakeOutputFiles(worker, this.Context);
+        }
+
         private void btnAddVestaReports_Click(object sender, EventArgs e)
+        {
+            AddVestaReports(sender, e);
+        }
+
+        private void AddVestaReports(object sender, EventArgs e)
         {
             string[] report_names = HllUtils.GetVestaReportNames();
             if (report_names != null)
@@ -468,7 +495,7 @@ namespace HolidayLabelsAndLists
                     // create an object to handle communication between
                     // background stuff and progress dialog:
                     _bgworker = HllUtils.MakeWorker(
-                        new DoWorkEventHandler(bgworker_DoWork),
+                        new DoWorkEventHandler(bgworker_DoImportWork),
                         new RunWorkerCompletedEventHandler(bgworker_RunWorkerCompleted),
                         new ProgressChangedEventHandler(bgworker_ProgressChanged)
                         );
@@ -491,6 +518,43 @@ namespace HolidayLabelsAndLists
                         ProgressForm.Close();
                     throw;
                 }
+            }
+        }
+
+        private void btnCreateOutput_Click(object sender, EventArgs e)
+        {
+            CreateOutput(sender, e);
+        }
+
+        private void CreateOutput(object sender, EventArgs e)
+        {
+            try
+            {
+                // create an object to handle communication between
+                // background stuff and progress dialog:
+                _bgworker = HllUtils.MakeWorker(
+                    new DoWorkEventHandler(bgworker_DoGenerateWork),
+                    new RunWorkerCompletedEventHandler(bgworker_RunWorkerCompleted),
+                    new ProgressChangedEventHandler(bgworker_ProgressChanged)
+                    );
+                SetAppState(AppStates.Processing);
+                // create and configure a progress dialog:
+                ProgressForm = new frmProgress();
+                ProgressForm.Done = false;
+                ProgressForm.Worker = _bgworker;
+                // Hook up "FormClosed" event handler:
+                ProgressForm.FormClosed += ProgressForm_FormClosed;
+                ProgressForm.Show();
+                ProgressForm.AddMessage(GlobRes.GeneratingOutputFilesMsg);
+                // start the background work:
+                _bgworker.RunWorkerAsync();
+            }
+            catch
+            {
+                SetAppState(AppStates.Viewing);
+                if (ProgressForm != null)
+                    ProgressForm.Close();
+                throw;
             }
         }
 
@@ -537,6 +601,10 @@ namespace HolidayLabelsAndLists
                     break;
                 case AppStates.Viewing:
                     this.Show();
+                    if (this.Context.IsEmpty)
+                        ShowNothingImportedMessage();
+                    else if (this.FileListManager.IsEmpty)
+                        ShowNoFilesMessage();
                     break;
                 case AppStates.ShowingWork:
                     ProgressForm.Done = true;
@@ -549,13 +617,34 @@ namespace HolidayLabelsAndLists
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void bgworker_DoWork(object sender, DoWorkEventArgs e)
+        private void bgworker_DoImportWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker wk = sender as BackgroundWorker;
             string[] args = (string[])e.Argument;
-            e.Result = DoProcessing(wk, args);
+            BGWorkerResult bgRes = new BGWorkerResult();
+            bgRes.Type = ProcessingType.IMPORT;
+            bgRes.ReportsReadCount = DoImportProcessing(wk, args);
             if (wk.CancellationPending)
                 e.Cancel = true;
+            else
+                e.Result = bgRes;
+        }
+
+        /// <summary>
+        /// Launch the processing code in a separate thread.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bgworker_DoGenerateWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker wk = sender as BackgroundWorker;
+            BGWorkerResult bgRes = new BGWorkerResult();
+            bgRes.Type = ProcessingType.GENERATE;
+            bgRes.FilesGeneratedCount = DoOutputProcessing(wk);
+            if (wk.CancellationPending)
+                e.Cancel = true;
+            else
+                e.Result = bgRes;
         }
 
         private void bgworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -595,12 +684,25 @@ namespace HolidayLabelsAndLists
                 }
                 else
                 {
-                    int res = (int)e.Result;
-                    ProgressForm.AddMessage(
-                        string.Format(GlobRes.FileAddingSuccessMsg, res)
-                        );
+                    BGWorkerResult bgRes = (BGWorkerResult)e.Result;
+                    string msg = null;
+                    switch(bgRes.Type)
+                    {
+                        case ProcessingType.GENERATE:
+                            msg = string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
+                            break;
+                        case ProcessingType.IMPORT:
+                            msg = string.Format(GlobRes.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount);
+                            break;
+                        case ProcessingType.BOTH:
+                            msg = string.Format(GlobRes.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount) +
+                                Environment.NewLine +  string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
+                            break;
+                    }
+                    ProgressForm.AddMessage(Environment.NewLine + msg);
                     ProgressForm.AddMessage(GlobRes.OKToCloseMsg);
-                    if (res > 0)
+                    ProgressForm.AddMessage(Environment.NewLine);
+                    if (bgRes.FilesGeneratedCount > 0)
                         UpdateView();
                 }
             }
@@ -627,5 +729,6 @@ namespace HolidayLabelsAndLists
                 }
             }
         }
+
     }
 }

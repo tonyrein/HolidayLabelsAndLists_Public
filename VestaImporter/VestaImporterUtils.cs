@@ -19,6 +19,12 @@ namespace VestaProcessor
         private const string LABELS_REPORT_MARKER_TEXT = "EA - Adopt-a-Family - Labels";
         private const string PARTICIPANT_REPORT_MARKER_TEXT = "EA - Partner Network Services Enrollment List";
  
+        /// <summary>
+        /// Given an ExcelSheet object, return the
+        /// corresponding report type, if any.
+        /// </summary>
+        /// <param name="sh"></param>
+        /// <returns></returns>
         public static ReportTypes ReportType(ExcelSheet sh)
         {
             ReportTypes retValue;

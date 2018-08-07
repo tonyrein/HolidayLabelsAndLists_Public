@@ -19,6 +19,13 @@ namespace VestaProcessor
 
     public static class ReportSectionFactory
     {
+        /// <summary>
+        /// Given a marker string, parse it to figure out
+        /// what kind of label and what kind of request
+        /// it's marking.
+        /// </summary>
+        /// <param name="marker_text"></param>
+        /// <returns></returns>
         private static Tuple<LabelType, RequestType> parse_marker_text(string marker_text)
         {
             LabelType label_type =
@@ -206,7 +213,6 @@ namespace VestaProcessor
             : base(sheet, top_row_idx, year)
         {
             this.label_type = LabelType.Bag;
-
         }
 
         protected override object ObjectFromVestaRow(DBWrapper context, ExcelRow row, int year)
