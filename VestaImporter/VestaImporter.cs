@@ -35,7 +35,6 @@ namespace VestaProcessor
             worker.ReportProgress(0,
                 string.Format(GlobRes.StartingEachReportMsg, this.filespec)
                 );
-            //worker.ReportProgress(0, $"Processing report {this.filespec}...");
             valid_VESTA = true;
             WorkbookWrapper bk = new WorkbookWrapper(this.filespec);
             if (bk == null)
@@ -43,7 +42,6 @@ namespace VestaProcessor
                 worker.ReportProgress(0,
                     string.Format(GlobRes.InvalidWorksheetMsg, this.filespec)
                     );
-                //worker.ReportProgress(0, $"{this.filespec} does not appear to be a valid Excel worksheet.");
                 valid_VESTA = false;
                 return;
             }
@@ -54,7 +52,6 @@ namespace VestaProcessor
                 worker.ReportProgress(0,
                     string.Format(GlobRes.SheetNotFoundInFileMsg, this.sheet_name, this.filespec)
                     );
-                //worker.ReportProgress(0, $"{this.sheet_name} not found in {this.filespec}");
                 valid_VESTA = false;
                 return;
             }
@@ -64,12 +61,16 @@ namespace VestaProcessor
                 worker.ReportProgress(0,
                     string.Format(GlobRes.UnknownReportTypeMsg, this.filespec)
                     );
-                //worker.ReportProgress(0, $"{this.filespec} report type is unknown.");
                 valid_VESTA = false;
                 return;
             }
         }
 
+        /// <summary>
+        /// The data sections of VESTA reports begin with
+        /// marker strings. These are different for each
+        /// type of VESTA report.
+        /// </summary>
         protected string[] SectionMarkers
         {
             get
@@ -119,10 +120,13 @@ namespace VestaProcessor
         /// text strings might be found in a particular report depends on the report
         /// type -- see SectionMarkers property of this class.
         /// 
+        /// Return the number of data sections found.
         /// </summary>
         private int FindDataSections()
         {
             int retInt = 0;
+            // Check for each marker string relevant to
+            // this report type:
             foreach (string marker_text in this.SectionMarkers)
             {
                 // find marker string:
@@ -157,13 +161,11 @@ namespace VestaProcessor
             if (!worker.CancellationPending)
             {
                 worker.ReportProgress(0, GlobRes.SearchingForDataSectionsMsg);
-                //worker.ReportProgress(0, "Searching for data sections in this VESTA report...");
                 this.GetHeaderInfo();
                 this.data_section_count = this.FindDataSections();
                 worker.ReportProgress(0,
                     string.Format(GlobRes.CountOfDataSectionsMsg, data_section_count)
                     );
-                //worker.ReportProgress(0, $"Found {data_section_count} data sections.");
             }
         }
 
@@ -188,14 +190,12 @@ namespace VestaProcessor
                     worker.ReportProgress(0,
                         string.Format(GlobRes.SectionXOfYMsg, i, data_section_count)
                         );
-                    //worker.ReportProgress(0, $"Processing data section {i} of {data_section_count}...");
                     section.execute(context);
                 }
             }
             if (i == data_section_count)
             {
                 worker.ReportProgress(0, GlobRes.AllSectionsProcessedOKMsg);
-                //worker.ReportProgress(0, $"All sections processed OK");
                 return 1;
             }
             else
@@ -203,7 +203,6 @@ namespace VestaProcessor
                 worker.ReportProgress(0,
                     string.Format(GlobRes.SomeSectionsNotProcessedMsg, i, data_section_count)
                         );
-                //worker.ReportProgress(0, $"Only {i} sections processed OK (out of {data_section_count})");
                 return 0;
             }
         }
