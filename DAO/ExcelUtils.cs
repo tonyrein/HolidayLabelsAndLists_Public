@@ -5,6 +5,10 @@ using System.IO;
 namespace DAO
 {
 
+    /// <summary>
+    /// Class for handling a collection of strings,
+    /// interpreted as the contents of a spreadsheet row.
+    /// </summary>
     public class ExcelRow
     {
         private string[] Cells;
@@ -50,15 +54,31 @@ namespace DAO
         {
             this.Cells = ExcelUtils.IRowToStringArray(irow);
         }
+
+        /// <summary>
+        /// Return the contents of this row as an
+        /// array of strings.
+        /// </summary>
+        /// <returns></returns>
         public string[] ToStringArray()
         {
             return this.Cells;
         }
+
+        /// <summary>
+        /// If the first element of this row's Cells member
+        /// is null, interpret that as this row being empty.
+        /// </summary>
+        /// <returns></returns>
         public bool IsEmpty()
         {
             return (this[0] == null);
         }
     }
+
+    /// <summary>
+    /// Class for handling a collection of ExcelRows
+    /// </summary>
     public class ExcelSheet
     {
         public string Name { get; set; }
