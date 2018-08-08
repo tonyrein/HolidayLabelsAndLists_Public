@@ -425,23 +425,23 @@ namespace HolidayLabelsAndLists
         /// refer to anything in frmMain and does no user interaction. It should probably
         /// be in a helper or utility class -- perhaps VestaImporterUtils?
         /// 
-        private int ImportFromVesta(BackgroundWorker wk,
-            DBWrapper context, string[] report_names)
-        {
-            int retInt = 0;
-            foreach (string fn in report_names)
-            {
-                if (Path.GetExtension(fn) == ".xlsx")
-                {
-                    VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
-                    retInt += p.execute(context);
-                }
-            }
-            // if we read anything in, save the changes to the database:
-            if (retInt > 0)
-                context.Save();
-            return retInt;
-        }
+        //private int ImportFromVesta(BackgroundWorker wk,
+        //    DBWrapper context, string[] report_names)
+        //{
+        //    int retInt = 0;
+        //    foreach (string fn in report_names)
+        //    {
+        //        if (Path.GetExtension(fn) == ".xlsx")
+        //        {
+        //            VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
+        //            retInt += p.execute(context);
+        //        }
+        //    }
+        //    // if we read anything in, save the changes to the database:
+        //    if (retInt > 0)
+        //        context.Save();
+        //    return retInt;
+        //}
 
         /// <summary>
         /// Read info from VESTA reports. Store the info in
@@ -462,7 +462,7 @@ namespace HolidayLabelsAndLists
             worker.ReportProgress(0,
                 string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
                 );
-            retInt = ImportFromVesta(worker, this.Context, report_names);
+            retInt = VestaImporterUtils.ImportFromVesta(worker, this.Context, report_names);
             return retInt;
         }
 

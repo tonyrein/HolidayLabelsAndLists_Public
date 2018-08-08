@@ -1,6 +1,9 @@
 ﻿
 
+using System.ComponentModel;
+using System.IO;
 using DAO;
+using GlobRes = AppWideResources.Properties.Resources;
 
 namespace VestaProcessor
 {
@@ -49,5 +52,36 @@ namespace VestaProcessor
             }
             return retValue;
         }
+
+        /// <summary>
+        /// Import contents of each file selected
+        /// by the user.
+        /// </summary>
+        /// <param name="wk"></param>
+        /// <param name="context"></param>
+        /// <param name="report_names"></param>
+        /// <returns></returns>
+        /// TODO: Move this method out of this class. It doesn't
+        /// refer to anything in frmMain and does no user interaction. It should probably
+        /// be in a helper or utility class -- perhaps VestaImporterUtils?
+        /// 
+        public static int ImportFromVesta(BackgroundWorker wk,
+            DBWrapper context, string[] report_names)
+        {
+            int retInt = 0;
+            foreach (string fn in report_names)
+            {
+                if (Path.GetExtension(fn) == ".xlsx")
+                {
+                    VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
+                    retInt += p.execute(context);
+                }
+            }
+            // if we read anything in, save the changes to the database:
+            if (retInt > 0)
+                context.Save();
+            return retInt;
+        }
+
     }
 }
