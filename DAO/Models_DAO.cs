@@ -55,4 +55,15 @@ namespace DAO
         public string state_or_province { get; set; }
         public string postal_code { get; set; }
     }
+
+    /// <summary>
+    /// used to prepare ParticipantSummaryLabel docs
+    /// </summary>
+    class FamiliesAndKids
+    {
+         public ServicesHouseholdEnrollment_DAO dao { get; set; }
+         public string[] kids { get; set; }
+         public int gift_card_count { get; set; }
+     }
+
 }
