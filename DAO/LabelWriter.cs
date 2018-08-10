@@ -562,7 +562,20 @@ namespace DAO
             //      ).Count();
             // Would it be better to do this in a separate CalculateAdditionalFields()
             // step as part of the import process?
-
+            List<object> fkl = new List<object>();
+            foreach(ServicesHouseholdEnrollment she in this.context.HoEnrList.Where(h=>h.year==this.Year))
+            {
+                var q = this.context.GliList.Where(g => (g.family_id == she.family_id && g.year == this.Year));
+                 if (q.Count() > 0)
+                 {
+                    FamiliesAndKids fk = new FamiliesAndKids();
+                     fk.dao = she.dao;
+                     fk.kids = q.Select(g => g.child_name).Distinct().ToArray();
+                     fk.gift_card_count = q.Where(g => g.request_type == "Other").Count();
+                     fkl.Add(fk);
+                 }
+            }
+            this.ItemList = fkl;
         }
 
         protected override void TypeOneRecord(Cell c, object rec)
