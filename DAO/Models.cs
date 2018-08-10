@@ -210,7 +210,6 @@ namespace DAO
         public string city { get { return dao.city; } set { dao.city = value; } }
         public string state_or_province { get { return dao.state_or_province; } set { dao.state_or_province = value; } }
         public string postal_code { get { return dao.postal_code; } set { dao.postal_code = value; } }
-        public int gift_card_count { get { return dao.gift_card_count; } set { dao.gift_card_count = value; } }
 
         public ServicesHouseholdEnrollment()
         {
