@@ -569,20 +569,34 @@ namespace DAO
         {
             // 
             List<object> fkl = new List<object>();
-            foreach(ServicesHouseholdEnrollment she in this.context.HoEnrList.Where(h=>h.year==this.Year))
+            ServicesHouseholdEnrollment_DAO[] participant_array =
+                this.context.HoEnrList.Select(h => h.dao).Where(h => h.year == this.Year).ToArray();
+            foreach(ServicesHouseholdEnrollment_DAO participant in participant_array)
             {
-                var q = this.context.GliList.Where(g => (g.family_id == she.family_id && g.year == this.Year));
-                 if (q.Count() > 0)
-                 {
-                    FamiliesAndKids fk = new FamiliesAndKids();
-                    fk.dao = she.dao;
-                    // Add the kids' names:
-                    fk.kids = q.Select(g => g.child_name).Distinct().ToArray();
-                    // Assume anything with request_type=="Other" is a gift card.
-                    fk.gift_card_count = q.Where(g => g.request_type == "Other").Count();
-                    fkl.Add(fk);
-                 }
+                var gli_array = this.context.GliList.Where(g => (g.year == this.Year && g.family_id == participant.family_id)).ToArray();
+                if (gli_array.Count() > 0)
+                {
+                    FamiliesAndKids fak = new FamiliesAndKids();
+                    fak.dao = participant;
+                    fak.kids = gli_array.Select(g => g.child_name).Distinct().ToArray();
+                    fak.gift_card_count = gli_array.Where(g => g.request_type == "Other").Count();
+                    fkl.Add(fak);
+                }
             }
+            //foreach(ServicesHouseholdEnrollment she in this.context.HoEnrList.Where(h=>h.year==this.Year))
+            //{
+            //    var q = this.context.GliList.Where(g => (g.family_id == she.family_id && g.year == this.Year));
+            //     if (q.Count() > 0)
+            //     {
+            //        FamiliesAndKids fk = new FamiliesAndKids();
+            //        fk.dao = she.dao;
+            //        // Add the kids' names:
+            //        fk.kids = q.Select(g => g.child_name).Distinct().ToArray();
+            //        // Assume anything with request_type=="Other" is a gift card.
+            //        fk.gift_card_count = q.Where(g => g.request_type == "Other").Count();
+            //        fkl.Add(fk);
+            //     }
+            //}
             this.ItemList = fkl;
         }
 
