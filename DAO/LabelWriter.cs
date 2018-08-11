@@ -567,7 +567,6 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-            // 
             List<object> fkl = new List<object>();
             ServicesHouseholdEnrollment_DAO[] participant_array =
                 this.context.HoEnrList.Select(h => h.dao).Where(h => h.year == this.Year).ToArray();
@@ -583,20 +582,6 @@ namespace DAO
                     fkl.Add(fak);
                 }
             }
-            //foreach(ServicesHouseholdEnrollment she in this.context.HoEnrList.Where(h=>h.year==this.Year))
-            //{
-            //    var q = this.context.GliList.Where(g => (g.family_id == she.family_id && g.year == this.Year));
-            //     if (q.Count() > 0)
-            //     {
-            //        FamiliesAndKids fk = new FamiliesAndKids();
-            //        fk.dao = she.dao;
-            //        // Add the kids' names:
-            //        fk.kids = q.Select(g => g.child_name).Distinct().ToArray();
-            //        // Assume anything with request_type=="Other" is a gift card.
-            //        fk.gift_card_count = q.Where(g => g.request_type == "Other").Count();
-            //        fkl.Add(fk);
-            //     }
-            //}
             this.ItemList = fkl;
         }
 
