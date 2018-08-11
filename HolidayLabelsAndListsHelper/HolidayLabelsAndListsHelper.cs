@@ -208,6 +208,7 @@ namespace HolidayLabelsAndListsHelper
             int retInt = 0;
             retInt += MakeParticipantLists(wk, ctx, year);
             retInt += MakePostcardLabels(wk, ctx, year);
+            retInt += MakeParticipantSummaryLabels(wk, ctx, year);
             return retInt;
         }
 
@@ -255,6 +256,16 @@ namespace HolidayLabelsAndListsHelper
                 w = new PostcardLabelWriter(wk, ctx, s, year);
                 retInt += w.TypeAllRecords();
             }
+            return retInt;
+        }
+
+        static int MakeParticipantSummaryLabels(BackgroundWorker wk,
+            DBWrapper ctx, int year)
+        {
+            LabelWriter w;
+            int retInt = 0;
+            w = new ParticipantSummaryLabelWriter(wk, ctx, year);
+            retInt += w.TypeAllRecords();
             return retInt;
         }
 
