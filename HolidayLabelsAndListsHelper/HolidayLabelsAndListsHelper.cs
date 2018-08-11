@@ -15,8 +15,8 @@ namespace HolidayLabelsAndListsHelper
     public static class HllUtils
     {
         private static string[] VALID_HLL_TYPES = new string[]
-            { "BAG", "GIFT", "DONOR", "MASTER", "PARTICIPANT", "POSTCARD" };
-        private static string[] FILE_TYPES_WITH_NO_DONOR = new string[] { "PARTICIPANT", "POSTCARD" };
+            { "BAG", "GIFT", "DONOR", "MASTER", "PARTICIPANT", "PARTICIPANTSUMMARY", "POSTCARD" };
+        private static string[] FILE_TYPES_WITH_NO_DONOR = new string[] { "PARTICIPANT", "PARTICIPANTSUMMARY", "POSTCARD" };
         public static string[] FILE_TYPES_WITH_DONOR = new string[] { "ALL", "BAG", "GIFT", "DONOR", "MASTER" };
         public static string[] LIST_AND_LABEL_EXTENSIONS = new string[] { ".docx", ".xlsx" };
         public const string BACKUP_FILE_REGEX = @".*\.bak\d{4,}$";
