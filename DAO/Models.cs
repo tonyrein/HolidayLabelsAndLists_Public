@@ -22,15 +22,16 @@ namespace DAO
 {
     public class BagLabelInfo
     {
-        private BagLabelInfo_DAO _dao = new BagLabelInfo_DAO();
-        public BagLabelInfo_DAO dao { get { return _dao; } }
+        //private BagLabelInfo_DAO _dao = new BagLabelInfo_DAO();
+        public BagLabelInfo_DAO dao { get; set; }
+        //public BagLabelInfo_DAO dao { get { return _dao; } }
         public int year
         {
-            get { return _dao.year; }
+            get { return dao.year; }
             set
             {
                 if (value < 2000) throw new ArgumentException("bag_label_info year must be >= 2000.");
-                _dao.year = value;
+                dao.year = value;
             }
         }
         public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
@@ -41,18 +42,18 @@ namespace DAO
         public string donor_name { get { return dao.donor_name; } set { dao.donor_name = value; } }
         public BagLabelInfo()
         {
-            this._dao = new BagLabelInfo_DAO();
+            this.dao = new BagLabelInfo_DAO();
         }
         public BagLabelInfo(BagLabelInfo_DAO dao)
         {
-            this._dao = dao;
+            this.dao = dao;
         }
     }
 
     public class Donor
     {
-        private Donor_DAO _dao;
-        public Donor_DAO dao { get { return _dao; } }
+        public Donor_DAO dao { get; set; }
+        //public Donor_DAO dao { get { return _dao; } }
         public static string MakeDonorName(string s)
         {
             string scr = Utils.TextUtils.CleanString(s);
@@ -65,23 +66,23 @@ namespace DAO
 
         public string code
         {
-            get { return _dao.code; }
+            get { return dao.code; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
-                    _dao.code = Donor.MakeDonorCode(value);
+                    dao.code = Donor.MakeDonorCode(value);
                 else // generate from name
-                    _dao.code = MakeDonorCode(name);
+                    dao.code = MakeDonorCode(name);
             }
         }
         public string name
         {
-            get { return _dao.name; }
+            get { return dao.name; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
                 {
-                    _dao.name = Donor.MakeDonorName(value);
+                    dao.name = Donor.MakeDonorName(value);
                 }
                 else
                 {
@@ -91,7 +92,7 @@ namespace DAO
         }
         public Donor()
         {
-            this._dao = new Donor_DAO();
+            this.dao = new Donor_DAO();
         }
         public Donor(string _cd, string _nm)
             : this()
@@ -102,7 +103,7 @@ namespace DAO
 
         public Donor(Donor_DAO dao)
         {
-            this._dao = dao;
+            this.dao = dao;
         }
 
         /// <summary>
@@ -118,8 +119,8 @@ namespace DAO
 }
     public class GiftLabelInfo
     {
-        private GiftLabelInfo_DAO _dao;
-        public GiftLabelInfo_DAO dao { get { return _dao; } }
+        public GiftLabelInfo_DAO dao { get; set; }
+        //public GiftLabelInfo_DAO dao { get { return _dao; } }
         private static string[] GENDER_VALUES = new string[] { "F", "M", "NotSpecified" };
         private int _year;
         private string _child_gender;
@@ -163,18 +164,18 @@ namespace DAO
 
         public GiftLabelInfo()
         {
-            this._dao = new GiftLabelInfo_DAO();
+            this.dao = new GiftLabelInfo_DAO();
         }
         public GiftLabelInfo(GiftLabelInfo_DAO dao)
         {
-            this._dao = dao;
+            this.dao = dao;
         }
     }
 
     public class ServicesHouseholdEnrollment
     {
-        private ServicesHouseholdEnrollment_DAO _dao;
-        public ServicesHouseholdEnrollment_DAO dao { get { return _dao; } }
+        public ServicesHouseholdEnrollment_DAO dao { get; set; }
+        //public ServicesHouseholdEnrollment_DAO dao { get { return _dao; } }
         public string service_type { get { return dao.service_type; } set { dao.service_type = value; } }
         public int year
         {
@@ -213,11 +214,11 @@ namespace DAO
 
         public ServicesHouseholdEnrollment()
         {
-            this._dao = new ServicesHouseholdEnrollment_DAO();
+            this.dao = new ServicesHouseholdEnrollment_DAO();
         }
         public ServicesHouseholdEnrollment(ServicesHouseholdEnrollment_DAO dao)
         {
-            this._dao = dao;
+            this.dao = dao;
         }
     }
 
