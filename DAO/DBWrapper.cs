@@ -395,8 +395,12 @@ namespace DAO
             BagLabelInfo bli = MatchingBagLabelInfo(newval);
             if (bli != null)
             {
-                int idx = BliList.IndexOf(bli);
-                BliList[idx] = newval;
+                // update record in list by using newvalue's dao
+                // member, but retain previously-assigned id, if any:
+                newval.dao.Id = bli.dao.Id;
+                bli.dao = newval.dao;
+                //int idx = BliList.IndexOf(bli);
+                //BliList[idx] = newval;
             }
             else
             {
@@ -414,8 +418,12 @@ namespace DAO
             Donor d = MatchingDonor(newval);
             if (d != null)
             {
-                int idx = DonorList.IndexOf(d);
-                DonorList[idx] = newval;
+                // update record in list by using newvalue's dao
+                // member, but retain previously-assigned id, if any:
+                newval.dao.Id = d.dao.Id;
+                d.dao = newval.dao;
+                //int idx = DonorList.IndexOf(d);
+                //DonorList[idx] = newval;
             }
             else
             {
@@ -464,8 +472,12 @@ namespace DAO
             GiftLabelInfo gli = MatchingGiftLabelInfo(newval);
             if (gli != null)
             {
-                int idx = GliList.IndexOf(gli);
-                GliList[idx] = newval;
+                // update record in list by using newvalue's dao
+                // member, but retain previously-assigned id, if any:
+                newval.dao.Id = gli.dao.Id;
+                gli.dao = newval.dao;
+                //int idx = GliList.IndexOf(gli);
+                //GliList[idx] = newval;
             }
             else
             {
@@ -483,8 +495,12 @@ namespace DAO
             ServicesHouseholdEnrollment henr = MatchingServicesHouseholdEnrollment(newval);
             if (henr != null)
             {
-                int idx = HoEnrList.IndexOf(henr);
-                HoEnrList[idx] = newval;
+                // update record in list by using newvalue's dao
+                // member, but retain previously-assigned id, if any:
+                newval.dao.Id = henr.dao.Id;
+                henr.dao = newval.dao;
+                //int idx = HoEnrList.IndexOf(henr);
+                //HoEnrList[idx] = newval;
             }
             else
             {
