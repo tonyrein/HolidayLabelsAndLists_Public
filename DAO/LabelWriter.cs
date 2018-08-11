@@ -599,7 +599,7 @@ namespace DAO
             string zip = Utils.TextUtils.CanonicalPostalCode(fk.dao.postal_code);
             p.SpacingBefore(0);
             p.SpacingAfter(0);
-            p.AppendLine(fk.dao.head_of_household).FontSize(18).Bold()
+            p.Append(fk.dao.head_of_household).FontSize(18).Bold()
                 .AppendLine(fk.dao.address).FontSize(12)
                 .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip)
                 .AppendLine(fk.dao.phone)
