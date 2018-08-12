@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -34,6 +36,7 @@ namespace HolidayLabelsAndLists
         private AppStates CurrentState;
         private BackgroundWorker _bgworker;
         private frmProgress ProgressForm;
+        private Dictionary<string, string> OutputDocTypes;
 
 
         public frmMain()
@@ -41,7 +44,7 @@ namespace HolidayLabelsAndLists
             InitializeComponent();
             Context.Load();
             FileListManager = new HllFileListManager(Context);
-            cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
+            //cmbTypeToView.DataSource = Properties.Resources.DocumentTypesValues.Split('#');
             SetCaptions();
             SetAppState(AppStates.Viewing);
         }
@@ -163,6 +166,13 @@ namespace HolidayLabelsAndLists
         {
             // turn IndexChanged event handler off
             cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
+            string[] DocTypeKeys = Properties.Resources.DocumentTypesKeys.Split('#');
+            string[] DocTypeValues = Properties.Resources.DocumentTypesValues.Split('#');
+            this.OutputDocTypes = DocTypeKeys.Zip(DocTypeValues, (k, v)
+                => new { k, v }).ToDictionary(x => x.k, x => x.v);
+            cmbTypeToView.DataSource = new BindingSource(this.OutputDocTypes,null);
+            cmbTypeToView.ValueMember = "Key";
+            cmbTypeToView.DisplayMember = "Value";
             if (set_to_zero)    
                 cmbTypeToView.SelectedIndex = 0;
             // turn IndexChanged event handler back on
@@ -215,7 +225,7 @@ namespace HolidayLabelsAndLists
         private void SetTypeFilter()
         {
             // Is it safe to assume this won't be null?
-            FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.Text);
+            FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.SelectedValue.ToString());
         }
 
         /// <summary>

@@ -405,6 +405,7 @@ namespace HolidayLabelsAndListsHelper
             ALL,
             DONOR_AND_MASTER,
             PARTICIPANT,
+            PARTICIPANTSUMMARY,
             BAG,
             GIFT,
             POSTCARD,
@@ -416,7 +417,7 @@ namespace HolidayLabelsAndListsHelper
         };
         private types[] TypesWithoutDonor = new types[]
         {
-            types.PARTICIPANT, types.POSTCARD
+            types.PARTICIPANT, types.PARTICIPANTSUMMARY, types.POSTCARD
         };
         private types ty;
         public bool HasDonor()
