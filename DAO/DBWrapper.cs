@@ -83,10 +83,6 @@ namespace DAO
         /// <returns></returns>
         private LiteDatabase GetDatabase()
         {
-            //string dbdir = FolderManager.OutputFolder;
-            //if (!Directory.Exists(dbdir))
-            //    Directory.CreateDirectory(dbdir);
-            //string dbpath = Path.Combine(dbdir, Properties.Resources.db_filename);
             return new LiteDatabase(GetDatabaseFilename());
         }
 
@@ -142,7 +138,6 @@ namespace DAO
         public void SaveDonors(LiteDatabase db)
         {
             string collection_name = "donors";
-            //db.DropCollection(collection_name);
             LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>(collection_name);
             foreach (Donor d in this.DonorList)
             {
@@ -153,7 +148,6 @@ namespace DAO
         public void SaveBagLabelInfo(LiteDatabase db)
         {
             string collection_name = "bag_label_info";
-            //db.DropCollection(collection_name);
             LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>(collection_name);
             foreach (BagLabelInfo bli in this.BliList)
             {
@@ -165,7 +159,6 @@ namespace DAO
         public void SaveGiftabelInfo(LiteDatabase db)
         {
             string collection_name = "gift_label_info";
-            //db.DropCollection(collection_name);
             LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>(collection_name);
             foreach (GiftLabelInfo gli in this.GliList)
             {
@@ -177,7 +170,6 @@ namespace DAO
         public void SaveServicesHouseholdEnrollment(LiteDatabase db)
         {
             string collection_name = "services_enrollment";
-            //db.DropCollection(collection_name);
             LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>(collection_name);
             foreach (ServicesHouseholdEnrollment henroll in this.HoEnrList)
             {
@@ -193,11 +185,6 @@ namespace DAO
             {
                 this.DonorList.Add(new Donor(dao));
             }
-            //int default_donors_added = this.AddDefaultDonors();
-            //if (default_donors_added > 0) // list changed -- save changes
-            //{
-            //        this.SaveDonors(db);
-            //}
         }
 
         public void LoadBagLabelInfo(LiteDatabase db)
@@ -229,17 +216,6 @@ namespace DAO
                 this.HoEnrList.Add(new ServicesHouseholdEnrollment(dao));
             }
         }
-        /// <summary>
-        /// Remove old data in preparation for a new
-        /// processing run. Save any new Donors for
-        /// the life of the main form.
-        /// </summary>
-        //public void Clean()
-        //{
-        //    BliList.Clear();
-        //    GliList.Clear();
-        //    HoEnrList.Clear();
-        //}
 
         /// <summary>
         /// Is there already an object in the list that matches the
@@ -253,20 +229,15 @@ namespace DAO
         /// <returns></returns>
         public BagLabelInfo MatchingBagLabelInfo(BagLabelInfo bli)
         {
-            return MatchingBagLabelInfo(bli.dao);
+            return BliList.Where
+                          (b => (
+                              b.year == bli.year &&
+                              b.request_type == bli.request_type &&
+                              b.family_id == bli.family_id
+                              )
+                          ).FirstOrDefault();
         }
 
-        public BagLabelInfo MatchingBagLabelInfo(BagLabelInfo_DAO dao)
-        {
-            return BliList.FirstOrDefault
-                           (b => (
-                               b.year == dao.year &&
-                               b.request_type == dao.request_type &&
-                               b.family_id == dao.family_id
-                               )
-                           );
-        }
-        
         /// <summary>
         /// Is there a Donor in the list with the given name?
         /// 
@@ -339,70 +310,32 @@ namespace DAO
         /// </summary>
         /// <param name="d"></param>
         /// <returns></returns>
-        public Donor MatchingDonor(Donor d)
+        public Donor MatchingDonor(Donor otherdonor)
         {
-            return MatchingDonor(d.dao);
+            return DonorList.Where(d => d.name == otherdonor.name).FirstOrDefault();
         }
-
-        public Donor MatchingDonor(Donor_DAO dao)
-        {
-            return DonorForDonorName(dao);
-        }
-
 
         public GiftLabelInfo MatchingGiftLabelInfo(GiftLabelInfo gli)
         {
-            return MatchingGiftLabelInfo(gli.dao);
+            return GliList.Where(g =>
+                (g.family_id == gli.family_id &&
+                g.child_name == gli.child_name &&
+                g.year == gli.year &&
+                g.request_type == gli.request_type)
+                ).FirstOrDefault();
         }
         
-        /// <summary>
-        /// Is there already an object in the list that matches
-        /// the passed-in one?
-        /// 
-        /// Two GiftLabelInfo objects match if their years,
-        /// request types, family ids and child names are the same.
-        /// 
-        /// </summary>
-        /// <param name="gli"></param>
-        /// <returns></returns>
-        public GiftLabelInfo MatchingGiftLabelInfo(GiftLabelInfo_DAO dao)
-        {
-            return GliList.FirstOrDefault
-                (g => (
-                    g.year == dao.year &&
-                    g.request_type == dao.request_type &&
-                    g.family_id == dao.family_id &&
-                    g.child_name == dao.child_name
-                    )
-                );
-        }
-
-
         public ServicesHouseholdEnrollment MatchingServicesHouseholdEnrollment(ServicesHouseholdEnrollment henroll)
         {
-            return MatchingServicesHouseholdEnrollment(henroll.dao);
+            return HoEnrList.Where
+                (h => (
+                h.year == henroll.year &&
+                h.service_type == henroll.service_type &&
+                h.head_of_household == henroll.head_of_household
+                )
+            ).FirstOrDefault();
         }
 
-        /// <summary>
-        /// Is there already an object in the list that matches
-        /// the passed-in one?
-        /// 
-        /// Two ServicesHouseholdEnrollment objects match if their
-        /// years, service types, and heads of household are the same.
-        /// </summary>
-        /// <param name="dao"></param>
-        /// <returns></returns>
-        public ServicesHouseholdEnrollment MatchingServicesHouseholdEnrollment(ServicesHouseholdEnrollment_DAO dao)
-        {
-            return HoEnrList.FirstOrDefault
-                (h =>(
-                    h.year == dao.year &&
-                    h.service_type == dao.service_type &&
-                    h.head_of_household == dao.head_of_household
-                    )
-                );
-        }
-        
         /// <summary>
         /// Check to see if matching object already exists. If so, replace it
         /// with the new one. If not, add the new one to the end of the list.
@@ -417,8 +350,6 @@ namespace DAO
                 // member, but retain previously-assigned id, if any:
                 newval.dao.Id = bli.dao.Id;
                 bli.dao = newval.dao;
-                //int idx = BliList.IndexOf(bli);
-                //BliList[idx] = newval;
             }
             else
             {
@@ -440,8 +371,6 @@ namespace DAO
                 // member, but retain previously-assigned id, if any:
                 newval.dao.Id = d.dao.Id;
                 d.dao = newval.dao;
-                //int idx = DonorList.IndexOf(d);
-                //DonorList[idx] = newval;
             }
             else
             {
@@ -494,8 +423,6 @@ namespace DAO
                 // member, but retain previously-assigned id, if any:
                 newval.dao.Id = gli.dao.Id;
                 gli.dao = newval.dao;
-                //int idx = GliList.IndexOf(gli);
-                //GliList[idx] = newval;
             }
             else
             {
@@ -517,8 +444,6 @@ namespace DAO
                 // member, but retain previously-assigned id, if any:
                 newval.dao.Id = henr.dao.Id;
                 henr.dao = newval.dao;
-                //int idx = HoEnrList.IndexOf(henr);
-                //HoEnrList[idx] = newval;
             }
             else
             {
@@ -541,7 +466,8 @@ namespace DAO
         private static string[][] initial_donors = new string[][]
         {
             new string[] {"EXCode1", "Example Donor Organization 1"},
-            new string[] {"EXCode2", "Example Donor Organization 2"}
+            new string[] {"EXCode2", "Example Donor Organization 2"},
+            new string[] {"GFTCRD", "Gift Cards"}
         };
     }
 

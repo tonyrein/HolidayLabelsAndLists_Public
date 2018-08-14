@@ -122,9 +122,6 @@ namespace DAO
         public GiftLabelInfo_DAO dao { get; set; }
         //public GiftLabelInfo_DAO dao { get { return _dao; } }
         private static string[] GENDER_VALUES = new string[] { "F", "M", "NotSpecified" };
-        private int _year;
-        private string _child_gender;
-        private int _child_age;
         public int year
         {
             get { return dao.year; }
