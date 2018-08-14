@@ -69,6 +69,13 @@ namespace DAO
             return retInt;
         }
 
+        private string GetDatabaseFilename()
+        {
+            string dbdir = FolderManager.OutputFolder;
+            if (!Directory.Exists(dbdir))
+                Directory.CreateDirectory(dbdir);
+            return Path.Combine(dbdir, Properties.Resources.db_filename);
+        }
         /// <summary>
         /// Create a connection to the database
         /// used for persistent storage.
@@ -76,11 +83,11 @@ namespace DAO
         /// <returns></returns>
         private LiteDatabase GetDatabase()
         {
-            string dbdir = FolderManager.OutputFolder;
-            if (!Directory.Exists(dbdir))
-                Directory.CreateDirectory(dbdir);
-            string dbpath = Path.Combine(dbdir, Properties.Resources.db_filename);
-            return new LiteDatabase(dbpath);
+            //string dbdir = FolderManager.OutputFolder;
+            //if (!Directory.Exists(dbdir))
+            //    Directory.CreateDirectory(dbdir);
+            //string dbpath = Path.Combine(dbdir, Properties.Resources.db_filename);
+            return new LiteDatabase(GetDatabaseFilename());
         }
 
         /// <summary>
@@ -89,6 +96,12 @@ namespace DAO
         /// <returns></returns>
         public void Save()
         {
+            // start fresh on each save:
+            string dbname = GetDatabaseFilename();
+            if (File.Exists(dbname))
+            {
+                File.Delete(dbname);
+            }
             using (LiteDatabase db = this.GetDatabase())
             {
                 this.SaveDonors(db);
@@ -110,6 +123,11 @@ namespace DAO
                 this.LoadBagLabelInfo(db);
                 this.LoadGiftLabelInfo(db);
                 this.LoadServicesHouseholdEnrollment(db);
+                int default_donors_added = this.AddDefaultDonors();
+                if (default_donors_added > 0) // list changed -- save changes
+                {
+                    this.SaveDonors(db);
+                }
             }
         }
 
@@ -124,7 +142,7 @@ namespace DAO
         public void SaveDonors(LiteDatabase db)
         {
             string collection_name = "donors";
-            db.DropCollection(collection_name);
+            //db.DropCollection(collection_name);
             LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>(collection_name);
             foreach (Donor d in this.DonorList)
             {
@@ -135,7 +153,7 @@ namespace DAO
         public void SaveBagLabelInfo(LiteDatabase db)
         {
             string collection_name = "bag_label_info";
-            db.DropCollection(collection_name);
+            //db.DropCollection(collection_name);
             LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>(collection_name);
             foreach (BagLabelInfo bli in this.BliList)
             {
@@ -147,7 +165,7 @@ namespace DAO
         public void SaveGiftabelInfo(LiteDatabase db)
         {
             string collection_name = "gift_label_info";
-            db.DropCollection(collection_name);
+            //db.DropCollection(collection_name);
             LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>(collection_name);
             foreach (GiftLabelInfo gli in this.GliList)
             {
@@ -159,7 +177,7 @@ namespace DAO
         public void SaveServicesHouseholdEnrollment(LiteDatabase db)
         {
             string collection_name = "services_enrollment";
-            db.DropCollection(collection_name);
+            //db.DropCollection(collection_name);
             LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>(collection_name);
             foreach (ServicesHouseholdEnrollment henroll in this.HoEnrList)
             {
@@ -175,11 +193,11 @@ namespace DAO
             {
                 this.DonorList.Add(new Donor(dao));
             }
-            int default_donors_added = this.AddDefaultDonors();
-            if (default_donors_added > 0) // list changed -- save changes
-            {
-                    this.SaveDonors(db);
-            }
+            //int default_donors_added = this.AddDefaultDonors();
+            //if (default_donors_added > 0) // list changed -- save changes
+            //{
+            //        this.SaveDonors(db);
+            //}
         }
 
         public void LoadBagLabelInfo(LiteDatabase db)
