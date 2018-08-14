@@ -44,7 +44,7 @@ namespace HolidayLabelsAndLists
             InitializeComponent();
             Context.Load();
             FileListManager = new HllFileListManager(Context);
-            //cmbTypeToView.DataSource = Properties.Resources.DocumentTypesValues.Split('#');
+            PopulateTypeToViewCombo(set_to_zero: true);
             SetCaptions();
             SetAppState(AppStates.Viewing);
         }
@@ -189,6 +189,7 @@ namespace HolidayLabelsAndLists
                 cmbTypeToView.SelectedIndexChanged += cmbTypeToView_SelectedIndexChanged;
             }
         }
+
         /// <summary>
         /// Set column width of file name column to magic number which
         /// means "full width of parent"
@@ -198,6 +199,10 @@ namespace HolidayLabelsAndLists
             lvAvailableFiles.Columns[0].Width = -2;
         }
 
+        /// <summary>
+        /// Only enable the "Include Backups" button if there are any
+        /// backup files in FileListManager.
+        /// </summary>
         private void SetButtonAndCheckboxState()
         {
             chbxIncludeBackups.Enabled = FileListManager.HasBackupFiles;
@@ -222,6 +227,7 @@ namespace HolidayLabelsAndLists
             SetFilters();
             //FileListManager.ApplyFilters();
         }
+
         /// <summary>
         /// Set donor filter to string value of combo box selection.
         /// (This will be the donor code.)
@@ -233,6 +239,11 @@ namespace HolidayLabelsAndLists
             FileListManager.DonorFilter = obj != null ? ((Donor)obj).code : "";
         }
 
+        /// <summary>
+        /// Set the type filter according to the selected
+        /// item of the type combo box. If there is no
+        /// selected item, set the type filter to "ALL."
+        /// </summary>
         private void SetTypeFilter()
         {
             object o = cmbTypeToView.SelectedItem;
@@ -363,6 +374,13 @@ namespace HolidayLabelsAndLists
             this.PopulateForm(first_run: false);
         }
 
+        /// <summary>
+        /// Set the year filter. Since the relevant donor values
+        /// may be different for each year, get the list
+        /// of relevant donors and set that filter too.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbYear_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.SetYearFilter();
@@ -447,36 +465,6 @@ namespace HolidayLabelsAndLists
             helpForm.Text = GlobRes.DocGeneralTitle;
             helpForm.ShowDialog(this);
         }
-
-        /// <summary>
-        /// Import contents of each file selected
-        /// by the user.
-        /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="context"></param>
-        /// <param name="report_names"></param>
-        /// <returns></returns>
-        /// TODO: Move this method out of this class. It doesn't
-        /// refer to anything in frmMain and does no user interaction. It should probably
-        /// be in a helper or utility class -- perhaps VestaImporterUtils?
-        /// 
-        //private int ImportFromVesta(BackgroundWorker wk,
-        //    DBWrapper context, string[] report_names)
-        //{
-        //    int retInt = 0;
-        //    foreach (string fn in report_names)
-        //    {
-        //        if (Path.GetExtension(fn) == ".xlsx")
-        //        {
-        //            VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
-        //            retInt += p.execute(context);
-        //        }
-        //    }
-        //    // if we read anything in, save the changes to the database:
-        //    if (retInt > 0)
-        //        context.Save();
-        //    return retInt;
-        //}
 
         /// <summary>
         /// Read info from VESTA reports. Store the info in
