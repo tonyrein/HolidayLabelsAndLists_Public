@@ -123,7 +123,9 @@ namespace DAO
         /// <param name="db"></param>
         public void SaveDonors(LiteDatabase db)
         {
-            LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>("donors");
+            string collection_name = "donors";
+            db.DropCollection(collection_name);
+            LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>(collection_name);
             foreach (Donor d in this.DonorList)
             {
                 coll.Upsert(d.dao);
@@ -132,7 +134,9 @@ namespace DAO
 
         public void SaveBagLabelInfo(LiteDatabase db)
         {
-            LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>("bag_label_info");
+            string collection_name = "bag_label_info";
+            db.DropCollection(collection_name);
+            LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>(collection_name);
             foreach (BagLabelInfo bli in this.BliList)
             {
                 coll.Upsert(bli.dao);
@@ -142,7 +146,9 @@ namespace DAO
 
         public void SaveGiftabelInfo(LiteDatabase db)
         {
-            LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>("gift_label_info");
+            string collection_name = "gift_label_info";
+            db.DropCollection(collection_name);
+            LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>(collection_name);
             foreach (GiftLabelInfo gli in this.GliList)
             {
                 coll.Upsert(gli.dao);
@@ -152,7 +158,9 @@ namespace DAO
 
         public void SaveServicesHouseholdEnrollment(LiteDatabase db)
         {
-            LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>("services_enrollment");
+            string collection_name = "services_enrollment";
+            db.DropCollection(collection_name);
+            LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>(collection_name);
             foreach (ServicesHouseholdEnrollment henroll in this.HoEnrList)
             {
                 coll.Upsert(henroll.dao);
@@ -161,13 +169,11 @@ namespace DAO
 
         public void LoadDonors(LiteDatabase db)
         {
+            this.DonorList.Clear();
             LiteCollection<Donor_DAO> coll = db.GetCollection<Donor_DAO>("donors");
             foreach (Donor_DAO dao in coll.Find(Query.All()))
             {
-                if (MatchingDonor(dao) == null) // This Donor is not already in list.
-                {
-                    this.DonorList.Add(new Donor(dao));
-                }
+                this.DonorList.Add(new Donor(dao));
             }
             int default_donors_added = this.AddDefaultDonors();
             if (default_donors_added > 0) // list changed -- save changes
@@ -178,37 +184,31 @@ namespace DAO
 
         public void LoadBagLabelInfo(LiteDatabase db)
         {
+            this.BliList.Clear();
             LiteCollection<BagLabelInfo_DAO> coll = db.GetCollection<BagLabelInfo_DAO>("bag_label_info");
             foreach(BagLabelInfo_DAO dao in coll.Find(Query.All()))
             {
-                if (MatchingBagLabelInfo(dao) == null)
-                {
-                    this.BliList.Add(new BagLabelInfo(dao));
-                }
+                this.BliList.Add(new BagLabelInfo(dao));
             }
         }
 
         public void LoadGiftLabelInfo(LiteDatabase db)
         {
+            this.GliList.Clear();
             LiteCollection<GiftLabelInfo_DAO> coll = db.GetCollection<GiftLabelInfo_DAO>("gift_label_info");
             foreach (GiftLabelInfo_DAO dao in coll.Find(Query.All()))
             {
-                if (MatchingGiftLabelInfo(dao) == null)
-                {
-                    this.GliList.Add(new GiftLabelInfo(dao));
-                }
+                this.GliList.Add(new GiftLabelInfo(dao));
             }
         }
 
         public void LoadServicesHouseholdEnrollment(LiteDatabase db)
         {
+            this.HoEnrList.Clear();
             LiteCollection<ServicesHouseholdEnrollment_DAO> coll = db.GetCollection<ServicesHouseholdEnrollment_DAO>("services_enrollment");
             foreach (ServicesHouseholdEnrollment_DAO dao in coll.Find(Query.All()))
             {
-                if (MatchingServicesHouseholdEnrollment(dao) == null)
-                {
-                    this.HoEnrList.Add(new ServicesHouseholdEnrollment(dao));
-                }
+                this.HoEnrList.Add(new ServicesHouseholdEnrollment(dao));
             }
         }
         /// <summary>
@@ -216,12 +216,12 @@ namespace DAO
         /// processing run. Save any new Donors for
         /// the life of the main form.
         /// </summary>
-        public void Clean()
-        {
-            BliList.Clear();
-            GliList.Clear();
-            HoEnrList.Clear();
-        }
+        //public void Clean()
+        //{
+        //    BliList.Clear();
+        //    GliList.Clear();
+        //    HoEnrList.Clear();
+        //}
 
         /// <summary>
         /// Is there already an object in the list that matches the

@@ -162,21 +162,32 @@ namespace HolidayLabelsAndLists
             cmbDonor.SelectedIndexChanged += cmbDonor_SelectedIndexChanged;
         }
 
+        /// <summary>
+        /// Initialize the collection of values used by cmbTypeToView
+        /// and set the selection to the first one.
+        /// 
+        /// NOTE: Unlike the other "Populate...()" methods, there is
+        /// nothing for this one to do unless set_to_zero is true.
+        /// </summary>
+        /// <param name="set_to_zero"></param>
         private void PopulateTypeToViewCombo(bool set_to_zero = true)
         {
-            // turn IndexChanged event handler off
-            cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
-            string[] DocTypeKeys = Properties.Resources.DocumentTypesKeys.Split('#');
-            string[] DocTypeValues = Properties.Resources.DocumentTypesValues.Split('#');
-            this.OutputDocTypes = DocTypeKeys.Zip(DocTypeValues, (k, v)
-                => new { k, v }).ToDictionary(x => x.k, x => x.v);
-            cmbTypeToView.DataSource = new BindingSource(this.OutputDocTypes,null);
-            cmbTypeToView.ValueMember = "Key";
-            cmbTypeToView.DisplayMember = "Value";
-            if (set_to_zero)    
+            if (set_to_zero == true)
+            {
+                // turn IndexChanged event handler off
+                cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
+                //string[] DocTypeKeys = Properties.Resources.DocumentTypesKeys.Split('#');
+                string[] DocTypeKeys = Enum.GetNames(typeof(output_doc_types));
+                string[] DocTypeValues = Properties.Resources.DocumentTypesValues.Split('#');
+                this.OutputDocTypes = DocTypeKeys.Zip(DocTypeValues, (k, v)
+                    => new { k, v }).ToDictionary(x => x.k, x => x.v);
+                cmbTypeToView.DataSource = new BindingSource(this.OutputDocTypes, null);
+                cmbTypeToView.ValueMember = "Key";
+                cmbTypeToView.DisplayMember = "Value";
                 cmbTypeToView.SelectedIndex = 0;
-            // turn IndexChanged event handler back on
-            cmbTypeToView.SelectedIndexChanged += cmbTypeToView_SelectedIndexChanged;
+                // turn IndexChanged event handler back on
+                cmbTypeToView.SelectedIndexChanged += cmbTypeToView_SelectedIndexChanged;
+            }
         }
         /// <summary>
         /// Set column width of file name column to magic number which
@@ -209,7 +220,7 @@ namespace HolidayLabelsAndLists
                 PopulateDonorCombo(y, set_to_zero: set_to_zero);
             }
             SetFilters();
-            FileListManager.ApplyFilters();
+            //FileListManager.ApplyFilters();
         }
         /// <summary>
         /// Set donor filter to string value of combo box selection.
@@ -224,8 +235,22 @@ namespace HolidayLabelsAndLists
 
         private void SetTypeFilter()
         {
-            // Is it safe to assume this won't be null?
-            FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.SelectedValue.ToString());
+            object o = cmbTypeToView.SelectedItem;
+            output_doc_types ty;
+            if (o != null)
+            {
+                KeyValuePair<string, string> kv = (KeyValuePair<string, string>)o;
+                ty = new output_doc_types();
+                // This TryParse() should not fail, since kv.Key should be
+                // the string representation of a valid type:
+                if (!Enum.TryParse(kv.Key, out ty))
+                    ty = output_doc_types.INVALID;
+            }
+            else
+            {
+                ty = output_doc_types.ALL;
+            }
+            FileListManager.TypeFilter = new FilterSetTypeFilters(ty);
         }
 
         /// <summary>

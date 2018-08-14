@@ -363,6 +363,7 @@ namespace DAO
         /// <summary>
         /// A BagLabelWriter uses cell layout parameters different from the other label
         /// writers, so we override the values inherited from the abstract base class.
+        /// 
         /// </summary>
         /// <param name="wk"></param>
         /// <param name="ctx"></param>
@@ -524,6 +525,14 @@ namespace DAO
         }
     }
 
+    /// <summary>
+    /// Dimensions:
+    /// Height: 3.33"
+    /// Width: 4.0"
+    /// Top and Bottom Margins: 0.5"
+    /// Left and Right Margins: 0.148"
+    /// 
+    /// </summary>
     public class ParticipantSummaryLabelWriter : LabelWriter
     {
         public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
@@ -531,11 +540,11 @@ namespace DAO
                 wk,
                 ctx,
                 year,
-                label_height: (int)(2.0 * (int)DocPartUnits.CellHeight),
-                label_width: (int)(3.5 * (int)DocPartUnits.CellWidth),
-                padding_width: (int)(0.5 * (int)DocPartUnits.CellWidth),
-                left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-                right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
+                label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
+                label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
+                padding_width: (int)(0 * (int)DocPartUnits.CellWidth),
+                left_margin: (int)(0.148 * (int)DocPartUnits.Margins),
+                right_margin: (int)(0.148 * (int)DocPartUnits.Margins),
                 num_cols: 3
               )
         {
@@ -578,7 +587,7 @@ namespace DAO
                     FamiliesAndKids fak = new FamiliesAndKids();
                     fak.dao = participant;
                     fak.kids = gli_array.Select(g => g.child_name).Distinct().ToArray();
-                    fak.gift_card_count = gli_array.Where(g => g.request_type == "Other").Count();
+                    fak.gift_card_count = gli_array.Where(g => g.donor_name == "Gift Cards").Count();
                     fkl.Add(fak);
                 }
             }

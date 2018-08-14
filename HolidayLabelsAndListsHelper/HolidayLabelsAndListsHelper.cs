@@ -25,12 +25,12 @@ namespace HolidayLabelsAndListsHelper
         public static bool IsValidHllType(string doctype) { return VALID_HLL_TYPES.Contains(doctype); }
 
         /// <summary>
-        /// Get list of Gift Label and Bag Label request types ("Clothing,"
+        /// Get list of Gift Label and Bag Label request output_doc_types ("Clothing,"
         /// "Toys," "Other") contained in the data read in from the VESTA
         /// reports.
         /// </summary>
         /// <param name="context" (DBWrapper)></param>
-        /// <returns>array of strings representing gift label info and bag label info request types</returns>
+        /// <returns>array of strings representing gift label info and bag label info request output_doc_types</returns>
         public static string[] RequestTypesInDb(DBWrapper context)
         {
             return (from g in context.GliList select g.request_type).Concat
@@ -38,7 +38,7 @@ namespace HolidayLabelsAndListsHelper
         }
 
         /// <summary>
-        /// Get list of the service enrollment types contained in the data
+        /// Get list of the service enrollment output_doc_types contained in the data
         /// read in from the VESTA reports.
         /// </summary>
         /// <param name="context" (DBWrapper)></param>
@@ -363,7 +363,11 @@ namespace HolidayLabelsAndListsHelper
             // elements denoting file type, year, and donor code are
             // separated by underscores.
             string[] sarray = without_bu_portion.ToUpper().Split('_');
-            Year = (sarray.Length >= 3) ? sarray[2] : "";
+            // Year is given in first element of sarray which starts with
+            // appropriate century.
+            string y = sarray.FirstOrDefault(s => s.StartsWith("20"));
+            Year = (y == null ? "" : y);
+            //Year = (sarray.Length >= 3) ? sarray[2] : "";
             IsValidHLL = ( Type.IsValid && HllUtils.IsValidYear(Year) );
             if (!IsValidHLL) // if not, don't bother with donor code, etc.
             {
@@ -398,63 +402,76 @@ namespace HolidayLabelsAndListsHelper
         }
     }
 
+    public enum output_doc_types
+    {
+        ALL,
+        BAG,
+        GIFT,
+        DONORANDMASTERLIST,
+        PARTICIPANTLIST,
+        PARTICIPANTSUMMARYLABEL,
+        POSTCARD,
+        INVALID,
+    }
+
     public class FilterSetTypeFilters
     {
-        public enum types
+        private output_doc_types[] TypesWithDonor = new output_doc_types[]
         {
-            ALL,
-            DONOR_AND_MASTER,
-            PARTICIPANT,
-            PARTICIPANTSUMMARY,
-            BAG,
-            GIFT,
-            POSTCARD,
-            INVALID,
-        }
-        private types[] TypesWithDonor = new types[]
-        {
-            types.ALL, types.DONOR_AND_MASTER, types.BAG, types.GIFT
+            output_doc_types.ALL, output_doc_types.DONORANDMASTERLIST, output_doc_types.BAG, output_doc_types.GIFT
         };
-        private types[] TypesWithoutDonor = new types[]
+        private output_doc_types[] TypesWithoutDonor = new output_doc_types[]
         {
-            types.PARTICIPANT, types.PARTICIPANTSUMMARY, types.POSTCARD
+            output_doc_types.PARTICIPANTLIST, output_doc_types.PARTICIPANTSUMMARYLABEL, output_doc_types.POSTCARD
         };
-        private types ty;
+        private output_doc_types ty;
         public bool HasDonor()
         {
             return TypesWithDonor.Contains(this.ty);
         }
 
+        public FilterSetTypeFilters(output_doc_types odt)
+        {
+            this.ty = odt;
+        }
+        /// <summary>
+        /// Use this constructor to make a FilterSetTypeFilters object
+        /// from a string, assumed to be part of a file name.
+        /// </summary>
+        /// <param name="s"></param>
         public FilterSetTypeFilters(string s)
         {
             s = Utils.TextUtils.CleanString(s);
             s = s.ToUpper();
             if (s.StartsWith("DONOR") || s.StartsWith("MASTER") )
             {
-                this.ty = types.DONOR_AND_MASTER;
+                this.ty = output_doc_types.DONORANDMASTERLIST;
+                return;
             }
-            else
+            if (s.StartsWith("PARTICIPANT_SUMMARY"))
             {
-                // For other types, only the portion
+                this.ty = output_doc_types.PARTICIPANTSUMMARYLABEL;
+                return;
+            }
+            if (s.StartsWith("PARTICIPANT_LIST"))
+            {
+                this.ty = output_doc_types.PARTICIPANTLIST;
+                return;
+            }
+                // For other output_doc_types, only the portion
                 // before the first '_' is significant.
                 s = s.Split('_')[0];
-                // If parsing into one of our types works,
+                // If parsing into one of our output_doc_types works,
                 // use that. Otherwise set to INVALID
                 if (!Enum.TryParse(s, out this.ty))
-                    this.ty = types.INVALID;
-            }
+                    this.ty = output_doc_types.INVALID;
         }
 
-        public override string ToString()
-        {
-            return this.ty.ToString();
-        }
-
-        public bool IsValid {  get { return this.ty != types.INVALID; } }
-        public bool IsParticipantList {  get { return this.ty == types.PARTICIPANT; } }
+        public bool IsValid {  get { return this.ty != output_doc_types.INVALID; } }
+        public bool IsParticipantList {  get { return this.ty == output_doc_types.PARTICIPANTLIST; } }
         public bool Matches(FilterSetTypeFilters other)
         {
-            return (this.ty == FilterSetTypeFilters.types.ALL) ||
+            return (this.ty == output_doc_types.ALL) ||
             (this.ty == other.ty);
         }
     }

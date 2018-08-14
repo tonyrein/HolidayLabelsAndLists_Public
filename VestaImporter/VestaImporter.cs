@@ -105,8 +105,20 @@ namespace VestaProcessor
         /// </summary>
         private void GetHeaderInfo()
         {
-            if (this.report_type == ReportTypes.Labels)  // not relevant for other types
-                this.year = int.Parse(this.sheet.ValueAt(LABEL_YEAR_ROW, LABEL_YEAR_COLUMN));
+            if (this.report_type == ReportTypes.Labels) // not relevant for other report types
+            {
+                int label_year_row = this.sheet.RowIndexOf("Year", col_idx: LABEL_YEAR_COLUMN-1);
+                if (label_year_row == -1)
+                {
+                    this.year = 2099;
+                }
+                else
+                {
+                    string y = this.sheet.ValueAt(label_year_row, LABEL_YEAR_COLUMN);
+                    if (!int.TryParse(y, out this.year))
+                        this.year = 2099;
+                }
+            }
             else
                 this.year = -1;
         }
