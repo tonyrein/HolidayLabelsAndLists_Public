@@ -586,7 +586,8 @@ namespace DAO
                 {
                     FamiliesAndKids fak = new FamiliesAndKids();
                     fak.dao = participant;
-                    fak.kids = gli_array.Select(g => g.child_name).Distinct().ToArray();
+                    string[] sa = gli_array.Select(g => g.child_name).Distinct().ToArray();
+                    fak.kids = string.Join(", ", sa);
                     fak.gift_card_count = gli_array.Where(g => g.donor_name == "Gift Cards").Count();
                     fkl.Add(fak);
                 }
@@ -596,8 +597,9 @@ namespace DAO
 
         protected override void TypeOneRecord(Cell c, object rec)
         {
+            // cast generic object to specific type
+            // appropriate to this label type:
             FamiliesAndKids fk = (FamiliesAndKids)rec;
-
             c.MarginTop = 0;
             Paragraph p = c.Paragraphs.First();
             // NovaCode should initialize Cells with one
@@ -610,13 +612,16 @@ namespace DAO
             p.SpacingAfter(0);
             p.Append(fk.dao.head_of_household).FontSize(24).Bold()
                 //.AppendLine(fk.dao.address).FontSize(18)
-                .AppendLine(fk.dao.address).FontSize(18)
-                .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip).FontSize(18)
-                .AppendLine(fk.dao.phone).FontSize(18)
-                .AppendLine("") // Leave blank line after phone nr.
-                .AppendLine("Children: " + string.Join(", ", fk.kids)).FontSize(18)
-                .AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(18)
-                .AppendLine("Number of Bags: ___").FontSize(18);
+                .AppendLine(fk.dao.address).FontSize(16)
+                .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip).FontSize(16)
+                .AppendLine(fk.dao.phone).FontSize(16)
+                //.AppendLine("") // Leave blank line after phone nr.
+                .AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(16)
+                .AppendLine("Number of Bags: ___").FontSize(16)
+                .AppendLine("") // Another blank line before children's names
+                .AppendLine("Children: " + fk.kids).FontSize(16);
+                //.AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(18)
+                //.AppendLine("Number of Bags: ___").FontSize(18);
         }
     }
 }

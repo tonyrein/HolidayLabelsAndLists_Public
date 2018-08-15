@@ -62,7 +62,7 @@ namespace DAO
     class FamiliesAndKids
     {
          public ServicesHouseholdEnrollment_DAO dao { get; set; }
-         public string[] kids { get; set; }
+         public string kids { get; set; }
          public int gift_card_count { get; set; }
      }
 
