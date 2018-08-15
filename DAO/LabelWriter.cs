@@ -363,6 +363,12 @@ namespace DAO
         /// <summary>
         /// A BagLabelWriter uses cell layout parameters different from the other label
         /// writers, so we override the values inherited from the abstract base class.
+        /// Dimensions:
+        /// =============
+        /// Cell Height: 5.276"
+        /// Cell Width: 3.5"
+        /// Padding Width: 0.5"
+        /// Left and Right Margins: 0.5"
         /// 
         /// </summary>
         /// <param name="wk"></param>
@@ -527,10 +533,12 @@ namespace DAO
 
     /// <summary>
     /// Dimensions:
-    /// Height: 3.33"
-    /// Width: 4.0"
+    /// ======================
+    /// Cell Height: 3.33"
+    /// Cell Width: 4.0"
+    /// Padding Width: 0.03"
     /// Top and Bottom Margins: 0.5"
-    /// Left and Right Margins: 0.148"
+    /// Left and Right Margins: 0.235"
     /// 
     /// </summary>
     public class ParticipantSummaryLabelWriter : LabelWriter
