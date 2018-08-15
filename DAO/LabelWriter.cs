@@ -542,9 +542,9 @@ namespace DAO
                 year,
                 label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
                 label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
-                padding_width: (int)(0 * (int)DocPartUnits.CellWidth),
-                left_margin: (int)(0.148 * (int)DocPartUnits.Margins),
-                right_margin: (int)(0.148 * (int)DocPartUnits.Margins),
+                padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
+                left_margin: (int)(0.235 * (int)DocPartUnits.Margins),
+                right_margin: (int)(0.235 * (int)DocPartUnits.Margins),
                 num_cols: 3
               )
         {
@@ -608,13 +608,15 @@ namespace DAO
             string zip = Utils.TextUtils.CanonicalPostalCode(fk.dao.postal_code);
             p.SpacingBefore(0);
             p.SpacingAfter(0);
-            p.Append(fk.dao.head_of_household).FontSize(18).Bold()
-                .AppendLine(fk.dao.address).FontSize(12)
-                .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip)
-                .AppendLine(fk.dao.phone)
-                .AppendLine("Children: " + string.Join(", ", fk.kids))
-                .AppendLine("Gift Cards: " + fk.gift_card_count.ToString())
-                .AppendLine("Number of Bags: ___");
+            p.Append(fk.dao.head_of_household).FontSize(24).Bold()
+                //.AppendLine(fk.dao.address).FontSize(18)
+                .AppendLine(fk.dao.address).FontSize(18)
+                .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip).FontSize(18)
+                .AppendLine(fk.dao.phone).FontSize(18)
+                .AppendLine("") // Leave blank line after phone nr.
+                .AppendLine("Children: " + string.Join(", ", fk.kids)).FontSize(18)
+                .AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(18)
+                .AppendLine("Number of Bags: ___").FontSize(18);
         }
     }
 }
