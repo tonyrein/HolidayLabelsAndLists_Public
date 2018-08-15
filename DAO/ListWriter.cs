@@ -123,9 +123,10 @@ namespace DAO
             string outfile_spec = this.GetOutputFileSpec();
             if (File.Exists(outfile_spec))
             {
-                // move original to backup
-                string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
-                File.Move(outfile_spec, bu_name);
+                Utils.FileUtils.MoveToBackup(outfile_spec);
+                //// move original to backup
+                //string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
+                //File.Move(outfile_spec, bu_name);
             }
             FileInfo fi = new FileInfo(outfile_spec);
             return new ExcelPackage(fi);

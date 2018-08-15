@@ -35,6 +35,16 @@ namespace Utils
             return retName;
         }
 
+        /// <summary>
+        /// Derives a backup filename based on the original name
+        /// of the file and renames the file with the backup name.
+        /// </summary>
+        /// <param name="filespec"></param>
+        public static void MoveToBackup(string filespec)
+        {
+            string backup_name = NextAvailableBackupName(filespec);
+            File.Move(filespec, backup_name);
+        }
 
         /// <summary>
         /// Copies the files in the given list to the destination..
