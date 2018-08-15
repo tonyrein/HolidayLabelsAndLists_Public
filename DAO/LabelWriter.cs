@@ -78,8 +78,9 @@ namespace DAO
             string outfile_spec = this.GetOutputFileSpec();
             if (File.Exists(outfile_spec))
             {
-                string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
-                File.Move(outfile_spec, bu_name);
+                Utils.FileUtils.MoveToBackup(outfile_spec);
+                //string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
+                //File.Move(outfile_spec, bu_name);
             }
             return DocX.Create(outfile_spec);
         }
