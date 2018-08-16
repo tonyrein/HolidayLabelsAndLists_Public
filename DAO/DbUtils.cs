@@ -1,14 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LiteDB;
+
 namespace DAO
 {
-    public static class DbBackupManager
+    public static class DbUtils
     {
+        private static string GetDatabaseFilename()
+        {
+            string dbdir = FolderManager.OutputFolder;
+            if (!Directory.Exists(dbdir))
+                Directory.CreateDirectory(dbdir);
+            return Path.Combine(dbdir, Properties.Resources.db_filename);
+        }
 
+        /// <summary>
+        /// Create a connection to the database
+        /// used for persistent storage.
+        /// </summary>
+        /// <returns></returns>
+        public static LiteDatabase GetDatabase()
+        {
+            return new LiteDatabase(DbUtils.GetDatabaseFilename());
+        }
 
         /// <summary>
         /// Returns a list of currently-existing
@@ -18,7 +37,7 @@ namespace DAO
         /// should also be oldest to most recent.
         /// </summary>
         /// <returns></returns>
-        public static List<string> ListBackupFiles()
+        private static List<string> ListBackupFiles()
         {
             List<string> retList = new List<string>();
             retList.Sort();
@@ -31,7 +50,7 @@ namespace DAO
         /// Returns available backup name
         /// </summary>
         /// <returns></returns>
-        public static string MakeSlot()
+        private static string MakeSlot()
         {
             string retString = "";
             return retString;
@@ -45,7 +64,7 @@ namespace DAO
         /// Returns number of files deleted.
         /// </summary>
         /// <returns></returns>
-        public static int DeleteOldBackups()
+        private static int DeleteOldBackups()
         {
             int retInt = 0;
             return retInt;
@@ -67,7 +86,7 @@ namespace DAO
 
         /// </summary>
         /// <returns></returns>
-        public static int DeleteOldest()
+        private static int DeleteOldest()
         {
             int retInt = 0;
             //retName = $"{basename}.bak{i,0:0000}{ext}";
@@ -87,12 +106,28 @@ namespace DAO
         /// To ensure dbfilename.litedb.bak001 is free,
         /// call DeleteOldBackups().
         /// </summary>
-        public static void DownshiftBackupNames()
+        private static void DownshiftBackupNames()
         {
             DeleteOldBackups();
 
         }
 
+        private static string EnsureSlot(List<string> backup_list)
+        {
+            return "";
+        }
+
+        public static void BackupDatabase()
+        {
+            List<string> list_of_backups = ListBackupFiles();
+            string slot_name = EnsureSlot(list_of_backups);
+            if (slot_name != "")
+            {
+                string dbname = GetDatabaseFilename();
+                File.Move(dbname, slot_name);
+            }
+
+        }
 
     }
 

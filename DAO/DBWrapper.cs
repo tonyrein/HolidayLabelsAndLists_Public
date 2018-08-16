@@ -69,22 +69,22 @@ namespace DAO
             return retInt;
         }
 
-        private string GetDatabaseFilename()
-        {
-            string dbdir = FolderManager.OutputFolder;
-            if (!Directory.Exists(dbdir))
-                Directory.CreateDirectory(dbdir);
-            return Path.Combine(dbdir, Properties.Resources.db_filename);
-        }
-        /// <summary>
-        /// Create a connection to the database
-        /// used for persistent storage.
-        /// </summary>
-        /// <returns></returns>
-        private LiteDatabase GetDatabase()
-        {
-            return new LiteDatabase(GetDatabaseFilename());
-        }
+        //private string GetDatabaseFilename()
+        //{
+        //    string dbdir = FolderManager.OutputFolder;
+        //    if (!Directory.Exists(dbdir))
+        //        Directory.CreateDirectory(dbdir);
+        //    return Path.Combine(dbdir, Properties.Resources.db_filename);
+        //}
+        ///// <summary>
+        ///// Create a connection to the database
+        ///// used for persistent storage.
+        ///// </summary>
+        ///// <returns></returns>
+        //private LiteDatabase GetDatabase()
+        //{
+        //    return new LiteDatabase(DbUtils.GetDatabaseFilename());
+        //}
 
         /// <summary>
         /// Save data to persistent store.
@@ -92,13 +92,8 @@ namespace DAO
         /// <returns></returns>
         public void Save()
         {
-            // start fresh on each save:
-            string dbname = GetDatabaseFilename();
-            if (File.Exists(dbname))
-            {
-                File.Delete(dbname);
-            }
-            using (LiteDatabase db = this.GetDatabase())
+            DbUtils.BackupDatabase();
+            using (LiteDatabase db = DbUtils.GetDatabase())
             {
                 this.SaveDonors(db);
                 this.SaveBagLabelInfo(db);
