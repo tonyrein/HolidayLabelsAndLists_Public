@@ -78,8 +78,9 @@ namespace DAO
             string outfile_spec = this.GetOutputFileSpec();
             if (File.Exists(outfile_spec))
             {
-                string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
-                File.Move(outfile_spec, bu_name);
+                Utils.FileUtils.MoveToBackup(outfile_spec);
+                //string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
+                //File.Move(outfile_spec, bu_name);
             }
             return DocX.Create(outfile_spec);
         }
@@ -363,6 +364,13 @@ namespace DAO
         /// <summary>
         /// A BagLabelWriter uses cell layout parameters different from the other label
         /// writers, so we override the values inherited from the abstract base class.
+        /// Dimensions:
+        /// =============
+        /// Cell Height: 5.276"
+        /// Cell Width: 3.5"
+        /// Padding Width: 0.5"
+        /// Left and Right Margins: 0.5"
+        /// 
         /// </summary>
         /// <param name="wk"></param>
         /// <param name="ctx"></param>
@@ -497,10 +505,10 @@ namespace DAO
             // that that paragraph isn't there, add one.
             if (p == null)
                 p = c.InsertParagraph();
+            string zip = Utils.TextUtils.CanonicalPostalCode(e.postal_code);
             p.Append(e.head_of_household).Bold()
                 .AppendLine(e.address)
-                .AppendLine(e.city + ", " + e.state_or_province + "  " + 
-                Utils.TextUtils.CanonicalPostalCode(e.postal_code));
+                .AppendLine(e.city + ", " + e.state_or_province + "  " +  zip);
         }
 
         /// <summary>
@@ -524,15 +532,32 @@ namespace DAO
         }
     }
 
-    class ParticipantSummaryLabelWriter : LabelWriter
+    /// <summary>
+    /// Dimensions:
+    /// ======================
+    /// Cell Height: 3.33"
+    /// Cell Width: 4.0"
+    /// Padding Width: 0.03"
+    /// Top and Bottom Margins: 0.5"
+    /// Left and Right Margins: 0.235"
+    /// 
+    /// </summary>
+    public class ParticipantSummaryLabelWriter : LabelWriter
     {
-        public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year,
-            int label_height = 102, int label_width = 3787, int padding_width = 172,
-            int left_margin = 13, int right_margin = 13, int top_margin = 36, int bottom_margin = 0,
-            int num_cols = 5)
-            : base(wk, ctx, year, label_height, label_width, padding_width, left_margin, right_margin,
-                  top_margin, bottom_margin, num_cols)
+        public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
+            : base(
+                wk,
+                ctx,
+                year,
+                label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
+                label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
+                padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
+                left_margin: (int)(0.235 * (int)DocPartUnits.Margins),
+                right_margin: (int)(0.235 * (int)DocPartUnits.Margins),
+                num_cols: 3
+              )
         {
+            this.SetItemList();
         }
 
         protected override string TargetFolder
@@ -551,23 +576,61 @@ namespace DAO
             return Path.Combine(this.TargetFolder, name);
         }
 
+        /// <summary>
+        /// For each ServicesHouseholdEnrollment object, if there
+        /// are corresponding GiftLabelInfo objects for this writer's
+        /// year:
+        ///     For each such GiftLabelInfo object, make a FamiliesAndKids
+        ///     object, fill its fields, and add it to our ItemList.
+        /// </summary>
         protected override void SetItemList()
         {
-            // Get list of ServicesHouseholdEnrollment objects
-            // for given year. Then, calculate gift card
-            // count for each one:
-            //  participant.gift_card_count = context.GliList.Where(
-            //      g => (g.year == this.Year) &&
-            //           (g.family_id == participant.family_id)
-            //      ).Count();
-            // Would it be better to do this in a separate CalculateAdditionalFields()
-            // step as part of the import process?
-
+            List<object> fkl = new List<object>();
+            ServicesHouseholdEnrollment_DAO[] participant_array =
+                this.context.HoEnrList.Select(h => h.dao).Where(h => h.year == this.Year).ToArray();
+            foreach(ServicesHouseholdEnrollment_DAO participant in participant_array)
+            {
+                var gli_array = this.context.GliList.Where(g => (g.year == this.Year && g.family_id == participant.family_id)).ToArray();
+                if (gli_array.Count() > 0)
+                {
+                    FamiliesAndKids fak = new FamiliesAndKids();
+                    fak.dao = participant;
+                    string[] sa = gli_array.Select(g => g.child_name).Distinct().ToArray();
+                    fak.kids = string.Join(", ", sa);
+                    fak.gift_card_count = gli_array.Where(g => g.donor_name == "Gift Cards").Count();
+                    fkl.Add(fak);
+                }
+            }
+            this.ItemList = fkl;
         }
 
         protected override void TypeOneRecord(Cell c, object rec)
         {
-            throw new NotImplementedException();
+            // cast generic object to specific type
+            // appropriate to this label type:
+            FamiliesAndKids fk = (FamiliesAndKids)rec;
+            c.MarginTop = 0;
+            Paragraph p = c.Paragraphs.First();
+            // NovaCode should initialize Cells with one
+            // paragraph. But, in the unlikeley case
+            // that that paragraph isn't there, add one.
+            if (p == null)
+                p = c.InsertParagraph();
+            string zip = Utils.TextUtils.CanonicalPostalCode(fk.dao.postal_code);
+            p.SpacingBefore(0);
+            p.SpacingAfter(0);
+            p.Append(fk.dao.head_of_household).FontSize(24).Bold()
+                //.AppendLine(fk.dao.address).FontSize(18)
+                .AppendLine(fk.dao.address).FontSize(16)
+                .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip).FontSize(16)
+                .AppendLine(fk.dao.phone).FontSize(16)
+                //.AppendLine("") // Leave blank line after phone nr.
+                .AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(16)
+                .AppendLine("Number of Bags: ___").FontSize(16)
+                .AppendLine("") // Another blank line before children's names
+                .AppendLine("Children: " + fk.kids).FontSize(16);
+                //.AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(18)
+                //.AppendLine("Number of Bags: ___").FontSize(18);
         }
     }
 }

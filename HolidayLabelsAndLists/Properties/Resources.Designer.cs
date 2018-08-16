@@ -177,11 +177,20 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Postcard Labels.
+        ///   Looks up a localized string similar to ALL#BAGLABEL#GIFTLABEL#DONORANDMASTERLIST#PARTICIPANTLIST#PARTICIPANTSUMMARYLABEL#POSTCARDLABEL.
         /// </summary>
-        internal static string DocumentTypes {
+        internal static string DocumentTypesKeys {
             get {
-                return ResourceManager.GetString("DocumentTypes", resourceCulture);
+                return ResourceManager.GetString("DocumentTypesKeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Participant Summary Labels#Postcard Labels.
+        /// </summary>
+        internal static string DocumentTypesValues {
+            get {
+                return ResourceManager.GetString("DocumentTypesValues", resourceCulture);
             }
         }
         

@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="db_backup_glob" xml:space="preserve">
+    <value>*.bak????.*</value>
+    <comment>0=db_filename</comment>
+  </data>
   <data name="db_filename" xml:space="preserve">
     <value>hll_data.litedb</value>
   </data>

@@ -141,8 +141,8 @@
   <data name="DocTypeLabelText" xml:space="preserve">
     <value>Document Type(s)</value>
   </data>
-  <data name="DocumentTypes" xml:space="preserve">
-    <value>All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Postcard Labels</value>
+  <data name="DocumentTypesValues" xml:space="preserve">
+    <value>All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Participant Summary Labels#Postcard Labels</value>
   </data>
   <data name="ExitBtnCaption" xml:space="preserve">
     <value>Exit</value>
@@ -379,5 +379,8 @@
     &lt;/html&gt;
   &lt;/body&gt;
 &lt;/html&gt;</value>
+  </data>
+  <data name="DocumentTypesKeys" xml:space="preserve">
+    <value>ALL#BAGLABEL#GIFTLABEL#DONORANDMASTERLIST#PARTICIPANTLIST#PARTICIPANTSUMMARYLABEL#POSTCARDLABEL</value>
   </data>
 </root>

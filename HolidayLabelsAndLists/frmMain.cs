@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -34,6 +36,7 @@ namespace HolidayLabelsAndLists
         private AppStates CurrentState;
         private BackgroundWorker _bgworker;
         private frmProgress ProgressForm;
+        private Dictionary<string, string> OutputDocTypes;
 
 
         public frmMain()
@@ -41,7 +44,7 @@ namespace HolidayLabelsAndLists
             InitializeComponent();
             Context.Load();
             FileListManager = new HllFileListManager(Context);
-            cmbTypeToView.DataSource = Properties.Resources.DocumentTypes.Split('#');
+            PopulateTypeToViewCombo(set_to_zero: true);
             SetCaptions();
             SetAppState(AppStates.Viewing);
         }
@@ -159,15 +162,34 @@ namespace HolidayLabelsAndLists
             cmbDonor.SelectedIndexChanged += cmbDonor_SelectedIndexChanged;
         }
 
+        /// <summary>
+        /// Initialize the collection of values used by cmbTypeToView
+        /// and set the selection to the first one.
+        /// 
+        /// NOTE: Unlike the other "Populate...()" methods, there is
+        /// nothing for this one to do unless set_to_zero is true.
+        /// </summary>
+        /// <param name="set_to_zero"></param>
         private void PopulateTypeToViewCombo(bool set_to_zero = true)
         {
-            // turn IndexChanged event handler off
-            cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
-            if (set_to_zero)    
+            if (set_to_zero == true)
+            {
+                // turn IndexChanged event handler off
+                cmbTypeToView.SelectedIndexChanged -= cmbTypeToView_SelectedIndexChanged;
+                //string[] DocTypeKeys = Properties.Resources.DocumentTypesKeys.Split('#');
+                string[] DocTypeKeys = Enum.GetNames(typeof(output_doc_types));
+                string[] DocTypeValues = Properties.Resources.DocumentTypesValues.Split('#');
+                this.OutputDocTypes = DocTypeKeys.Zip(DocTypeValues, (k, v)
+                    => new { k, v }).ToDictionary(x => x.k, x => x.v);
+                cmbTypeToView.DataSource = new BindingSource(this.OutputDocTypes, null);
+                cmbTypeToView.ValueMember = "Key";
+                cmbTypeToView.DisplayMember = "Value";
                 cmbTypeToView.SelectedIndex = 0;
-            // turn IndexChanged event handler back on
-            cmbTypeToView.SelectedIndexChanged += cmbTypeToView_SelectedIndexChanged;
+                // turn IndexChanged event handler back on
+                cmbTypeToView.SelectedIndexChanged += cmbTypeToView_SelectedIndexChanged;
+            }
         }
+
         /// <summary>
         /// Set column width of file name column to magic number which
         /// means "full width of parent"
@@ -177,6 +199,10 @@ namespace HolidayLabelsAndLists
             lvAvailableFiles.Columns[0].Width = -2;
         }
 
+        /// <summary>
+        /// Only enable the "Include Backups" button if there are any
+        /// backup files in FileListManager.
+        /// </summary>
         private void SetButtonAndCheckboxState()
         {
             chbxIncludeBackups.Enabled = FileListManager.HasBackupFiles;
@@ -199,8 +225,9 @@ namespace HolidayLabelsAndLists
                 PopulateDonorCombo(y, set_to_zero: set_to_zero);
             }
             SetFilters();
-            FileListManager.ApplyFilters();
+            //FileListManager.ApplyFilters();
         }
+
         /// <summary>
         /// Set donor filter to string value of combo box selection.
         /// (This will be the donor code.)
@@ -212,10 +239,29 @@ namespace HolidayLabelsAndLists
             FileListManager.DonorFilter = obj != null ? ((Donor)obj).code : "";
         }
 
+        /// <summary>
+        /// Set the type filter according to the selected
+        /// item of the type combo box. If there is no
+        /// selected item, set the type filter to "ALL."
+        /// </summary>
         private void SetTypeFilter()
         {
-            // Is it safe to assume this won't be null?
-            FileListManager.TypeFilter = new FilterSetTypeFilters(cmbTypeToView.Text);
+            object o = cmbTypeToView.SelectedItem;
+            output_doc_types ty;
+            if (o != null)
+            {
+                KeyValuePair<string, string> kv = (KeyValuePair<string, string>)o;
+                ty = new output_doc_types();
+                // This TryParse() should not fail, since kv.Key should be
+                // the string representation of a valid type:
+                if (!Enum.TryParse(kv.Key, out ty))
+                    ty = output_doc_types.INVALID;
+            }
+            else
+            {
+                ty = output_doc_types.ALL;
+            }
+            FileListManager.TypeFilter = new FilterSetTypeFilters(ty);
         }
 
         /// <summary>
@@ -328,6 +374,13 @@ namespace HolidayLabelsAndLists
             this.PopulateForm(first_run: false);
         }
 
+        /// <summary>
+        /// Set the year filter. Since the relevant donor values
+        /// may be different for each year, get the list
+        /// of relevant donors and set that filter too.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbYear_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.SetYearFilter();
@@ -414,36 +467,6 @@ namespace HolidayLabelsAndLists
         }
 
         /// <summary>
-        /// Import contents of each file selected
-        /// by the user.
-        /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="context"></param>
-        /// <param name="report_names"></param>
-        /// <returns></returns>
-        /// TODO: Move this method out of this class. It doesn't
-        /// refer to anything in frmMain and does no user interaction. It should probably
-        /// be in a helper or utility class -- perhaps VestaImporterUtils?
-        /// 
-        private int ImportFromVesta(BackgroundWorker wk,
-            DBWrapper context, string[] report_names)
-        {
-            int retInt = 0;
-            foreach (string fn in report_names)
-            {
-                if (Path.GetExtension(fn) == ".xlsx")
-                {
-                    VestaImporter p = new VestaImporter(wk, fn, GlobRes.ResultsSheetDefaultName);
-                    retInt += p.execute(context);
-                }
-            }
-            // if we read anything in, save the changes to the database:
-            if (retInt > 0)
-                context.Save();
-            return retInt;
-        }
-
-        /// <summary>
         /// Read info from VESTA reports. Store the info in
         /// a DBWrapper object.
         /// 
@@ -462,7 +485,7 @@ namespace HolidayLabelsAndLists
             worker.ReportProgress(0,
                 string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
                 );
-            retInt = ImportFromVesta(worker, this.Context, report_names);
+            retInt = VestaImporterUtils.ImportFromVesta(worker, this.Context, report_names);
             return retInt;
         }
 
