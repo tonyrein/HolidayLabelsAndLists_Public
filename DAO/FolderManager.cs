@@ -74,5 +74,10 @@ namespace DAO
             }
             return Path.Combine(YearFolder(year), retString);
         }
+
+        public static string DbFolder()
+        {
+            return Path.Combine(OutputFolder, "Database");
+        }
     }
 }

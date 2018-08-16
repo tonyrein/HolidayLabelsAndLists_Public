@@ -13,7 +13,7 @@ namespace DAO
     {
         private static string GetDatabaseFilename()
         {
-            string dbdir = FolderManager.OutputFolder;
+            string dbdir = FolderManager.DbFolder();
             if (!Directory.Exists(dbdir))
                 Directory.CreateDirectory(dbdir);
             return Path.Combine(dbdir, Properties.Resources.db_filename);
@@ -42,6 +42,24 @@ namespace DAO
             List<string> retList = new List<string>();
             retList.Sort();
             return retList;
+        }
+
+        /// <summary>
+        /// Returns a Queue of the backup files
+        /// with the oldest first in line.
+        /// </summary>
+        /// <returns></returns>
+        private static Queue<FileInfo> GetBackupQueue()
+        {
+            List<FileInfo> unsorted = new List<FileInfo>();
+            string glob = String.Format(Properties.Resources.db_backup_glob, Properties.Resources.db_filename);
+            string[] sa = Directory.GetFiles(FolderManager.DbFolder(), glob).ToArray();
+            foreach(string s in sa)
+            {
+                unsorted.Add(new FileInfo(s));
+            }
+            List<FileInfo> sorted = unsorted.OrderBy(f => f.CreationTimeUtc).ToList();
+            return new Queue<FileInfo>(sorted);
         }
 
         /// <summary>

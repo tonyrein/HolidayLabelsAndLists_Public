@@ -61,6 +61,15 @@ namespace DAO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}.bak[0-9][0-9][0-9].
+        /// </summary>
+        internal static string db_backup_glob {
+            get {
+                return ResourceManager.GetString("db_backup_glob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hll_data.litedb.
         /// </summary>
         internal static string db_filename {
