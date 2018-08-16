@@ -69,23 +69,6 @@ namespace DAO
             return retInt;
         }
 
-        //private string GetDatabaseFilename()
-        //{
-        //    string dbdir = FolderManager.OutputFolder;
-        //    if (!Directory.Exists(dbdir))
-        //        Directory.CreateDirectory(dbdir);
-        //    return Path.Combine(dbdir, Properties.Resources.db_filename);
-        //}
-        ///// <summary>
-        ///// Create a connection to the database
-        ///// used for persistent storage.
-        ///// </summary>
-        ///// <returns></returns>
-        //private LiteDatabase GetDatabase()
-        //{
-        //    return new LiteDatabase(DbUtils.GetDatabaseFilename());
-        //}
-
         /// <summary>
         /// Save data to persistent store.
         /// </summary>
@@ -108,7 +91,7 @@ namespace DAO
         /// <returns></returns>
         public void Load()
         {
-            using (LiteDatabase db = this.GetDatabase())
+            using (LiteDatabase db = DbUtils.GetDatabase())
             {
                 this.LoadDonors(db);
                 this.LoadBagLabelInfo(db);

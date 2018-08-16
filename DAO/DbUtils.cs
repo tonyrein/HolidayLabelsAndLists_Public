@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using LiteDB;
 
@@ -30,21 +28,6 @@ namespace DAO
         }
 
         /// <summary>
-        /// Returns a list of currently-existing
-        /// backup files, sorted in alphabetical
-        /// order -- this should be the same as
-        /// numerical order for these files, and
-        /// should also be oldest to most recent.
-        /// </summary>
-        /// <returns></returns>
-        private static List<string> ListBackupFiles()
-        {
-            List<string> retList = new List<string>();
-            retList.Sort();
-            return retList;
-        }
-
-        /// <summary>
         /// Returns a Queue of the backup files
         /// with the oldest first in line.
         /// </summary>
@@ -52,7 +35,7 @@ namespace DAO
         private static Queue<FileInfo> GetBackupQueue()
         {
             List<FileInfo> unsorted = new List<FileInfo>();
-            string glob = String.Format(Properties.Resources.db_backup_glob, Properties.Resources.db_filename);
+            string glob = Properties.Resources.db_backup_glob;
             string[] sa = Directory.GetFiles(FolderManager.DbFolder(), glob).ToArray();
             foreach(string s in sa)
             {
@@ -62,89 +45,63 @@ namespace DAO
             return new Queue<FileInfo>(sorted);
         }
 
-        /// <summary>
-        /// Frees up a space by deleting old backup(s) if
-        /// neccessary and renaming remaining backups.
-        /// Returns available backup name
-        /// </summary>
-        /// <returns></returns>
-        private static string MakeSlot()
+        private static int NumberFromBackupFilename(string fn)
         {
-            string retString = "";
-            return retString;
-        }
-
-        /// <summary>
-        /// Deletes zero or more old backup files as
-        /// needed to reduce number of backups to
-        /// Max - 1.
-        /// 
-        /// Returns number of files deleted.
-        /// </summary>
-        /// <returns></returns>
-        private static int DeleteOldBackups()
-        {
-            int retInt = 0;
+            // filename is, for example:
+            //    P:\HLL_INTERNAL\Database\hll_data.bak0012.litedb
+            // We want the 0012 portion, parsed to 12.
+            string basename = Path.Combine(Path.GetDirectoryName(fn),
+                Path.GetFileNameWithoutExtension(fn));
+            int retInt;
+            if (!int.TryParse(basename.Substring(basename.Length - 4), out retInt))
+                retInt = -1;
             return retInt;
         }
-
-
-        /// <summary>
-        /// 
-        /// Deletes files as needed to free up
-        /// the first slot in the backup file name space.
-        /// 
-        /// If a file with the first slot name exists,
-        /// it will be deleted.
-        /// 
-        /// If that file does not exist, BUT the number
-        /// of backups is >= to max allowed, the oldest
-        /// file(s) will be deleted to bring the number
-        /// down to max allowed - 1.
-
-        /// </summary>
-        /// <returns></returns>
-        private static int DeleteOldest()
-        {
+            /// <summary>
+            /// Derive the next available backup file number.
+            /// 
+            /// Backup files are named <db base filename>.bak0000.ext, <db base filename>.back0001.ext, and
+            /// so on. We retain up to (Properties.Settings.Default.MaxDBBackups).
+            /// 
+            /// Return a number that's one more than the max of the numerical portions of our
+            /// backup filenames. If we get to 999, start over at 0. (This assumes that
+            /// the max allowable db backups is < 999).
+            /// </summary>
+            /// <param name="Q"></param>
+            /// <returns></returns>
+            private static int NextFileNum(Queue<FileInfo> Q)
+            {
             int retInt = 0;
-            //retName = $"{basename}.bak{i,0:0000}{ext}";
-            List<string> list_of_backups = ListBackupFiles();
-            //int max_allowed = Properties.Settings
+            if (Q.Count() > 0)
+            {
+                retInt = Q.Max(fi => NumberFromBackupFilename(fi.FullName)) + 1;
+            }
+            if (retInt > 999)
+                retInt = 0;
             return retInt;
         }
 
         /// <summary>
-        /// Get list of backup files, sorted in order
-        /// of age, from oldest to youngest.
-        /// 
-        /// Then, start at the oldest and rename each
-        /// one to the next backup name, starting
-        /// with dbfilename.litedb.bak001.
-        /// 
-        /// To ensure dbfilename.litedb.bak001 is free,
-        /// call DeleteOldBackups().
+        /// Dequeue files from the bottom of the queue (oldest end) until
+        /// we are down to the max allowable file number.
         /// </summary>
-        private static void DownshiftBackupNames()
+        /// <param name="Q"></param>
+        private static void ShrinkBackupFileQueue(Queue<FileInfo> Q)
         {
-            DeleteOldBackups();
-
-        }
-
-        private static string EnsureSlot(List<string> backup_list)
-        {
-            return "";
+            int max_files = Properties.Settings.Default.MaxDBBackups;
+            while (Q.Count() >= max_files)
+            {
+                FileInfo fi = Q.Dequeue();
+                fi.Delete();
+            }
         }
 
         public static void BackupDatabase()
         {
-            List<string> list_of_backups = ListBackupFiles();
-            string slot_name = EnsureSlot(list_of_backups);
-            if (slot_name != "")
-            {
-                string dbname = GetDatabaseFilename();
-                File.Move(dbname, slot_name);
-            }
-
+            Queue<FileInfo> Q = GetBackupQueue();
+            ShrinkBackupFileQueue(Q);
+            int next_num = NextFileNum(Q);
+            Utils.FileUtils.MoveToBackup(GetDatabaseFilename(), start_at: next_num);
         }
 
     }

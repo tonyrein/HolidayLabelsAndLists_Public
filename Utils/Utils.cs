@@ -18,16 +18,16 @@ namespace Utils
         /// </summary>
         /// <param name="orig_name"></param>
         /// <returns></returns>
-        public static string NextAvailableBackupName(string orig_name)
+        public static string NextAvailableBackupName(string orig_name, int start_at)
         {
             string ext = Path.GetExtension(orig_name);
             string basename = Path.Combine(Path.GetDirectoryName(orig_name),
                 Path.GetFileNameWithoutExtension(orig_name));
             string retName;
-            int i = 1;
+            int i = start_at;
             do
             {
-                // construct string such as "e:\original_path\original_filename_bak0003.docx"
+                // construct string such as "e:\original_path\original_filename.bak0003.docx"
                 retName = $"{basename}.bak{i,0:0000}{ext}";
                 i++;
             }
@@ -40,9 +40,9 @@ namespace Utils
         /// of the file and renames the file with the backup name.
         /// </summary>
         /// <param name="filespec"></param>
-        public static void MoveToBackup(string filespec)
+        public static void MoveToBackup(string filespec, int start_at=0)
         {
-            string backup_name = NextAvailableBackupName(filespec);
+            string backup_name = NextAvailableBackupName(filespec, start_at);
             File.Move(filespec, backup_name);
         }
 
