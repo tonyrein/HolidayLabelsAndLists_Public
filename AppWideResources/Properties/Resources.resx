@@ -240,7 +240,7 @@ The error message was {1}</value>
     <value>Select different criteria for Document Type to View, Year, and/or Donor</value>
   </data>
   <data name="NoOutputFilesMsg" xml:space="preserve">
-    <value>There are no label or list files available for viewing.\nPlease click "Create Labels and Lists"\nand select one or more reports.</value>
+    <value>There are no label or list files available for viewing. Please click "Create Labels and Lists" to generate them.</value>
   </data>
   <data name="NoOutputFilesTitle" xml:space="preserve">
     <value>No Output Files</value>

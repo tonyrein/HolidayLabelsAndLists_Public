@@ -332,7 +332,7 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no label or list files available for viewing.\nPlease click &quot;Create Labels and Lists&quot;\nand select one or more reports..
+        ///   Looks up a localized string similar to There are no label or list files available for viewing. Please click &quot;Create Labels and Lists&quot; to generate them..
         /// </summary>
         public static string NoOutputFilesMsg {
             get {
