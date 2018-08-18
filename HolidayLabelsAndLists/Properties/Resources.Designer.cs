@@ -142,24 +142,21 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;
-        ///&lt;html&gt;
-        ///  &lt;head&gt;
-        ///
-        ///    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-        ///    &lt;title&gt;HLL_Doc&lt;/title&gt;
-        ///  &lt;/head&gt;
-        ///  &lt;body&gt;
-        ///    &lt;html&gt;&lt;br&gt;
-        ///    &lt;head&gt;&lt;br&gt;
-        ///    &lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
-        ///    &lt;/head&gt;
-        ///    &lt;body style=&quot;cursor: auto;&quot;&gt;
-        ///    &lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User
-        ///    Documentation&lt;/h1&gt;
-        ///    &lt;hr/&gt;
-        ///    &lt;h2&gt;Introduction&lt;/h2&gt;
-        ///    &lt;p&gt;The Holiday Labels and Lists program(&amp;quot;HL [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        ///&lt;title&gt;HLL_Doc&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body style=&quot;cursor: auto;&quot;&gt;
+        ///&lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
+        ///&lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User
+        ///Documentation&lt;/h1&gt;
+        ///&lt;hr&gt;
+        ///&lt;h2&gt;Introduction&lt;/h2&gt;
+        ///&lt;p&gt;The Holiday Labels and Lists program(&quot;HLL&quot;) is meant to be used
+        ///in connection with Valley&apos;s holiday programs. It streamlines the
+        ///process of creating bag and gift labels, master and donor lists,
+        ///participant [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Doc_HTML {
             get {

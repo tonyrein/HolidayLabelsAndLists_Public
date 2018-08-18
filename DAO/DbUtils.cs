@@ -73,7 +73,7 @@ namespace DAO
             {
             int retInt = 0;
             if (Q.Count() > 0)
-            {
+            { 
                 retInt = Q.Max(fi => NumberFromBackupFilename(fi.FullName)) + 1;
             }
             if (retInt > 999)
