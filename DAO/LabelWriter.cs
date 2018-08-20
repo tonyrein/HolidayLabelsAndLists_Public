@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using Novacode; //for DocX
+using Xceed.Words.NET; //for DocX
 using Utils;
 using GlobRes = AppWideResources.Properties.Resources;
 namespace DAO
