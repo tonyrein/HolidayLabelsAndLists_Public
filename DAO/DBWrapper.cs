@@ -56,11 +56,9 @@ namespace DAO
         private int AddDefaultDonors()
         {
             int retInt = 0;
-            foreach (string[] sa in initial_donors)
+            foreach (Donor d in InitialDonors.InitialList())
             {
-                string cd = sa[0]; string nm = sa[1];
-                Donor d = new Donor(sa[0], sa[1]);
-                if (MatchingDonor(d) == null)
+                if (MatchingDonor(d) == null) // not already present
                 {
                     this.DonorList.Add(d);
                     retInt++;
@@ -429,24 +427,6 @@ namespace DAO
             }
         }
 
-        /// <summary>
-        /// Initial list of donors
-        /// 
-        /// When code in VestaImporter reads a record containing a donor
-        /// organization name from a VESTA report, it assigns donor
-        /// codes as follows:
-        /// 
-        /// 1. If the name in the record read by the importer exists in the
-        /// array below, the corresponding code is used. Otherwise:
-        /// 
-        /// 2. A code is generated from the name using DAO.Donor.MakeDonorCode()
-        /// </summary>
-        private static string[][] initial_donors = new string[][]
-        {
-            new string[] {"EXCode1", "Example Donor Organization 1"},
-            new string[] {"EXCode2", "Example Donor Organization 2"},
-            new string[] {"GFTCRD", "Gift Cards"}
-        };
     }
 
 }

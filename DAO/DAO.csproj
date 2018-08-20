@@ -114,6 +114,7 @@
     <!--<Compile Include="DAOResources.cs" />-->
     <Compile Include="ExcelUtils.cs" />
     <Compile Include="FolderManager.cs" />
+    <Compile Include="InitialDonors.cs" />
     <Compile Include="LabelWriter.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Models_DAO.cs" />
