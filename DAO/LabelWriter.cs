@@ -574,7 +574,8 @@ namespace DAO
           padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
           left_margin: (int)(0.125 * (int)DocPartUnits.Margins),
           right_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-          num_cols: 3
+          num_cols: 3,
+          orientation: Orientation.Landscape
         )
         {
             this.SetItemList();
