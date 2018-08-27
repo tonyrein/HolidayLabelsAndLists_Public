@@ -47,6 +47,8 @@ namespace DAO
     {
         protected int LabelHeight { get; set; }
         protected int LabelWidth { get; set; }
+        protected float PageWidth { get; set; }
+        protected float PageHeight { get; set; }
         protected int PaddingWidth { get; set; }
         protected int LeftMargin { get; set; }
         protected int RightMargin { get; set; }
@@ -117,7 +119,10 @@ namespace DAO
             int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
             int bottom_margin = 0,
             int num_cols = 5,
+            float page_width = 816F,
+            float page_height = 1056F,
             Orientation orientation = Orientation.Portrait
+            
             )
         {
             this.Worker = wk;
@@ -125,8 +130,11 @@ namespace DAO
             this.Year = year;
             this.LabelHeight = label_height; this.LabelWidth = label_width;
             this.PaddingWidth = padding_width; this.LeftMargin = left_margin;
+            this.PageWidth = page_width;
+            this.PageHeight = page_height;
             this.RightMargin = right_margin; this.TopMargin = top_margin;
             this.BottomMargin = bottom_margin; this.NumberOfColumns = num_cols;
+            
             this.orientation = orientation;
         }
 
@@ -183,8 +191,11 @@ namespace DAO
             try
             {
                 doc = this.OpenDocument();
-                doc.PageLayout.Orientation = this.orientation;
-                this.setMargins(doc);
+                //doc.PageLayout.Orientation = this.orientation;
+                //doc.PageWidth = this.PageWidth;
+                //doc.PageHeight = this.PageHeight;
+                ////doc.PageLayout.Orientation = this.orientation;
+                //this.setMargins(doc);
                 // add a table with one row and correct # of columns:
                 this.table = doc.AddTable(1, this.NumberOfColumns);
                 this.table.Alignment = Alignment.center;
@@ -221,7 +232,25 @@ namespace DAO
                 // set the table's column widths, insert the table into
                 // the NovaCode document, save the document, and report
                 // our progress.
+                doc.PageLayout.Orientation = this.orientation;
+                switch(this.orientation)
+                {
+                    case Orientation.Portrait:
+                        doc.PageWidth = this.PageWidth;
+                        doc.PageHeight = this.PageHeight;
+                        break;
+                    case Orientation.Landscape:
+                        doc.PageWidth = this.PageHeight;
+                        doc.PageHeight = this.PageWidth;
+                        break;
+                    default:
+                        throw new Exception("Invalid page orientation!");
+                        break;
+                }
+                //doc.PageLayout.Orientation = this.orientation;
+                this.setMargins(doc);
                 this.setColumnWidths();
+                //doc.PageLayout.Orientation = this.orientation;
                 doc.InsertTable(this.table);
                 doc.Save();
                 this.Worker.ReportProgress(0,
@@ -575,7 +604,8 @@ namespace DAO
           padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
           left_margin: (int)(0.125 * (int)DocPartUnits.Margins),
           right_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-          num_cols: 3,
+          //num_cols: 3,
+          num_cols: 5,
           orientation: Orientation.Landscape
         )
         {
