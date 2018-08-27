@@ -53,6 +53,7 @@ namespace DAO
         protected int TopMargin { get; set; }
         protected int BottomMargin { get; set; }
         protected int NumberOfColumns { get; set; }
+        protected Orientation orientation { get; set; }
         protected Table table;
         protected List<object> ItemList { get; set; }
         protected const string FILE_EXTENSION = ".docx";
@@ -115,7 +116,8 @@ namespace DAO
             int right_margin = (int)(0.19 * (int)DocPartUnits.Margins),
             int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
             int bottom_margin = 0,
-            int num_cols = 5
+            int num_cols = 5,
+            Orientation orientation = Orientation.Portrait
             )
         {
             this.Worker = wk;
@@ -125,6 +127,7 @@ namespace DAO
             this.PaddingWidth = padding_width; this.LeftMargin = left_margin;
             this.RightMargin = right_margin; this.TopMargin = top_margin;
             this.BottomMargin = bottom_margin; this.NumberOfColumns = num_cols;
+            this.orientation = orientation;
         }
 
         private Row addRow()
@@ -544,18 +547,35 @@ namespace DAO
     /// </summary>
     public class ParticipantSummaryLabelWriter : LabelWriter
     {
+        //public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
+        //    : base(
+        //        wk,
+        //        ctx,
+        //        year,
+        //        label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
+        //        label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
+        //        padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
+        //        left_margin: (int)(0.235 * (int)DocPartUnits.Margins),
+        //        right_margin: (int)(0.235 * (int)DocPartUnits.Margins),
+        //        num_cols: 3
+        //      )
+        //{
+        //    this.SetItemList();
+        //}
+
+
         public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
-            : base(
-                wk,
-                ctx,
-                year,
-                label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
-                label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
-                padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
-                left_margin: (int)(0.235 * (int)DocPartUnits.Margins),
-                right_margin: (int)(0.235 * (int)DocPartUnits.Margins),
-                num_cols: 3
-              )
+      : base(
+          wk,
+          ctx,
+          year,
+          label_height: (int)(3.50 * (int)DocPartUnits.CellHeight),
+          label_width: (int)(4.188 * (int)DocPartUnits.CellWidth),
+          padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
+          left_margin: (int)(0.125 * (int)DocPartUnits.Margins),
+          right_margin: (int)(0.125 * (int)DocPartUnits.Margins),
+          num_cols: 3
+        )
         {
             this.SetItemList();
         }
