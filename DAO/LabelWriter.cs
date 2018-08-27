@@ -183,6 +183,7 @@ namespace DAO
             try
             {
                 doc = this.OpenDocument();
+                doc.PageLayout.Orientation = this.orientation;
                 this.setMargins(doc);
                 // add a table with one row and correct # of columns:
                 this.table = doc.AddTable(1, this.NumberOfColumns);
