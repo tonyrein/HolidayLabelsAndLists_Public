@@ -47,9 +47,10 @@ namespace DAO
     {
         protected int LabelHeight { get; set; }
         protected int LabelWidth { get; set; }
-        protected float PageWidth { get; set; }
-        protected float PageHeight { get; set; }
-        protected int PaddingWidth { get; set; }
+        protected int PageWidth { get; set; }
+        protected int PageHeight { get; set; }
+        protected int HorizontalPadding { get; set; }
+        protected int VerticalPadding { get; set; }
         protected int LeftMargin { get; set; }
         protected int RightMargin { get; set; }
         protected int TopMargin { get; set; }
@@ -107,20 +108,39 @@ namespace DAO
         /// <param name="top_margin"></param>
         /// <param name="bottom_margin"></param>
         /// <param name="num_cols"></param>
-        public LabelWriter(
+        public LabelWriter
+            //(
+            //BackgroundWorker wk,
+            //DBWrapper ctx,
+            //int year,
+            //int label_height = (int)(1.066 * (int)DocPartUnits.CellHeight), // Avery 5160
+            //int label_width = (int)(2.63 * (int)DocPartUnits.CellWidth),
+            //int horizontal_padding = (int)(0.12 * (int)DocPartUnits.CellWidth),
+            //int left_margin = (int)(0.19 * (int)DocPartUnits.Margins),
+            //int right_margin = (int)(0.19 * (int)DocPartUnits.Margins),
+            //int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
+            //int bottom_margin = 0,
+            //int num_cols = 5,
+            //int page_width = 816,
+            //int page_height = 1056,
+            //Orientation orientation = Orientation.Portrait
+
+            //)
+            (
             BackgroundWorker wk,
             DBWrapper ctx,
             int year,
             int label_height = (int)(1.066 * (int)DocPartUnits.CellHeight), // Avery 5160
             int label_width = (int)(2.63 * (int)DocPartUnits.CellWidth),
-            int padding_width = (int)(0.12 * (int)DocPartUnits.CellWidth),
+            int horizontal_padding = (int)(0.12 * (int)DocPartUnits.CellWidth),
+            int vertical_padding = (int)(0.00 * (int)DocPartUnits.CellHeight),
             int left_margin = (int)(0.19 * (int)DocPartUnits.Margins),
             int right_margin = (int)(0.19 * (int)DocPartUnits.Margins),
             int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
             int bottom_margin = 0,
             int num_cols = 5,
-            float page_width = 816F,
-            float page_height = 1056F,
+            int page_width = 816,
+            int page_height = 1056,
             Orientation orientation = Orientation.Portrait
             
             )
@@ -129,19 +149,19 @@ namespace DAO
             this.context = ctx;
             this.Year = year;
             this.LabelHeight = label_height; this.LabelWidth = label_width;
-            this.PaddingWidth = padding_width; this.LeftMargin = left_margin;
+            this.HorizontalPadding = horizontal_padding;
+            this.VerticalPadding = vertical_padding; this.LeftMargin = left_margin;
             this.PageWidth = page_width;
             this.PageHeight = page_height;
             this.RightMargin = right_margin; this.TopMargin = top_margin;
             this.BottomMargin = bottom_margin; this.NumberOfColumns = num_cols;
-            
             this.orientation = orientation;
         }
 
         private Row addRow()
         {
             Row r = this.table.InsertRow();
-            r.Height = this.LabelHeight;
+            r.Height = this.LabelHeight + this.VerticalPadding;
             return r;
         }
 
@@ -156,7 +176,7 @@ namespace DAO
                 if ((i % 2) == 0)
                     this.table.SetColumnWidth(i, this.LabelWidth);
                 else
-                    this.table.SetColumnWidth(i, this.PaddingWidth);
+                    this.table.SetColumnWidth(i, this.HorizontalPadding);
             }
         }
 
@@ -191,9 +211,9 @@ namespace DAO
             try
             {
                 doc = this.OpenDocument();
-                //doc.PageLayout.Orientation = this.orientation;
-                //doc.PageWidth = this.PageWidth;
-                //doc.PageHeight = this.PageHeight;
+                doc.PageLayout.Orientation = this.orientation;
+                doc.PageWidth = this.PageWidth;
+                doc.PageHeight = this.PageHeight;
                 ////doc.PageLayout.Orientation = this.orientation;
                 //this.setMargins(doc);
                 // add a table with one row and correct # of columns:
@@ -232,21 +252,21 @@ namespace DAO
                 // set the table's column widths, insert the table into
                 // the NovaCode document, save the document, and report
                 // our progress.
-                doc.PageLayout.Orientation = this.orientation;
-                switch(this.orientation)
-                {
-                    case Orientation.Portrait:
-                        doc.PageWidth = this.PageWidth;
-                        doc.PageHeight = this.PageHeight;
-                        break;
-                    case Orientation.Landscape:
-                        doc.PageWidth = this.PageHeight;
-                        doc.PageHeight = this.PageWidth;
-                        break;
-                    default:
-                        throw new Exception("Invalid page orientation!");
-                        break;
-                }
+                //doc.PageLayout.Orientation = this.orientation;
+                //switch(this.orientation)
+                //{
+                //    case Orientation.Portrait:
+                //        doc.PageWidth = this.PageWidth;
+                //        doc.PageHeight = this.PageHeight;
+                //        break;
+                //    case Orientation.Landscape:
+                //        doc.PageWidth = this.PageHeight;
+                //        doc.PageHeight = this.PageWidth;
+                //        break;
+                //    default:
+                //        throw new Exception("Invalid page orientation!");
+                //        break;
+                //}
                 //doc.PageLayout.Orientation = this.orientation;
                 this.setMargins(doc);
                 this.setColumnWidths();
@@ -318,6 +338,16 @@ namespace DAO
             get { return FolderManager.ChristmasProgramFolder(Year); }
         }
 
+        /// <summary>
+        /// Make a LabelWriter with default dimensions (Avery 5160)
+        /// anda specified BackgroundWorker, DBWrapper, Donor,
+        /// request type, and year
+        /// </summary>
+        /// <param name="wk"></param>
+        /// <param name="ctx"></param>
+        /// <param name="d"></param>
+        /// <param name="request_type"></param>
+        /// <param name="year"></param>
         public GiftLabelWriter(BackgroundWorker wk, DBWrapper ctx, Donor d, string request_type, int year)
             : base(wk, ctx, year)
         {
@@ -395,15 +425,15 @@ namespace DAO
         }
 
         /// <summary>
-        /// A BagLabelWriter uses cell layout parameters different from the other label
-        /// writers, so we override the values inherited from the abstract base class.
-        /// Dimensions:
+        /// Make a LabelWriter with Avery 5168 dimensions:
         /// =============
         /// Cell Height: 5.276"
         /// Cell Width: 3.5"
         /// Padding Width: 0.5"
         /// Left and Right Margins: 0.5"
         /// 
+        /// Also specify a BackgroundWorker, DBWrapper, Donor,
+        /// request type, and year.
         /// </summary>
         /// <param name="wk"></param>
         /// <param name="ctx"></param>
@@ -417,7 +447,7 @@ namespace DAO
                 year,
                 label_height: (int)(5.276 * (int)DocPartUnits.CellHeight), // Avery 5168
                 label_width: (int)(3.5 * (int)DocPartUnits.CellWidth),
-                padding_width: (int)(0.5 * (int)DocPartUnits.CellWidth),
+                horizontal_padding: (int)(0.5 * (int)DocPartUnits.CellWidth),
                 left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
                 right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
                 num_cols: 3
@@ -494,6 +524,11 @@ namespace DAO
         }
     }
 
+    /// <summary>
+    /// Make a LabelWriter with default dimensions (Avery 5160)
+    /// and a specified BackgroundWorker, DBWrapper,
+    /// service type, and year.
+    /// </summary>
     public class PostcardLabelWriter : LabelWriter
     {
         private string ServiceType { get; set; }
@@ -584,7 +619,7 @@ namespace DAO
         //        year,
         //        label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
         //        label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
-        //        padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
+        //        horizontal_padding: (int)(0.03 * (int)DocPartUnits.CellWidth),
         //        left_margin: (int)(0.235 * (int)DocPartUnits.Margins),
         //        right_margin: (int)(0.235 * (int)DocPartUnits.Margins),
         //        num_cols: 3
@@ -594,22 +629,34 @@ namespace DAO
         //}
 
 
+        /// <summary>
+        /// Make a LabelWriter with Avery 5614 dimensions
+        /// and a specified BackgroundWorker, DBWrapper, and year.
+        /// </summary>
+        /// <param name="wk"></param>
+        /// <param name="ctx"></param>
+        /// <param name="year"></param>
         public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
-      : base(
-          wk,
-          ctx,
-          year,
-          //label_height: (int)(3.50 * (int)DocPartUnits.CellHeight),
-          //label_width: (int)(4.188 * (int)DocPartUnits.CellWidth),
-          label_width: (int)(3.50 * (int)DocPartUnits.CellWidth),
-          label_height: (int)(4.188 * (int)DocPartUnits.CellHeight),
-          padding_width: (int)(0.03 * (int)DocPartUnits.CellWidth),
-          left_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-          right_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-          //num_cols: 3,
-          num_cols: 5,
-          orientation: Orientation.Landscape
-        )
+          : base(
+              wk,
+              ctx,
+              year,
+              //label_height: (int)(3.50 * (int)DocPartUnits.CellHeight),
+              //label_width: (int)(4.188 * (int)DocPartUnits.CellWidth),
+              label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
+              label_height: (int)(4.09375 * (int)DocPartUnits.CellHeight),
+              horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
+              vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
+              top_margin: (int)(0.125 * (int)DocPartUnits.Margins),
+              bottom_margin: (int)(0.125 * (int)DocPartUnits.Margins),
+              left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
+              right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
+              //num_cols: 3,
+              num_cols: 5,
+              orientation: Orientation.Landscape,
+              page_width: 1056,
+              page_height: 816
+            )
         {
             this.SetItemList();
         }
