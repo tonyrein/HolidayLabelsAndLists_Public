@@ -105,12 +105,11 @@ namespace DAO
             int last_col = sh.Dimension.End.Column;
             for(int i = start_row; i <= end_row; i++)
             {
-                // need something like the following to take care of empty cells:
-                // var name = (excelSheet.Cells[j, 0].Value ?? "").ToString();
                 List<string> celllist = new List<string>();
                 for(int col = first_col; col <= last_col; col++)
                 {
-                    //var c = sh.Cells[i, col].
+                    var c = sh.Cells[i, col];
+                    var v = c.
                     //var ctnt = sh.Cells[i, col].Value;
                     //if (ctnt.)
                     celllist.Add(sh.Cells[i, col].Text);
