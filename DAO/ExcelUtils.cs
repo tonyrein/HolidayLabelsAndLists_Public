@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
-using NPOI.SS.UserModel;
+//using NPOI.SS.UserModel;
+using OfficeOpenXml;
+
 using System.IO;
 namespace DAO
 {
@@ -41,20 +43,24 @@ namespace DAO
                     this.Cells[index] = value;
             }
         }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ExcelRow()
         {
             this.Cells = new string[] { "" };
         }
 
         /// <summary>
-        /// Construct an ExcelRow from an NPOI IRow object.
+        /// Construct a DAO.ExcelRow from a List of string.
         /// </summary>
-        /// <param name="irow"></param>
-        public ExcelRow(IRow irow)
+        /// <param name="stringlist"></param>
+        public ExcelRow(List<string> stringlist)
         {
-            this.Cells = ExcelUtils.IRowToStringArray(irow);
+            this.Cells = stringlist.ToArray();
         }
-
+       
         /// <summary>
         /// Return the contents of this row as an
         /// array of strings.
@@ -67,12 +73,12 @@ namespace DAO
 
         /// <summary>
         /// If the first element of this row's Cells member
-        /// is null, interpret that as this row being empty.
+        /// is null or empty, interpret that as this row being empty.
         /// </summary>
         /// <returns></returns>
         public bool IsEmpty()
         {
-            return (this[0] == null);
+            return string.IsNullOrEmpty(this[0]);
         }
     }
 
@@ -84,17 +90,31 @@ namespace DAO
         public string Name { get; set; }
         public List<ExcelRow> Rows { get; }
 
+       
         /// <summary>
-        /// Construct an ExcelSheet from an NPOI ISheet
+        /// Construct a DAO.ExcelSheet from an OfficeOpenXML worksheet
         /// </summary>
         /// <param name="sh"></param>
-        public ExcelSheet(ISheet sh)
+        public ExcelSheet(OfficeOpenXml.ExcelWorksheet sh)
         {
-            this.Name = sh.SheetName;
+            this.Name = sh.Name;
             this.Rows = new List<ExcelRow>();
-            for (int i = 0; i <= sh.LastRowNum; i++)
+            int start_row = sh.Dimension.Start.Row;
+            int end_row = sh.Dimension.End.Row;
+            int first_col = sh.Dimension.Start.Column;
+            int last_col = sh.Dimension.End.Column;
+            for(int i = start_row; i <= end_row; i++)
             {
-                this.Rows.Add(new ExcelRow(sh.GetRow(i)));
+                List<string> celllist = new List<string>();
+                for(int col = first_col; col <= last_col; col++)
+                {
+                    //var c = sh.Cells[i, col].
+                    //var ctnt = sh.Cells[i, col].Value;
+                    //if (ctnt.)
+                    celllist.Add(sh.Cells[i, col].Text);
+                }
+                ExcelRow r = new ExcelRow(celllist);
+                this.Rows.Add(r);
             }
         }
 
@@ -168,8 +188,8 @@ namespace DAO
     }
 
     /// <summary>
-    /// Use NPOI to manage in-memory copies of one or more
-    /// worksheets in an Excel workbook.
+    /// In-Memory representation of one or more Excel
+    /// worksheets.
     /// </summary>
     public class WorkbookWrapper
     {
@@ -199,19 +219,35 @@ namespace DAO
         {
             this.FullName = filespec;
             this.Name = Path.GetFileNameWithoutExtension(filespec);
-            IWorkbook bk;
-            using (FileStream stream = new FileStream(
-                Path.GetFullPath(filespec),
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.ReadWrite
-                ))
+            FileInfo fi = new FileInfo(filespec);
+            using (ExcelPackage pkg = new ExcelPackage(fi))
             {
-                bk = WorkbookFactory.Create(stream);
+                this.LoadSheets(pkg.Workbook);
             }
-            this.LoadSheets(bk);
+
+
+
         }
 
+        /// <summary>
+        /// Load the contents of this workbook's
+        /// worksheets into DAO.ExcelSheet objects.
+        /// 
+        /// Note that the Worksheets collection
+        /// indexing is 1-based.
+        /// </summary>
+        /// <param name="bk"></param>
+        public void LoadSheets(ExcelWorkbook bk)
+        {
+            this.Sheets.Clear();
+            if (bk != null)
+            {
+                for (int i = 1; i <= bk.Worksheets.Count; i++)
+                {
+                    this.Sheets.Add(new ExcelSheet(bk.Worksheets[i]));
+                }
+            }
+        }
         /// <summary>
         /// Initialize this WorkbookWrapper's Sheets collection
         /// from an NPOI IWorkbook object
@@ -219,17 +255,17 @@ namespace DAO
         /// Does nothing if IWorkbook is null
         /// </summary>
         /// <param name="bk"></param>
-        public void LoadSheets(IWorkbook bk)
-        {
-            this.Sheets.Clear();
-            if (bk != null)
-            {
-                for (int i = 0; i < bk.NumberOfSheets; i++)
-                {
-                    this.Sheets.Add(new ExcelSheet(bk.GetSheetAt(i)));
-                }
-            }
-        }
+        //public void LoadSheets0(IWorkbook bk)
+        //{
+        //    this.Sheets.Clear();
+        //    if (bk != null)
+        //    {
+        //        for (int i = 0; i < bk.NumberOfSheets; i++)
+        //        {
+        //            this.Sheets.Add(new ExcelSheet(bk.GetSheetAt(i)));
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Does this WorkbookWrapper have a sheet with the
@@ -252,67 +288,82 @@ namespace DAO
 
     public static class ExcelUtils
     {
-        /// <summary>
-        ///  Given an NPOI IRow, return an array of
-        ///  string, with each slot in the array holding
-        ///  the contents of a cell.
-        ///  
-        ///  NPOI IRows expose LastCellNum and FirstCellNum
-        ///  properties. The FirstCellNum is the zero-based
-        ///  index of the first non-empty cell in the row. The
-        ///  LastCellNum is the zero-based index of the cell
-        ///  immediately following the last non-empty cell.
-        ///  To put it another way, FirstCellNum is the column
-        ///  number of the left-most cell which contains data,
-        ///  and LastCellNum - 1 is the column number of the
-        ///  right-most cell which contains data.
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns>
-        ///   If row is null (corresponding to an empty Excel row),
-        ///   return string[1] containing only null.
-        ///   Otherwise, fill all array slots with cell string
-        ///   values, or "" for cells that are null (corresponding
-        ///   to empty Excel cells).
-        ///   
-        ///   Cell contents which are not strings (eg date/times or formulas)
-        ///   are converted to strings.
-        ///   
-        /// </returns>
-        public static string[] IRowToStringArray(IRow row)
+        ///// <summary>
+        /////  Given an NPOI IRow, return an array of
+        /////  string, with each slot in the array holding
+        /////  the contents of a cell.
+        /////  
+        /////  NPOI IRows expose LastCellNum and FirstCellNum
+        /////  properties. The FirstCellNum is the zero-based
+        /////  index of the first non-empty cell in the row. The
+        /////  LastCellNum is the zero-based index of the cell
+        /////  immediately following the last non-empty cell.
+        /////  To put it another way, FirstCellNum is the column
+        /////  number of the left-most cell which contains data,
+        /////  and LastCellNum - 1 is the column number of the
+        /////  right-most cell which contains data.
+        ///// </summary>
+        ///// <param name="row"></param>
+        ///// <returns>
+        /////   If row is null (corresponding to an empty Excel row),
+        /////   return string[1] containing only null.
+        /////   Otherwise, fill all array slots with cell string
+        /////   values, or "" for cells that are null (corresponding
+        /////   to empty Excel cells).
+        /////   
+        /////   Cell contents which are not strings (eg date/times or formulas)
+        /////   are converted to strings.
+        /////   
+        ///// </returns>
+        //public static string[] IRowToStringArray(IRow row)
+        //{
+        //    // Initialize array to be returned:
+        //    string[] retArray = null;
+        //    // If IRow is null, the underlying Excel row
+        //    // is empty. Return an array of string
+        //    // with only one slot, containing null, to
+        //    // encode an empty row.
+        //    if (row == null)
+        //    {
+        //        retArray = new string[] { null };
+        //    }
+        //    else
+        //    {
+        //        // If IRow is not null, then loop over
+        //        // each of its cells.
+        //        // If a cell is null, add an empty string
+        //        // to our return array. Otherwise, change
+        //        // the cell type into a string and add that
+        //        // string to our return array.
+        //        retArray = new string[row.LastCellNum];
+        //        for (int i = 0; i < row.LastCellNum; i++)
+        //        {
+        //            ICell c = row.GetCell(i);
+        //            if (c == null)
+        //            {
+        //                retArray[i] = "";
+        //            }
+        //            else
+        //            {
+        //                c.SetCellType(CellType.String);
+        //                retArray[i] = c.StringCellValue;
+        //            }
+        //        }
+        //    }
+        //    return retArray;
+        //}
+
+        public static string[] OOXMLRowToStringArray(OfficeOpenXml.ExcelRow row)
         {
             // Initialize array to be returned:
             string[] retArray = null;
-            // If IRow is null, the underlying Excel row
+            // If OOXML Row is null, the underlying Excel row
             // is empty. Return an array of string
             // with only one slot, containing null, to
             // encode an empty row.
             if (row == null)
             {
                 retArray = new string[] { null };
-            }
-            else
-            {
-                // If IRow is not null, then loop over
-                // each of its cells.
-                // If a cell is null, add an empty string
-                // to our return array. Otherwise, change
-                // the cell type into a string and add that
-                // string to our return array.
-                retArray = new string[row.LastCellNum];
-                for (int i = 0; i < row.LastCellNum; i++)
-                {
-                    ICell c = row.GetCell(i);
-                    if (c == null)
-                    {
-                        retArray[i] = "";
-                    }
-                    else
-                    {
-                        c.SetCellType(CellType.String);
-                        retArray[i] = c.StringCellValue;
-                    }
-                }
             }
             return retArray;
         }
