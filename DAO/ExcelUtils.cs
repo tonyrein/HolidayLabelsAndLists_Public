@@ -105,6 +105,8 @@ namespace DAO
             int last_col = sh.Dimension.End.Column;
             for(int i = start_row; i <= end_row; i++)
             {
+                // need something like the following to take care of empty cells:
+                // var name = (excelSheet.Cells[j, 0].Value ?? "").ToString();
                 List<string> celllist = new List<string>();
                 for(int col = first_col; col <= last_col; col++)
                 {
@@ -248,24 +250,6 @@ namespace DAO
                 }
             }
         }
-        /// <summary>
-        /// Initialize this WorkbookWrapper's Sheets collection
-        /// from an NPOI IWorkbook object
-        /// 
-        /// Does nothing if IWorkbook is null
-        /// </summary>
-        /// <param name="bk"></param>
-        //public void LoadSheets0(IWorkbook bk)
-        //{
-        //    this.Sheets.Clear();
-        //    if (bk != null)
-        //    {
-        //        for (int i = 0; i < bk.NumberOfSheets; i++)
-        //        {
-        //            this.Sheets.Add(new ExcelSheet(bk.GetSheetAt(i)));
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// Does this WorkbookWrapper have a sheet with the
