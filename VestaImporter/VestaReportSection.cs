@@ -145,19 +145,12 @@ namespace VestaProcessor
             // Get a date/time string and parse it:
             DateTime dt;
             string s = row[this.field_indices["Date Reserved/Enrolled"]];
-            // s represents a double integer. Parse it into a number:
-            double d;
-            if (Double.TryParse(s, out d)) // string parsed to double OK
+            // s represents a date and time. Parse it into a DateTime object:
+            if (! System.DateTime.TryParse(s, out dt)) // string parsed to double OK
             {
-                // Turn double into DateTime object and use its properties
-                dt = DateTime.FromOADate(d);
+                // If parse fails, just use current date
+                dt = DateTime.Now;
             }
-            else
-            {
-                dt = DateTime.Now; // can't get date from report -- just use current date
-            }
-            // Ignore year argument passed to us -- does not apply for services_household_enrollment
-            // Set date fields from DateTime object:
             retObj.year = dt.Year;
             retObj.day = dt.Day;
             retObj.month = dt.Month;
