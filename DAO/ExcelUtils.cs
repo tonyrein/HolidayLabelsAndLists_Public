@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-//using NPOI.SS.UserModel;
 using OfficeOpenXml;
 
 using System.IO;
@@ -13,8 +12,8 @@ namespace DAO
     /// </summary>
     public class ExcelRow
     {
-        private string[] Cells;
-        public int Length { get { return Cells.Length; } }
+        private List<string> Cells;
+        public int Length { get { return Cells.Count; } }
 
         /// <summary>
         /// Allows retrieval of cells using array notation ( MyRow[10], for example )
@@ -32,14 +31,14 @@ namespace DAO
         {
             get
             {
-                if (index >= 0 && index < this.Cells.Length)
+                if (index >= 0 && index < this.Length)
                     return this.Cells[index];
                 else
                     return null;
             }
             set
             {
-                if (index >= 0 && index < this.Cells.Length)
+                if (index >= 0 && index < this.Length)
                     this.Cells[index] = value;
             }
         }
@@ -49,7 +48,7 @@ namespace DAO
         /// </summary>
         public ExcelRow()
         {
-            this.Cells = new string[] { "" };
+            this.Cells = new List<string>();
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace DAO
         /// <param name="stringlist"></param>
         public ExcelRow(List<string> stringlist)
         {
-            this.Cells = stringlist.ToArray();
+            this.Cells = stringlist;
         }
        
         /// <summary>
@@ -68,7 +67,7 @@ namespace DAO
         /// <returns></returns>
         public string[] ToStringArray()
         {
-            return this.Cells;
+            return this.Cells.ToArray();
         }
 
         /// <summary>
@@ -78,7 +77,7 @@ namespace DAO
         /// <returns></returns>
         public bool IsEmpty()
         {
-            return string.IsNullOrEmpty(this[0]);
+            return this.Cells[0] == null;
         }
     }
 
@@ -89,34 +88,24 @@ namespace DAO
     {
         public string Name { get; set; }
         public List<ExcelRow> Rows { get; }
-
        
-        /// <summary>
-        /// Construct a DAO.ExcelSheet from an OfficeOpenXML worksheet
-        /// </summary>
-        /// <param name="sh"></param>
-        public ExcelSheet(OfficeOpenXml.ExcelWorksheet sh)
+        ///
+        /// default constructor
+        /// 
+        public ExcelSheet()
         {
-            this.Name = sh.Name;
             this.Rows = new List<ExcelRow>();
-            int start_row = sh.Dimension.Start.Row;
-            int end_row = sh.Dimension.End.Row;
-            int first_col = sh.Dimension.Start.Column;
-            int last_col = sh.Dimension.End.Column;
-            for(int i = start_row; i <= end_row; i++)
+        }
+
+        public ExcelSheet(string name, List<List<string>> rows)
+            : this()
+        {
+            this.Name = name;
+            foreach (List<string> r in rows)
             {
-                List<string> celllist = new List<string>();
-                for(int col = first_col; col <= last_col; col++)
-                {
-                    var c = sh.Cells[i, col];
-                    var v = c.
-                    //var ctnt = sh.Cells[i, col].Value;
-                    //if (ctnt.)
-                    celllist.Add(sh.Cells[i, col].Text);
-                }
-                ExcelRow r = new ExcelRow(celllist);
-                this.Rows.Add(r);
+                this.Rows.Add(new ExcelRow(r));
             }
+
         }
 
         /// <summary>
@@ -245,7 +234,10 @@ namespace DAO
             {
                 for (int i = 1; i <= bk.Worksheets.Count; i++)
                 {
-                    this.Sheets.Add(new ExcelSheet(bk.Worksheets[i]));
+                    OfficeOpenXml.ExcelWorksheet sh = bk.Worksheets[i];
+                    List<List<string>> sheet_contents = ExcelUtils.OoXmlGetSheetContents(sh);
+                    string name = sh.Name;
+                    this.Sheets.Add(new ExcelSheet(name, sheet_contents));
                 }
             }
         }
@@ -271,84 +263,66 @@ namespace DAO
 
     public static class ExcelUtils
     {
-        ///// <summary>
-        /////  Given an NPOI IRow, return an array of
-        /////  string, with each slot in the array holding
-        /////  the contents of a cell.
-        /////  
-        /////  NPOI IRows expose LastCellNum and FirstCellNum
-        /////  properties. The FirstCellNum is the zero-based
-        /////  index of the first non-empty cell in the row. The
-        /////  LastCellNum is the zero-based index of the cell
-        /////  immediately following the last non-empty cell.
-        /////  To put it another way, FirstCellNum is the column
-        /////  number of the left-most cell which contains data,
-        /////  and LastCellNum - 1 is the column number of the
-        /////  right-most cell which contains data.
-        ///// </summary>
-        ///// <param name="row"></param>
-        ///// <returns>
-        /////   If row is null (corresponding to an empty Excel row),
-        /////   return string[1] containing only null.
-        /////   Otherwise, fill all array slots with cell string
-        /////   values, or "" for cells that are null (corresponding
-        /////   to empty Excel cells).
-        /////   
-        /////   Cell contents which are not strings (eg date/times or formulas)
-        /////   are converted to strings.
-        /////   
-        ///// </returns>
-        //public static string[] IRowToStringArray(IRow row)
-        //{
-        //    // Initialize array to be returned:
-        //    string[] retArray = null;
-        //    // If IRow is null, the underlying Excel row
-        //    // is empty. Return an array of string
-        //    // with only one slot, containing null, to
-        //    // encode an empty row.
-        //    if (row == null)
-        //    {
-        //        retArray = new string[] { null };
-        //    }
-        //    else
-        //    {
-        //        // If IRow is not null, then loop over
-        //        // each of its cells.
-        //        // If a cell is null, add an empty string
-        //        // to our return array. Otherwise, change
-        //        // the cell type into a string and add that
-        //        // string to our return array.
-        //        retArray = new string[row.LastCellNum];
-        //        for (int i = 0; i < row.LastCellNum; i++)
-        //        {
-        //            ICell c = row.GetCell(i);
-        //            if (c == null)
-        //            {
-        //                retArray[i] = "";
-        //            }
-        //            else
-        //            {
-        //                c.SetCellType(CellType.String);
-        //                retArray[i] = c.StringCellValue;
-        //            }
-        //        }
-        //    }
-        //    return retArray;
-        //}
-
-        public static string[] OOXMLRowToStringArray(OfficeOpenXml.ExcelRow row)
+       
+        /// <summary>
+        /// Given a range, assumed to be a single cell,
+        /// return the contents as a string.
+        /// 
+        /// Return empty string if range is null or if
+        /// range's value is null.
+        /// 
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static string OoXmlGetCellContents(OfficeOpenXml.ExcelRange c)
         {
-            // Initialize array to be returned:
-            string[] retArray = null;
-            // If OOXML Row is null, the underlying Excel row
-            // is empty. Return an array of string
-            // with only one slot, containing null, to
-            // encode an empty row.
-            if (row == null)
+            string retString;
+            if (c == null || c.Value == null)
+                retString = "";
+            else
             {
-                retArray = new string[] { null };
+                retString = c.Value.ToString();
             }
-            return retArray;
+            return retString;
         }
+
+        /// <summary>
+        /// Fill in a List of Lists of string from the contents of
+        /// an OoXml ExcelWorksheet
+        /// </summary>
+        /// <param name="sh"></param>
+        /// <returns></returns>
+        public static List<List<string>> OoXmlGetSheetContents(OfficeOpenXml.ExcelWorksheet sh)
+        {
+            // Make a List of Lists to hold the return values:
+            List<List<string>> retList = new List<List<string>>();
+            // Find the parameters of this sheet:
+            int start_row = sh.Dimension.Start.Row;
+            int end_row = sh.Dimension.End.Row;
+            int first_col = sh.Dimension.Start.Column;
+            int last_col = sh.Dimension.End.Column;
+            // Iterate over the rows; for each one, fill
+            // in a List of strings from its contents and
+            // add that List to our return List of Lists:
+            for (int i = start_row; i <= end_row; i++)
+            {
+                List<string> celllist = new List<string>();
+                // OoXml indexing here is 1-based!
+                for (int col = first_col; col <= last_col; col++)
+                {
+                    string contents = OoXmlGetCellContents(sh.Cells[i, col]);
+                    celllist.Add(contents);
+                }
+                // If all cells are null or blank, mark this row as empty:
+                if (celllist.TrueForAll(c=>string.IsNullOrEmpty(c)))
+                {
+                    celllist.Clear();
+                    celllist.Add(null);
+                }
+                retList.Add(celllist);
+            }
+            return retList;
+        }
+
     }
 }
