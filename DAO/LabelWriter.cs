@@ -204,6 +204,7 @@ namespace DAO
                 doc.PageWidth = this.PageWidth;
                 doc.PageHeight = this.PageHeight;
                 doc.PageLayout.Orientation = this.orientation;
+                this.SetMargins(doc);
                 // Add a table with one row and correct # of columns,
                 // but do not insert it into the document yet.
                 this.table = doc.AddTable(1, this.NumberOfColumns);
@@ -244,6 +245,7 @@ namespace DAO
                 this.SetColumnWidths();
                 this.SetAllRowProperties();
                 doc.InsertTable(this.table);
+                //this.SetMargins(doc);
                 doc.Save();
                 this.Worker.ReportProgress(0,
                     string.Format(GlobRes.FileCreationSuccessMsg, fn)
@@ -315,11 +317,6 @@ namespace DAO
         /// anda specified BackgroundWorker, DBWrapper, Donor,
         /// request type, and year
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="ctx"></param>
-        /// <param name="d"></param>
-        /// <param name="request_type"></param>
-        /// <param name="year"></param>
         public GiftLabelWriter(BackgroundWorker wk, DBWrapper ctx, Donor d, string request_type, int year)
             : base(wk, ctx, year)
         {
