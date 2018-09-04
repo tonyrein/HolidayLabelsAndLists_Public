@@ -136,8 +136,8 @@
   </data>
   <data name="FileExceptionErrorMsg" xml:space="preserve">
     <value>An error occurred trying to work with file {0}.
-The error message was {1}</value>
-    <comment>0=filename; 1= error message text</comment>
+The error message was {1}. Here is the stack trace: {2}</value>
+    <comment>0=filename; 1= error message text, 2=stack trace</comment>
   </data>
   <data name="GiftReceiptRequest" xml:space="preserve">
     <value>Please include gift receipt.</value>

@@ -206,7 +206,7 @@ namespace AppWideResources.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to An error occurred trying to work with file {0}.
-        ///The error message was {1}.
+        ///The error message was {1}. Here is the stack trace: {2}.
         /// </summary>
         public static string FileExceptionErrorMsg {
             get {

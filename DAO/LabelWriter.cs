@@ -13,7 +13,7 @@ namespace DAO
     /// <summary>
     /// Enum used to symbolically refer to
     /// the number of each type of unit
-    /// in one inch.
+    /// in one inch. (One inch is approx. 2.54 cm.)
     /// </summary>
     public enum UnitRatios
     {
@@ -25,16 +25,16 @@ namespace DAO
     }
 
     /// <summary>
-    /// For some reason, Word uses different units
-    /// to measure different parameters of the
-    /// page and label layouts.
+    /// The units used by the EPPlus library to specify
+    /// different parameters of page and table cell layouts.
     /// </summary>
     public enum DocPartUnits
     {
         CellWidth = UnitRatios.Twips,
-        CellHeight = UnitRatios.Dpi96,
+        CellHeight = UnitRatios.Points,
         Margins = UnitRatios.Points,
     }
+
 
     /// <summary>
     /// Handles the creation of documents suitable for printing on label stock.
@@ -64,7 +64,7 @@ namespace DAO
         protected abstract string TargetFolder { get; }
         private BackgroundWorker Worker;
         protected DBWrapper context;
-
+        protected int RowHeight { get { return this.LabelHeight + this.VerticalPadding; } }
         /// <summary>
         /// Create target directory if it does not already exist.
         /// 
@@ -83,8 +83,6 @@ namespace DAO
             if (File.Exists(outfile_spec))
             {
                 Utils.FileUtils.MoveToBackup(outfile_spec);
-                //string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
-                //File.Move(outfile_spec, bu_name);
             }
             return DocX.Create(outfile_spec);
         }
@@ -99,33 +97,7 @@ namespace DAO
         /// The values in the abstract base class constructor are defaults
         /// used by most of the label types in this application.
         /// 
-        /// </summary>
-        /// <param name="label_height"></param>
-        /// <param name="label_width"></param>
-        /// <param name="padding_width"></param>
-        /// <param name="left_margin"></param>
-        /// <param name="right_margin"></param>
-        /// <param name="top_margin"></param>
-        /// <param name="bottom_margin"></param>
-        /// <param name="num_cols"></param>
         public LabelWriter
-            //(
-            //BackgroundWorker wk,
-            //DBWrapper ctx,
-            //int year,
-            //int label_height = (int)(1.066 * (int)DocPartUnits.CellHeight), // Avery 5160
-            //int label_width = (int)(2.63 * (int)DocPartUnits.CellWidth),
-            //int horizontal_padding = (int)(0.12 * (int)DocPartUnits.CellWidth),
-            //int left_margin = (int)(0.19 * (int)DocPartUnits.Margins),
-            //int right_margin = (int)(0.19 * (int)DocPartUnits.Margins),
-            //int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
-            //int bottom_margin = 0,
-            //int num_cols = 5,
-            //int page_width = 816,
-            //int page_height = 1056,
-            //Orientation orientation = Orientation.Portrait
-
-            //)
             (
             BackgroundWorker wk,
             DBWrapper ctx,
@@ -142,7 +114,6 @@ namespace DAO
             int page_width = 816,
             int page_height = 1056,
             Orientation orientation = Orientation.Portrait
-            
             )
         {
             this.Worker = wk;
@@ -158,18 +129,16 @@ namespace DAO
             this.orientation = orientation;
         }
 
-        private Row addRow()
+        private Row AddRow()
         {
-            Row r = this.table.InsertRow();
-            r.Height = this.LabelHeight + this.VerticalPadding;
-            return r;
+            return this.table.InsertRow();
         }
 
         /// <summary>
         /// Assume odd-numbered columns are label cells and
         /// even-numbered ones are padding cells.
         /// </summary>
-        private void setColumnWidths()
+        private void SetColumnWidths()
         {
             for (int i = 0; i < this.NumberOfColumns; i++)
             {
@@ -179,8 +148,28 @@ namespace DAO
                     this.table.SetColumnWidth(i, this.HorizontalPadding);
             }
         }
+        
+        private void SetHeightOneRow(Row r)
+        {
+            r.Height = this.RowHeight;
+        }
 
-        private void setMargins(DocX doc)
+        private void SetPropertiesOneRow(Row r)
+        {
+            r.BreakAcrossPages = false;
+        }
+
+        private void SetAllRowProperties()
+        {
+            foreach (Row r in this.table.Rows)
+            {
+                SetPropertiesOneRow(r);
+                SetHeightOneRow(r);
+            }
+
+        }
+
+        private void SetMargins(DocX doc)
         {
             doc.MarginBottom = this.BottomMargin;
             doc.MarginLeft = this.LeftMargin;
@@ -214,13 +203,13 @@ namespace DAO
                 doc.PageLayout.Orientation = this.orientation;
                 doc.PageWidth = this.PageWidth;
                 doc.PageHeight = this.PageHeight;
-                ////doc.PageLayout.Orientation = this.orientation;
-                //this.setMargins(doc);
-                // add a table with one row and correct # of columns:
+                doc.PageLayout.Orientation = this.orientation;
+                // Add a table with one row and correct # of columns,
+                // but do not insert it into the document yet.
                 this.table = doc.AddTable(1, this.NumberOfColumns);
                 this.table.Alignment = Alignment.center;
-                Row current_row = table.Rows[0];
-                current_row.Height = this.LabelHeight;
+                // Get a reference to the table's first row:
+                Row current_row = this.table.Rows[0];
                 // Loop through records. "Type" each record's
                 // contents into the next label cell, starting
                 // with the first cell in the first (and so far
@@ -231,7 +220,9 @@ namespace DAO
                     // a new row and go to left-hand cell.
                     if (col_idx == this.NumberOfColumns)
                     {
-                        current_row = this.addRow();
+                        // Keep current row reference set
+                        // to table's last row:
+                        current_row = this.AddRow();
                         col_idx = 0;
                     }
                     // Odd number? That means this cell is a padding
@@ -248,29 +239,10 @@ namespace DAO
                     this.TypeOneRecord(current_row.Cells[col_idx], item);
                     col_idx++;
                 }
-                // When all records are written into the table's cells,
-                // set the table's column widths, insert the table into
-                // the NovaCode document, save the document, and report
-                // our progress.
-                //doc.PageLayout.Orientation = this.orientation;
-                //switch(this.orientation)
-                //{
-                //    case Orientation.Portrait:
-                //        doc.PageWidth = this.PageWidth;
-                //        doc.PageHeight = this.PageHeight;
-                //        break;
-                //    case Orientation.Landscape:
-                //        doc.PageWidth = this.PageHeight;
-                //        doc.PageHeight = this.PageWidth;
-                //        break;
-                //    default:
-                //        throw new Exception("Invalid page orientation!");
-                //        break;
-                //}
-                //doc.PageLayout.Orientation = this.orientation;
-                this.setMargins(doc);
-                this.setColumnWidths();
-                //doc.PageLayout.Orientation = this.orientation;
+                // Set table's properties BEFORE
+                // inserting the table into the document:
+                this.SetColumnWidths();
+                this.SetAllRowProperties();
                 doc.InsertTable(this.table);
                 doc.Save();
                 this.Worker.ReportProgress(0,
@@ -283,7 +255,7 @@ namespace DAO
                 StringBuilder sb = new StringBuilder();
                 sb.AppendFormat(
                     GlobRes.FileExceptionErrorMsg,
-                    fn, e.Message
+                    fn, e.Message, e.StackTrace
                 );
                 this.Worker.ReportProgress(0, sb.ToString());
                 retInt = 0;
@@ -365,13 +337,13 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-                var query = context.GliList.Where(
-                    s => (s.year == this.Year) &&
-                    (s.donor_code == this.Dnr.code) &&
-                    (s.donor_name == this.Dnr.name) &&
-                    (s.request_type == this.RequestType)
-                    );
-                this.ItemList = query.ToList<object>();
+            var query = context.GliList.Where(
+                s => (s.year == this.Year) &&
+                (s.donor_code == this.Dnr.code) &&
+                (s.donor_name == this.Dnr.name) &&
+                (s.request_type == this.RequestType)
+                );
+            this.ItemList = query.ToList<object>();
         }
 
         /// <summary>
@@ -383,7 +355,7 @@ namespace DAO
         {
             c.MarginTop = (int)(0.1 * (int)DocPartUnits.Margins);
             GiftLabelInfo gli = (GiftLabelInfo)rec;
-            // NovaCode should initialize Cells with one
+            // Xceed.Words.NET should initialize Cells with one
             // paragraph. But, in the unlikeley case
             // that that paragraph isn't there, add one.
             Paragraph p = c.Paragraphs.First();
@@ -435,11 +407,6 @@ namespace DAO
         /// Also specify a BackgroundWorker, DBWrapper, Donor,
         /// request type, and year.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="ctx"></param>
-        /// <param name="d"></param>
-        /// <param name="request_type"></param>
-        /// <param name="year"></param>
         public BagLabelWriter(BackgroundWorker wk, DBWrapper ctx, Donor d, string request_type, int year)
             : base(
                 wk,
@@ -465,13 +432,13 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-                var query = context.BliList.Where(
-                    s => (s.year == this.Year) &&
-                    (s.donor_code == this.Dnr.code) &&
-                    (s.donor_name == this.Dnr.name) &&
-                    (s.request_type == this.RequestType)
-                    );
-                this.ItemList = query.ToList<object>();
+            var query = context.BliList.Where(
+                s => (s.year == this.Year) &&
+                (s.donor_code == this.Dnr.code) &&
+                (s.donor_name == this.Dnr.name) &&
+                (s.request_type == this.RequestType)
+                );
+            this.ItemList = query.ToList<object>();
         }
 
         /// <summary>
@@ -494,7 +461,7 @@ namespace DAO
             c.MarginTop = 0;
             BagLabelInfo bli = (BagLabelInfo)rec;
             Paragraph p = c.Paragraphs.First();
-            // NovaCode should initialize Cells with one
+            // Xceed.Words.NET should initialize Cells with one
             // paragraph. But, in the unlikeley case
             // that that paragraph isn't there, add one.
             if (p == null)
@@ -552,10 +519,10 @@ namespace DAO
                         s => (s.year == this.Year) &&
                         (s.service_type == this.ServiceType)
                         );
-                this.ItemList = query.ToList()
-                    .GroupBy(s => s.head_of_household)
-                    .Select(g => g.First()).OrderBy(s => s.head_of_household)
-                    .ToList<object>();
+            this.ItemList = query.ToList()
+                .GroupBy(s => s.head_of_household)
+                .Select(g => g.First()).OrderBy(s => s.head_of_household)
+                .ToList<object>();
         }
 
         /// <summary>
@@ -568,7 +535,7 @@ namespace DAO
             c.MarginTop = (int)(0.1 * (int)DocPartUnits.Margins);
             ServicesHouseholdEnrollment e = (ServicesHouseholdEnrollment)rec;
             Paragraph p = c.Paragraphs.First();
-            // NovaCode should initialize Cells with one
+            // Xceed.Words.NET should initialize Cells with one
             // paragraph. But, in the unlikeley case
             // that that paragraph isn't there, add one.
             if (p == null)
@@ -576,7 +543,7 @@ namespace DAO
             string zip = Utils.TextUtils.CanonicalPostalCode(e.postal_code);
             p.Append(e.head_of_household).Bold()
                 .AppendLine(e.address)
-                .AppendLine(e.city + ", " + e.state_or_province + "  " +  zip);
+                .AppendLine(e.city + ", " + e.state_or_province + "  " + zip);
         }
 
         /// <summary>
@@ -603,46 +570,25 @@ namespace DAO
     /// <summary>
     /// Dimensions:
     /// ======================
-    /// Cell Height: 3.33"
-    /// Cell Width: 4.0"
+    /// Cell Height: 4.0"
+    /// Cell Width: 3.33"
     /// Padding Width: 0.03"
-    /// Top and Bottom Margins: 0.5"
-    /// Left and Right Margins: 0.235"
-    /// 
+    /// Top and Bottom Margins: 0.125"
+    /// Left and Right Margins: 0.5"
+    /// Landscape orientation
     /// </summary>
     public class ParticipantSummaryLabelWriter : LabelWriter
     {
-        //public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
-        //    : base(
-        //        wk,
-        //        ctx,
-        //        year,
-        //        label_height: (int)(3.33 * (int)DocPartUnits.CellHeight),
-        //        label_width: (int)(4.0 * (int)DocPartUnits.CellWidth),
-        //        horizontal_padding: (int)(0.03 * (int)DocPartUnits.CellWidth),
-        //        left_margin: (int)(0.235 * (int)DocPartUnits.Margins),
-        //        right_margin: (int)(0.235 * (int)DocPartUnits.Margins),
-        //        num_cols: 3
-        //      )
-        //{
-        //    this.SetItemList();
-        //}
-
 
         /// <summary>
         /// Make a LabelWriter with Avery 5614 dimensions
         /// and a specified BackgroundWorker, DBWrapper, and year.
         /// </summary>
-        /// <param name="wk"></param>
-        /// <param name="ctx"></param>
-        /// <param name="year"></param>
         public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
           : base(
               wk,
               ctx,
               year,
-              //label_height: (int)(3.50 * (int)DocPartUnits.CellHeight),
-              //label_width: (int)(4.188 * (int)DocPartUnits.CellWidth),
               label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
               label_height: (int)(4.09375 * (int)DocPartUnits.CellHeight),
               horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
@@ -651,7 +597,6 @@ namespace DAO
               bottom_margin: (int)(0.125 * (int)DocPartUnits.Margins),
               left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
               right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-              //num_cols: 3,
               num_cols: 5,
               orientation: Orientation.Landscape,
               page_width: 1056,
@@ -689,7 +634,7 @@ namespace DAO
             List<object> fkl = new List<object>();
             ServicesHouseholdEnrollment_DAO[] participant_array =
                 this.context.HoEnrList.Select(h => h.dao).Where(h => h.year == this.Year).ToArray();
-            foreach(ServicesHouseholdEnrollment_DAO participant in participant_array)
+            foreach (ServicesHouseholdEnrollment_DAO participant in participant_array)
             {
                 var gli_array = this.context.GliList.Where(g => (g.year == this.Year && g.family_id == participant.family_id)).ToArray();
                 if (gli_array.Count() > 0)
@@ -722,16 +667,12 @@ namespace DAO
             p.SpacingAfter(0);
             p.Append(fk.dao.head_of_household).FontSize(24).Bold()
                 .AppendLine(fk.dao.phone).FontSize(18).Bold()
-                //.AppendLine(fk.dao.address).FontSize(18)
                 .AppendLine(fk.dao.address).FontSize(16)
                 .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip).FontSize(16)
-                //.AppendLine("") // Leave blank line after phone nr.
                 .AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(16)
                 .AppendLine("Number of Bags: ___").FontSize(16)
                 .AppendLine("") // Another blank line before children's names
                 .AppendLine("Children: " + fk.kids).FontSize(16);
-                //.AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(18)
-                //.AppendLine("Number of Bags: ___").FontSize(18);
         }
     }
 }
