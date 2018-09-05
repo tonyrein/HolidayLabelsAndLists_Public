@@ -33,6 +33,8 @@ namespace DAO
         CellWidth = UnitRatios.Twips,
         CellHeight = UnitRatios.Points,
         Margins = UnitRatios.Points,
+        PageWidth = UnitRatios.Points,
+        PageHeight = UnitRatios.Points,
     }
 
 
@@ -56,7 +58,9 @@ namespace DAO
         protected int TopMargin { get; set; }
         protected int BottomMargin { get; set; }
         protected int NumberOfColumns { get; set; }
-        protected Orientation orientation { get; set; }
+        protected int LabelRowsPerPage { get; }
+        protected int TotalRowsPerPage { get;  }
+        protected Orientation Orientation { get; set; }
         protected Table table;
         protected List<object> ItemList { get; set; }
         protected const string FILE_EXTENSION = ".docx";
@@ -111,8 +115,9 @@ namespace DAO
             int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
             int bottom_margin = 0,
             int num_cols = 5,
-            int page_width = 816,
-            int page_height = 1056,
+            int label_rows_per_page = 2,
+            int page_width = (int)(8.5 * (int)DocPartUnits.PageWidth),
+            int page_height = (int)(11.0 * (int)DocPartUnits.PageHeight),
             Orientation orientation = Orientation.Portrait
             )
         {
@@ -126,12 +131,34 @@ namespace DAO
             this.PageHeight = page_height;
             this.RightMargin = right_margin; this.TopMargin = top_margin;
             this.BottomMargin = bottom_margin; this.NumberOfColumns = num_cols;
-            this.orientation = orientation;
+            this.Orientation = orientation;
+            if (this.VerticalPadding > 0)
+                this.TotalRowsPerPage = (2 * this.LabelRowsPerPage) - 1;
+            else
+                this.TotalRowsPerPage = this.LabelRowsPerPage;
+        }
+
+        private void AddPaddingRow()
+        {
+            Row r = this.table.InsertRow();
+            r.Height = this.VerticalPadding;
+            SetPropertiesOneRow(r);
         }
 
         private Row AddRow()
         {
-            return this.table.InsertRow();
+            if (this.VerticalPadding > 0)
+            {
+                // If the last row added was NOT the last
+                // row of a page, put in a padding row:
+                int row_count = this.table.RowCount;
+                if ((row_count % this.TotalRowsPerPage) != 0)
+                    this.AddPaddingRow();
+            }
+            Row r = this.table.InsertRow();
+            SetHeightOneRow(r);
+            SetPropertiesOneRow(r);
+            return r;
         }
 
         /// <summary>
@@ -151,7 +178,7 @@ namespace DAO
         
         private void SetHeightOneRow(Row r)
         {
-            r.Height = this.RowHeight;
+            r.Height = this.LabelHeight;
         }
 
         private void SetPropertiesOneRow(Row r)
@@ -200,10 +227,10 @@ namespace DAO
             try
             {
                 doc = this.OpenDocument();
-                doc.PageLayout.Orientation = this.orientation;
+                doc.PageLayout.Orientation = this.Orientation;
                 doc.PageWidth = this.PageWidth;
                 doc.PageHeight = this.PageHeight;
-                doc.PageLayout.Orientation = this.orientation;
+                doc.PageLayout.Orientation = this.Orientation;
                 this.SetMargins(doc);
                 // Add a table with one row and correct # of columns,
                 // but do not insert it into the document yet.
@@ -211,6 +238,8 @@ namespace DAO
                 this.table.Alignment = Alignment.center;
                 // Get a reference to the table's first row:
                 Row current_row = this.table.Rows[0];
+                SetHeightOneRow(current_row);
+                SetPropertiesOneRow(current_row);
                 // Loop through records. "Type" each record's
                 // contents into the next label cell, starting
                 // with the first cell in the first (and so far
@@ -243,7 +272,7 @@ namespace DAO
                 // Set table's properties BEFORE
                 // inserting the table into the document:
                 this.SetColumnWidths();
-                this.SetAllRowProperties();
+                //this.SetAllRowProperties();
                 doc.InsertTable(this.table);
                 //this.SetMargins(doc);
                 doc.Save();
@@ -318,7 +347,7 @@ namespace DAO
         /// request type, and year
         /// </summary>
         public GiftLabelWriter(BackgroundWorker wk, DBWrapper ctx, Donor d, string request_type, int year)
-            : base(wk, ctx, year)
+            : base(wk, ctx, year, label_rows_per_page: 9)
         {
             this.Dnr = d;
             this.RequestType = request_type;
@@ -409,12 +438,13 @@ namespace DAO
                 wk,
                 ctx,
                 year,
-                label_height: (int)(5.276 * (int)DocPartUnits.CellHeight), // Avery 5168
+                label_height: (int)(5.0 * (int)DocPartUnits.CellHeight), // Avery 5168
                 label_width: (int)(3.5 * (int)DocPartUnits.CellWidth),
                 horizontal_padding: (int)(0.5 * (int)DocPartUnits.CellWidth),
                 left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
                 right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-                num_cols: 3
+                num_cols: 3,
+                label_rows_per_page: 2
               )
         {
             this.Dnr = d;
@@ -498,7 +528,7 @@ namespace DAO
         private string ServiceType { get; set; }
         public PostcardLabelWriter(BackgroundWorker wk, DBWrapper ctx,
             string service_type, int year)
-            : base(wk, ctx, year) // use defaults for all dimensions
+            : base(wk, ctx, year, label_rows_per_page: 9) // use defaults for all dimensions
         {
             this.ServiceType = service_type;
             this.SetItemList();
@@ -583,31 +613,22 @@ namespace DAO
         /// </summary>
         public ParticipantSummaryLabelWriter(BackgroundWorker wk, DBWrapper ctx, int year)
           : base(
-              wk,
-              ctx,
-              year,
-              label_width: (int)(4.09375 * (int)DocPartUnits.CellWidth),
-              label_height: (int)(3.33333 * (int)DocPartUnits.CellHeight),
-              //label_width: (int)(4.09375 * (int)DocPartUnits.CellWidth),
-              //label_height: (int)(3.33333 * (int)DocPartUnits.CellHeight),
-              //label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
-              //label_height: (int)(4.09375 * (int)DocPartUnits.CellHeight),
-              horizontal_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
-              vertical_padding: (int)(0 * (int)DocPartUnits.CellHeight),
-              //horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
-              //vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
-              top_margin: (int)(1.0 * (int)DocPartUnits.Margins),
-              bottom_margin: (int)(1.0 * (int)DocPartUnits.Margins),
-              left_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-              right_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-              //top_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-              //bottom_margin: (int)(0.125 * (int)DocPartUnits.Margins),
-              //left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-              //right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-              num_cols: 3,
-              orientation: Orientation.Portrait,
-              page_width: 816,
-              page_height:1056
+            wk,
+            ctx,
+            year,
+            label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
+            label_height: (int)(3.0 * (int)DocPartUnits.CellHeight),
+            horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
+            vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
+            top_margin: (int)(1.0 * (int)DocPartUnits.Margins),
+            bottom_margin: (int)(1.0 * (int)DocPartUnits.Margins),
+            left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
+            right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
+            num_cols: 5,
+            label_rows_per_page: 2,
+            orientation: Orientation.Landscape,
+            page_width: (int)(11.0 * (int)DocPartUnits.PageWidth),
+            page_height: (int)(8.5 * (int)DocPartUnits.PageHeight)
             )
         {
             this.SetItemList();
