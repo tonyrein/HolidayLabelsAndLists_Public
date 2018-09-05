@@ -57,7 +57,8 @@ namespace DAO
         protected int RightMargin { get; set; }
         protected int TopMargin { get; set; }
         protected int BottomMargin { get; set; }
-        protected int NumberOfColumns { get; set; }
+        protected int NumberOfLabelColumns { get; set; }
+        protected int TotalNumberOfColumns { get; }
         protected int LabelRowsPerPage { get; }
         protected int TotalRowsPerPage { get;  }
         protected Orientation Orientation { get; set; }
@@ -114,7 +115,7 @@ namespace DAO
             int right_margin = (int)(0.19 * (int)DocPartUnits.Margins),
             int top_margin = (int)(0.5 * (int)DocPartUnits.Margins),
             int bottom_margin = 0,
-            int num_cols = 5,
+            int num_label_cols = 5,
             int label_rows_per_page = 2,
             int page_width = (int)(8.5 * (int)DocPartUnits.PageWidth),
             int page_height = (int)(11.0 * (int)DocPartUnits.PageHeight),
@@ -127,15 +128,20 @@ namespace DAO
             this.LabelHeight = label_height; this.LabelWidth = label_width;
             this.HorizontalPadding = horizontal_padding;
             this.VerticalPadding = vertical_padding; this.LeftMargin = left_margin;
+            this.LabelRowsPerPage = label_rows_per_page;
             this.PageWidth = page_width;
             this.PageHeight = page_height;
             this.RightMargin = right_margin; this.TopMargin = top_margin;
-            this.BottomMargin = bottom_margin; this.NumberOfColumns = num_cols;
+            this.BottomMargin = bottom_margin; this.NumberOfLabelColumns = num_label_cols;
             this.Orientation = orientation;
             if (this.VerticalPadding > 0)
                 this.TotalRowsPerPage = (2 * this.LabelRowsPerPage) - 1;
             else
                 this.TotalRowsPerPage = this.LabelRowsPerPage;
+            if (this.HorizontalPadding > 0)
+                this.TotalNumberOfColumns = (2 * this.NumberOfLabelColumns) - 1;
+            else
+                this.TotalNumberOfColumns = this.NumberOfLabelColumns;
         }
 
         private void AddPaddingRow()
@@ -162,18 +168,30 @@ namespace DAO
         }
 
         /// <summary>
-        /// Assume odd-numbered columns are label cells and
-        /// even-numbered ones are padding cells.
+        /// Odd-numbered columns are "padding" columns,
+        /// but only if horizontal padding is greater than zero.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        private bool IsPaddingCell(int idx)
+        {
+            return (this.HorizontalPadding > 0) && ((idx % 2) != 0);
+        }
+
+        /// <summary>
+        /// Loop through our table's columns
+        /// and set width of each appropriate
+        /// to its type.
         /// </summary>
         private void SetColumnWidths()
         {
-            for (int i = 0; i < this.NumberOfColumns; i++)
-            {
-                if ((i % 2) == 0)
-                    this.table.SetColumnWidth(i, this.LabelWidth);
-                else
-                    this.table.SetColumnWidth(i, this.HorizontalPadding);
-            }
+                for (int i = 0; i < this.TotalNumberOfColumns; i++)
+                {
+                    if (this.IsPaddingCell(i))
+                        this.table.SetColumnWidth(i, this.HorizontalPadding);
+                    else
+                        this.table.SetColumnWidth(i, this.LabelWidth);
+                }
         }
         
         private void SetHeightOneRow(Row r)
@@ -204,6 +222,7 @@ namespace DAO
             doc.MarginTop = this.TopMargin;
         }
 
+
         /// <summary>
         /// Insert label cells into the output document.
         /// 
@@ -222,7 +241,7 @@ namespace DAO
                 string.Format(GlobRes.CountWritingMsg,
                     this.ItemList.Count, "labels", fn)
                     );
-            int col_idx = 0;
+            //int col_idx = 0;
             DocX doc = null;
             try
             {
@@ -234,32 +253,33 @@ namespace DAO
                 this.SetMargins(doc);
                 // Add a table with one row and correct # of columns,
                 // but do not insert it into the document yet.
-                this.table = doc.AddTable(1, this.NumberOfColumns);
+                this.table = doc.AddTable(1, this.TotalNumberOfColumns);
                 this.table.Alignment = Alignment.center;
                 // Get a reference to the table's first row:
                 Row current_row = this.table.Rows[0];
+                // Set its properties:
                 SetHeightOneRow(current_row);
                 SetPropertiesOneRow(current_row);
                 // Loop through records. "Type" each record's
                 // contents into the next label cell, starting
                 // with the first cell in the first (and so far
                 // the only) row. Add new rows as needed.
+                int col_idx = 0;
                 foreach (object item in this.ItemList)
                 {
                     // End of this row? If so, add
                     // a new row and go to left-hand cell.
-                    if (col_idx == this.NumberOfColumns)
+                    if (col_idx == this.TotalNumberOfColumns)
                     {
-                        // Keep current row reference set
-                        // to table's last row:
+                        // Set current row reference set
+                        // to table's new last row:
                         current_row = this.AddRow();
                         col_idx = 0;
                     }
-                    // Odd number? That means this cell is a padding
-                    // cell -- don't write this record into it -- instead,
+                    // Padding cell? Don't write this record into it -- instead,
                     // do anything appropriate for padding cells (might
                     // well be nothing) and skip to next cell.
-                    if ((col_idx % 2) != 0)
+                    if (this.IsPaddingCell(col_idx))
                     {
                         this.DoSpace(current_row.Cells[col_idx]);
                         col_idx++;
@@ -347,7 +367,12 @@ namespace DAO
         /// request type, and year
         /// </summary>
         public GiftLabelWriter(BackgroundWorker wk, DBWrapper ctx, Donor d, string request_type, int year)
-            : base(wk, ctx, year, label_rows_per_page: 9)
+            : base(wk,
+                  ctx,
+                  year,
+                  num_label_cols: 3,
+                  label_rows_per_page: 10
+                  )
         {
             this.Dnr = d;
             this.RequestType = request_type;
@@ -443,7 +468,7 @@ namespace DAO
                 horizontal_padding: (int)(0.5 * (int)DocPartUnits.CellWidth),
                 left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
                 right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-                num_cols: 3,
+                num_label_cols: 2,
                 label_rows_per_page: 2
               )
         {
@@ -528,7 +553,12 @@ namespace DAO
         private string ServiceType { get; set; }
         public PostcardLabelWriter(BackgroundWorker wk, DBWrapper ctx,
             string service_type, int year)
-            : base(wk, ctx, year, label_rows_per_page: 9) // use defaults for all dimensions
+            : base(wk,
+                  ctx,
+                  year,
+                  num_label_cols: 3,
+                  label_rows_per_page: 10
+                  ) // use defaults for all other dimensions
         {
             this.ServiceType = service_type;
             this.SetItemList();
@@ -617,14 +647,14 @@ namespace DAO
             ctx,
             year,
             label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
-            label_height: (int)(3.0 * (int)DocPartUnits.CellHeight),
+            label_height: (int)(3.56 * (int)DocPartUnits.CellHeight),
             horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
             vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
-            top_margin: (int)(1.0 * (int)DocPartUnits.Margins),
-            bottom_margin: (int)(1.0 * (int)DocPartUnits.Margins),
+            top_margin: (int)(0.5 * (int)DocPartUnits.Margins),
+            bottom_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-            num_cols: 5,
+            num_label_cols: 3,
             label_rows_per_page: 2,
             orientation: Orientation.Landscape,
             page_width: (int)(11.0 * (int)DocPartUnits.PageWidth),
