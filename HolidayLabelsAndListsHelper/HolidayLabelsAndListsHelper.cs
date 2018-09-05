@@ -235,6 +235,14 @@ namespace HolidayLabelsAndListsHelper
             return retInt;
         }
 
+        private static int MakeThanksgivingParticipantLists(BackgroundWorker wk,
+            DBWrapper ctx, int year)
+        {
+            ListWriter w = new ThanksgivingDeliveryList(wk, ctx, year);
+            r
+            int retInt = 0;
+        }
+
         /// <summary>
         /// Create postcard label files for the given year,
         /// one for each service type.

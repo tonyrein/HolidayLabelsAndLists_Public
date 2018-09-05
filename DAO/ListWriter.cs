@@ -787,4 +787,134 @@ namespace DAO
             return FolderManager.PostcardsAndParticipantsFolder(Year, ServiceType);
         }
     }
+
+    public class ThanksgivingDeliveryList : ListWriter
+    {
+        public string ServiceType { get; set; }
+        public int Year { get; set; }
+
+        public ThanksgivingDeliveryList(BackgroundWorker wk, DBWrapper ctx,
+            int year)
+            : base(wk, ctx)
+        {
+            this.ServiceType = "Thanksgiving basket";
+            this.Year = year;
+            this.Init();
+        }
+
+        /// <summary>
+        /// Specify header text and widths for relevant columns.
+        /// -1 for width means that the
+        /// column't width will be set later based on the
+        /// length of the contents.
+        /// </summary>
+        protected override void PopulateColumnInfo()
+        {
+            int num_columns = 7;
+            this.ColumnInfoArray = new ColumnInfo[num_columns];
+            this.ColumnInfoArray[0] = new ColumnInfo("Head of Household", 30,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true);
+            this.ColumnInfoArray[1] = new ColumnInfo("Primary Phone", 15,
+                ExcelHorizontalAlignment.Center,
+                ExcelVerticalAlignment.Top, true);
+            this.ColumnInfoArray[2] = new ColumnInfo("Address", 25,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true);
+            this.ColumnInfoArray[3] = new ColumnInfo("City", 12,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true);
+            this.ColumnInfoArray[4] = new ColumnInfo("ST", 5,
+                ExcelHorizontalAlignment.Center,
+                ExcelVerticalAlignment.Top, false);
+            this.ColumnInfoArray[5] = new ColumnInfo("Zip", 7,
+                ExcelHorizontalAlignment.Center,
+                ExcelVerticalAlignment.Top, false);
+            this.ColumnInfoArray[6] = new ColumnInfo("Directions/Notes", 25,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true);
+        }
+
+        protected override string[] FetchColumnNames()
+        {
+            return this.ColumnInfoArray.Select(ci => ci.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Fetch ServicesHouseholdEnrollment objects with
+        /// the appropriate year and service type. Sort the
+        /// list by head of household. Then add each one's
+        /// data to our return list of string arrays.
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        // CHANGE THIS
+        protected override List<string[]> FetchData()
+        {
+            List<string[]> retList = new List<string[]>();
+            var query = context.HoEnrList.Where(
+                s => (s.year == this.Year) &&
+                (s.service_type == this.ServiceType)
+                )
+               .OrderBy(s => s.head_of_household);
+            foreach (ServicesHouseholdEnrollment e in query)
+            {
+                retList.Add(
+                                new string[] { e.head_of_household, e.phone, e.address,
+                                        e.city, e.state_or_province,
+                                        Utils.TextUtils.CanonicalPostalCode(e.postal_code),
+                                ""}
+                            );
+            }
+            return retList;
+        }
+
+        /// <summary>
+        /// ParticipantListWriter header is
+        /// [ <service type>, <year> ]
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        // CHANGE THIS
+        protected override string[] FetchHeaders()
+        {
+            return new string[]
+            {
+                string.Format(GlobRes.ParticipantListHeader,
+                this.ServiceType, this.Year)
+            };
+        }
+
+        /// <summary>
+        /// ParticipantListWriter worksheet names
+        /// are the service type, canonicalized.
+        /// </summary>
+        protected override string WorksheetName
+        {
+            get { return Utils.TextUtils.CleanString(this.ServiceType); }
+        }
+
+        /// <summary>
+        /// Output filespec is constructed from
+        /// year and service type.
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        // CHANGE THIS
+        protected override string GetOutputFileSpec()
+        {
+            string name = string.Format(GlobRes.ParticipantListBasefilename,
+                this.Year,
+                Utils.TextUtils.CleanString(this.ServiceType));
+            return Path.Combine(this.TargetFolder(), name);
+        }
+
+        // CHANGE THIS
+        protected override string TargetFolder()
+        {
+            return FolderManager.PostcardsAndParticipantsFolder(Year, ServiceType);
+        }
+    }
+
+
 }
