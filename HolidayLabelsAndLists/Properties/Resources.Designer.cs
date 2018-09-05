@@ -19,7 +19,7 @@ namespace HolidayLabelsAndLists.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -142,24 +142,21 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;
-        ///&lt;html&gt;
-        ///  &lt;head&gt;
-        ///
-        ///    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-        ///    &lt;title&gt;HLL_Doc&lt;/title&gt;
-        ///  &lt;/head&gt;
-        ///  &lt;body&gt;
-        ///    &lt;html&gt;&lt;br&gt;
-        ///    &lt;head&gt;&lt;br&gt;
-        ///    &lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
-        ///    &lt;/head&gt;
-        ///    &lt;body style=&quot;cursor: auto;&quot;&gt;
-        ///    &lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User
-        ///    Documentation&lt;/h1&gt;
-        ///    &lt;hr/&gt;
-        ///    &lt;h2&gt;Introduction&lt;/h2&gt;
-        ///    &lt;p&gt;The Holiday Labels and Lists program(&amp;quot;HL [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        ///&lt;title&gt;HLL_Doc&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body style=&quot;cursor: auto;&quot;&gt;
+        ///&lt;title&gt;Holiday Labels and Lists&lt;/title&gt;
+        ///&lt;h1 style=&quot;text-align: center;&quot;&gt;Holiday Labels and Lists User
+        ///Documentation&lt;/h1&gt;
+        ///&lt;hr&gt;
+        ///&lt;h2&gt;Introduction&lt;/h2&gt;
+        ///&lt;p&gt;The Holiday Labels and Lists program(&quot;HLL&quot;) is meant to be used
+        ///in connection with Valley&apos;s holiday programs. It streamlines the
+        ///process of creating bag and gift labels, master and donor lists,
+        ///participant [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Doc_HTML {
             get {
@@ -173,15 +170,6 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string DocTypeLabelText {
             get {
                 return ResourceManager.GetString("DocTypeLabelText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ALL#BAGLABEL#GIFTLABEL#DONORANDMASTERLIST#PARTICIPANTLIST#PARTICIPANTSUMMARYLABEL#POSTCARDLABEL.
-        /// </summary>
-        internal static string DocumentTypesKeys {
-            get {
-                return ResourceManager.GetString("DocumentTypesKeys", resourceCulture);
             }
         }
         
@@ -200,28 +188,6 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string ExitBtnCaption {
             get {
                 return ResourceManager.GetString("ExitBtnCaption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&gt;
-        ///&lt;html&gt;
-        ///  &lt;head&gt;
-        ///
-        ///    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-        ///    &lt;title&gt;Output File Management&lt;/title&gt;
-        ///  &lt;/head&gt;
-        ///  &lt;body&gt;
-        ///    &lt;h1&gt;HLL Output File Management&lt;/h1&gt;
-        ///    The File Management window offers you several functions designed to
-        ///    help you reduce clutter, save disk space, and preserve HLL&apos;s output
-        ///    files (the label and list documents). Here are brief summaries of
-        ///    the functions:&lt;br&gt;
-        ///    &lt;br&gt; [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string FileManagementHTML {
-            get {
-                return ResourceManager.GetString("FileManagementHTML", resourceCulture);
             }
         }
         

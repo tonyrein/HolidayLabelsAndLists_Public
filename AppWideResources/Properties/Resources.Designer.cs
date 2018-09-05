@@ -206,7 +206,7 @@ namespace AppWideResources.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to An error occurred trying to work with file {0}.
-        ///The error message was {1}.
+        ///The error message was {1}. Here is the stack trace: {2}.
         /// </summary>
         public static string FileExceptionErrorMsg {
             get {
@@ -332,7 +332,7 @@ namespace AppWideResources.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no label or list files available for viewing.\nPlease click &quot;Create Labels and Lists&quot;\nand select one or more reports..
+        ///   Looks up a localized string similar to There are no label or list files available for viewing. Please click &quot;Create Labels and Lists&quot; to generate them..
         /// </summary>
         public static string NoOutputFilesMsg {
             get {
