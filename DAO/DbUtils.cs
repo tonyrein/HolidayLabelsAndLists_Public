@@ -57,28 +57,28 @@ namespace DAO
                 retInt = -1;
             return retInt;
         }
-            /// <summary>
-            /// Derive the next available backup file number.
-            /// 
-            /// Backup files are named <db base filename>.bak0000.ext, <db base filename>.back0001.ext, and
-            /// so on. We retain up to (Properties.Settings.Default.MaxDBBackups).
-            /// 
-            /// Return a number that's one more than the max of the numerical portions of our
-            /// backup filenames. If we get to 999, start over at 0. (This assumes that
-            /// the max allowable db backups is < 999).
-            /// </summary>
-            /// <param name="Q"></param>
-            /// <returns></returns>
-            private static int NextFileNum(Queue<FileInfo> Q)
-            {
-            int retInt = 0;
-            if (Q.Count() > 0)
-            { 
-                retInt = Q.Max(fi => NumberFromBackupFilename(fi.FullName)) + 1;
-            }
-            if (retInt > 999)
-                retInt = 0;
-            return retInt;
+        /// <summary>
+        /// Derive the next available backup file number.
+        /// 
+        /// Backup files are named <db base filename>.bak0000.ext, <db base filename>.back0001.ext, and
+        /// so on. We retain up to (Properties.Settings.Default.MaxDBBackups).
+        /// 
+        /// Return a number that's one more than the max of the numerical portions of our
+        /// backup filenames. If we get to 999, start over at 0. (This assumes that
+        /// the max allowable db backups is < 999).
+        /// </summary>
+        /// <param name="Q"></param>
+        /// <returns></returns>
+        private static int NextFileNum(Queue<FileInfo> Q)
+        {
+        int retInt = 0;
+        if (Q.Count() > 0)
+        { 
+            retInt = Q.Max(fi => NumberFromBackupFilename(fi.FullName)) + 1;
+        }
+        if (retInt > 999)
+            retInt = 0;
+        return retInt;
         }
 
         /// <summary>
