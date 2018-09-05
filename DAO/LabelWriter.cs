@@ -41,7 +41,7 @@ namespace DAO
     /// <summary>
     /// Handles the creation of documents suitable for printing on label stock.
     /// 
-    /// Uses a NovaCode Table object as a target for the output.
+    /// Uses an XCeed.Words.NET Table object as a target for the output.
     /// This is the abstract base class -- the subclasses are specific to particular
     /// label types.
     /// </summary>
@@ -69,7 +69,7 @@ namespace DAO
         protected abstract string TargetFolder { get; }
         private BackgroundWorker Worker;
         protected DBWrapper context;
-        protected int RowHeight { get { return this.LabelHeight + this.VerticalPadding; } }
+
         /// <summary>
         /// Create target directory if it does not already exist.
         /// 
@@ -96,8 +96,9 @@ namespace DAO
         /// The main thing this constructor does is initialize the dimensions.
         /// For some reason, different units are used for different parameters:
         ///    Cell width: twips
-        ///    Cell height: 96 dots per inch
+        ///    Cell height: points
         ///    Margins: points
+        ///    Page width and height: points
         ///    
         /// The values in the abstract base class constructor are defaults
         /// used by most of the label types in this application.
@@ -107,7 +108,7 @@ namespace DAO
             BackgroundWorker wk,
             DBWrapper ctx,
             int year,
-            int label_height = (int)(1.066 * (int)DocPartUnits.CellHeight), // Avery 5160
+            int label_height = (int)(1.0 * (int)DocPartUnits.CellHeight), // Avery 5160
             int label_width = (int)(2.63 * (int)DocPartUnits.CellWidth),
             int horizontal_padding = (int)(0.12 * (int)DocPartUnits.CellWidth),
             int vertical_padding = (int)(0.00 * (int)DocPartUnits.CellHeight),
@@ -147,23 +148,42 @@ namespace DAO
         private void AddPaddingRow()
         {
             Row r = this.table.InsertRow();
-            r.Height = this.VerticalPadding;
-            SetPropertiesOneRow(r);
+            SetPaddingRowHeight(r);
+            SetRowProperties(r);
         }
 
-        private Row AddRow()
+        /// <summary>
+        /// Empty ("padding") rows are inserted after all
+        /// label rows, provided this LabelWriter's vertical
+        /// padding is greater than zero.
+        /// 
+        /// However, do not insert a padding row if the last
+        /// row already in the table is the last row of a page.
+        /// </summary>
+        /// <returns></returns>
+        private bool NeedPaddingRow()
         {
-            if (this.VerticalPadding > 0)
-            {
-                // If the last row added was NOT the last
-                // row of a page, put in a padding row:
-                int row_count = this.table.RowCount;
-                if ((row_count % this.TotalRowsPerPage) != 0)
-                    this.AddPaddingRow();
-            }
+            return (
+                (this.VerticalPadding > 0) &&
+                ( (this.table.RowCount % this.TotalRowsPerPage) != 0 )
+                );
+        }
+
+
+        /// <summary>
+        /// Insert the next label row.
+        /// If required, insert a padding row
+        /// after the label row.
+        /// Return the label row.
+        /// </summary>
+        /// <returns></returns>
+        private Row AddLabelRow()
+        {
             Row r = this.table.InsertRow();
-            SetHeightOneRow(r);
-            SetPropertiesOneRow(r);
+            SetLabelRowHeight(r);
+            SetRowProperties(r);
+            if (this.NeedPaddingRow())
+                this.AddPaddingRow();
             return r;
         }
 
@@ -180,8 +200,8 @@ namespace DAO
 
         /// <summary>
         /// Loop through our table's columns
-        /// and set width of each appropriate
-        /// to its type.
+        /// and set width of each as appropriate
+        /// for its type.
         /// </summary>
         private void SetColumnWidths()
         {
@@ -194,24 +214,19 @@ namespace DAO
                 }
         }
         
-        private void SetHeightOneRow(Row r)
+        private void SetLabelRowHeight(Row r)
         {
             r.Height = this.LabelHeight;
         }
 
-        private void SetPropertiesOneRow(Row r)
+        private void SetPaddingRowHeight(Row r)
         {
-            r.BreakAcrossPages = false;
+            r.Height = this.VerticalPadding;
         }
 
-        private void SetAllRowProperties()
+        private void SetRowProperties(Row r)
         {
-            foreach (Row r in this.table.Rows)
-            {
-                SetPropertiesOneRow(r);
-                SetHeightOneRow(r);
-            }
-
+            r.BreakAcrossPages = false;
         }
 
         private void SetMargins(DocX doc)
@@ -222,12 +237,11 @@ namespace DAO
             doc.MarginTop = this.TopMargin;
         }
 
-
         /// <summary>
-        /// Insert label cells into the output document.
+        /// Create an output document and fill in
+        /// its content.
         /// 
         /// Return 1 if file written, else 0
-        /// 
         /// </summary>
         public int TypeAllRecords()
         {
@@ -241,7 +255,6 @@ namespace DAO
                 string.Format(GlobRes.CountWritingMsg,
                     this.ItemList.Count, "labels", fn)
                     );
-            //int col_idx = 0;
             DocX doc = null;
             try
             {
@@ -258,8 +271,10 @@ namespace DAO
                 // Get a reference to the table's first row:
                 Row current_row = this.table.Rows[0];
                 // Set its properties:
-                SetHeightOneRow(current_row);
-                SetPropertiesOneRow(current_row);
+                SetLabelRowHeight(current_row);
+                SetRowProperties(current_row);
+                if (this.NeedPaddingRow())
+                    this.AddPaddingRow();
                 // Loop through records. "Type" each record's
                 // contents into the next label cell, starting
                 // with the first cell in the first (and so far
@@ -272,8 +287,8 @@ namespace DAO
                     if (col_idx == this.TotalNumberOfColumns)
                     {
                         // Set current row reference set
-                        // to table's new last row:
-                        current_row = this.AddRow();
+                        // to table's new last label row:
+                        current_row = this.AddLabelRow();
                         col_idx = 0;
                     }
                     // Padding cell? Don't write this record into it -- instead,
@@ -289,12 +304,10 @@ namespace DAO
                     this.TypeOneRecord(current_row.Cells[col_idx], item);
                     col_idx++;
                 }
-                // Set table's properties BEFORE
+                // Set table's column widths BEFORE
                 // inserting the table into the document:
                 this.SetColumnWidths();
-                //this.SetAllRowProperties();
                 doc.InsertTable(this.table);
-                //this.SetMargins(doc);
                 doc.Save();
                 this.Worker.ReportProgress(0,
                     string.Format(GlobRes.FileCreationSuccessMsg, fn)
@@ -627,11 +640,14 @@ namespace DAO
     /// <summary>
     /// Dimensions:
     /// ======================
-    /// Cell Height: 4.0"
+    /// Cell Height: 3.56"
     /// Cell Width: 3.33"
-    /// Padding Width: 0.03"
-    /// Top and Bottom Margins: 0.125"
+    /// Horizontal Padding Width: None
+    /// Vertical Padding: 0.375"
+    /// Top and Bottom Margins: 0.5"
     /// Left and Right Margins: 0.5"
+    /// Page Width: 11.0"
+    /// Page Height: 8.5"
     /// Landscape orientation
     /// </summary>
     public class ParticipantSummaryLabelWriter : LabelWriter
