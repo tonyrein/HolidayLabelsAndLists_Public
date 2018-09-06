@@ -19,7 +19,7 @@ namespace AppWideResources.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -526,6 +526,33 @@ namespace AppWideResources.Properties {
         public static string StartingEachReportMsg {
             get {
                 return ResourceManager.GetString("StartingEachReportMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving_Delivery_List_{0}.xlsx.
+        /// </summary>
+        public static string ThanksgivingDeliveryBaseFilename {
+            get {
+                return ResourceManager.GetString("ThanksgivingDeliveryBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving Delivery List, {0}.
+        /// </summary>
+        public static string ThanksgivingDeliveryListHeader {
+            get {
+                return ResourceManager.GetString("ThanksgivingDeliveryListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving Delivery List.
+        /// </summary>
+        public static string ThanksgivingDeliveryListSheetName {
+            get {
+                return ResourceManager.GetString("ThanksgivingDeliveryListSheetName", resourceCulture);
             }
         }
         

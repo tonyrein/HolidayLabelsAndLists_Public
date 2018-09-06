@@ -812,25 +812,25 @@ namespace DAO
         {
             int num_columns = 7;
             this.ColumnInfoArray = new ColumnInfo[num_columns];
-            this.ColumnInfoArray[0] = new ColumnInfo("Head of Household", 30,
+            this.ColumnInfoArray[0] = new ColumnInfo("Head of Household", 28,
                 ExcelHorizontalAlignment.Left,
                 ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[1] = new ColumnInfo("Primary Phone", 15,
+            this.ColumnInfoArray[1] = new ColumnInfo("Primary Phone", 13,
                 ExcelHorizontalAlignment.Center,
                 ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[2] = new ColumnInfo("Address", 25,
+            this.ColumnInfoArray[2] = new ColumnInfo("Address", 22,
                 ExcelHorizontalAlignment.Left,
                 ExcelVerticalAlignment.Top, true);
             this.ColumnInfoArray[3] = new ColumnInfo("City", 12,
                 ExcelHorizontalAlignment.Left,
                 ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[4] = new ColumnInfo("ST", 5,
+            this.ColumnInfoArray[4] = new ColumnInfo("ST", 4,
                 ExcelHorizontalAlignment.Center,
                 ExcelVerticalAlignment.Top, false);
             this.ColumnInfoArray[5] = new ColumnInfo("Zip", 7,
                 ExcelHorizontalAlignment.Center,
                 ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[6] = new ColumnInfo("Directions/Notes", 25,
+            this.ColumnInfoArray[6] = new ColumnInfo("Directions/Notes", 35,
                 ExcelHorizontalAlignment.Left,
                 ExcelVerticalAlignment.Top, true);
         }
@@ -880,8 +880,7 @@ namespace DAO
         {
             return new string[]
             {
-                string.Format(GlobRes.ParticipantListHeader,
-                this.ServiceType, this.Year)
+                string.Format(GlobRes.ThanksgivingDeliveryListHeader, this.Year)
             };
         }
 
@@ -891,7 +890,7 @@ namespace DAO
         /// </summary>
         protected override string WorksheetName
         {
-            get { return Utils.TextUtils.CleanString(this.ServiceType); }
+            get { return GlobRes.ThanksgivingDeliveryListSheetName; }
         }
 
         /// <summary>
@@ -903,9 +902,8 @@ namespace DAO
         // CHANGE THIS
         protected override string GetOutputFileSpec()
         {
-            string name = string.Format(GlobRes.ParticipantListBasefilename,
-                this.Year,
-                Utils.TextUtils.CleanString(this.ServiceType));
+            string name = string.Format(GlobRes.ThanksgivingDeliveryBaseFilename,
+                this.Year);
             return Path.Combine(this.TargetFolder(), name);
         }
 
