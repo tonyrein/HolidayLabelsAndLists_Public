@@ -326,4 +326,15 @@ The error message was {1}. Here is the stack trace: {2}</value>
   <data name="NothingImportedTitle" xml:space="preserve">
     <value>No Imported VESTA Data</value>
   </data>
+  <data name="ThanksgivingDeliveryBaseFilename" xml:space="preserve">
+    <value>Thanksgiving_Delivery_List_{0}.xlsx</value>
+    <comment>0=year</comment>
+  </data>
+  <data name="ThanksgivingDeliveryListHeader" xml:space="preserve">
+    <value>Thanksgiving Delivery List, {0}</value>
+    <comment>0=year</comment>
+  </data>
+  <data name="ThanksgivingDeliveryListSheetName" xml:space="preserve">
+    <value>Thanksgiving Delivery List</value>
+  </data>
 </root>

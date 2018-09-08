@@ -46,7 +46,8 @@ namespace DAO
         private List<string[]> _datarows = null;
         private string[] _column_names = null;
         private string[] _header_rows = null;
-        protected ColumnInfo[] ColumnInfoArray = null;
+        //protected ColumnInfo[] ColumnInfoArray = null;
+        protected List<ColumnInfo> ColumnInfoList = null;
         protected List<string[]> DataRows
         {
             get
@@ -123,10 +124,8 @@ namespace DAO
             string outfile_spec = this.GetOutputFileSpec();
             if (File.Exists(outfile_spec))
             {
+                // Move original to backup ...
                 Utils.FileUtils.MoveToBackup(outfile_spec);
-                //// move original to backup
-                //string bu_name = Utils.FileUtils.NextAvailableBackupName(outfile_spec);
-                //File.Move(outfile_spec, bu_name);
             }
             FileInfo fi = new FileInfo(outfile_spec);
             return new ExcelPackage(fi);
@@ -354,11 +353,11 @@ namespace DAO
             }
 
             // Per-column formatting supplied?
-            if (this.ColumnInfoArray != null)
+            if (this.ColumnInfoList != null)
             {
-                for (int i = 0; i < this.ColumnInfoArray.Length; i++)
+                for (int i = 0; i < this.ColumnInfoList.Count; i++)
                 {
-                    ColumnInfo ci = this.ColumnInfoArray[i];
+                    ColumnInfo ci = this.ColumnInfoList[i];
                     // Define range on this column:
                     r = this.sh.Cells[this.TopDataRow, i + 1,
                         bottom_row, i + 1];
@@ -444,41 +443,42 @@ namespace DAO
         /// <summary>
         /// Specify header text and widths for relevant columns.
         /// -1 for width means that the
-        /// column't width will be set later based on the
+        /// column's width will be set later based on the
         /// length of the contents.
         /// </summary>
         protected override void PopulateColumnInfo()
         {
             int num_columns = 8;
-            this.ColumnInfoArray = new ColumnInfo[num_columns];
-            this.ColumnInfoArray[0] = new ColumnInfo("Fam ID", -1,
+            this.ColumnInfoList = new List<ColumnInfo>();
+            //this.ColumnInfoArray = new ColumnInfo[num_columns];
+            this.ColumnInfoList.Add(new ColumnInfo("Fam ID", -1,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[1] = new ColumnInfo("Child", -1,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Child", -1,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[2] = new ColumnInfo("Gen", 4,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Gen", 4,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[3] = new ColumnInfo("Age", 4,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Age", 4,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[4] = new ColumnInfo("Req. Type", -1,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Req. Type", -1,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[5] = new ColumnInfo("Request Detail", 35,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Request Detail", 35,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[6] = new ColumnInfo("Donor Name", 30,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add(new ColumnInfo("Donor Name", 30,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[7] = new ColumnInfo("Donor Phone", 17,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Donor Phone", 17,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, false);
+                ExcelVerticalAlignment.Top, false));
         }
         protected override string[] FetchColumnNames()
         {
-            return this.ColumnInfoArray.Select(ci => ci.Name).ToArray();
+            return this.ColumnInfoList.Select(ci => ci.Name).ToArray();
         }
 
         /// <summary>
@@ -574,7 +574,7 @@ namespace DAO
 
         protected override string[] FetchColumnNames()
         {
-            return this.ColumnInfoArray.Select(ci => ci.Name).ToArray();
+            return this.ColumnInfoList.Select(ci => ci.Name).ToArray();
         }
 
         /// <summary>
@@ -634,34 +634,33 @@ namespace DAO
         /// <summary>
         /// Specify header text and widths for relevant columns.
         /// -1 for width means that the
-        /// column't width will be set later based on the
+        /// column's width will be set later based on the
         /// length of the contents.
         /// </summary>
         protected override void PopulateColumnInfo()
         {
-            int num_columns = 7;
-            this.ColumnInfoArray = new ColumnInfo[num_columns];
-            this.ColumnInfoArray[0] = new ColumnInfo("Fam ID", -1,
+            this.ColumnInfoList = new List<ColumnInfo>();
+            this.ColumnInfoList.Add(new ColumnInfo("Fam ID", -1,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[1] = new ColumnInfo("Family Name", -1,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Family Name", -1,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[2] = new ColumnInfo("Child", -1,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Child", -1,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[3] = new ColumnInfo("Gen", 4,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Gen", 4,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[4] = new ColumnInfo("Age", 4,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Age", 4,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[5] = new ColumnInfo("Req. Type", -1,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Req. Type", -1,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[6] = new ColumnInfo("Request Detail", 35,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add(new ColumnInfo("Request Detail", 35,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, true);
+                ExcelVerticalAlignment.Top, true));
         }
 
         protected override string TargetFolder()
@@ -688,36 +687,35 @@ namespace DAO
         /// <summary>
         /// Specify header text and widths for relevant columns.
         /// -1 for width means that the
-        /// column't width will be set later based on the
+        /// column's width will be set later based on the
         /// length of the contents.
         /// </summary>
         protected override void PopulateColumnInfo()
         {
-            int num_columns = 6;
-            this.ColumnInfoArray = new ColumnInfo[num_columns];
-            this.ColumnInfoArray[0] = new ColumnInfo("Head of Household", 30,
+            this.ColumnInfoList = new List<ColumnInfo>();
+            this.ColumnInfoList.Add( new ColumnInfo("Head of Household", 30,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[1] = new ColumnInfo("Primary Phone", 15,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("Primary Phone", 15,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[2] = new ColumnInfo("Address", 25,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("Address", 25,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[3] = new ColumnInfo("City", 15,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("City", 15,
                 ExcelHorizontalAlignment.Left,
-                ExcelVerticalAlignment.Top, true);
-            this.ColumnInfoArray[4] = new ColumnInfo("ST", 5,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("ST", 5,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
-            this.ColumnInfoArray[5] = new ColumnInfo("Zip", 7,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add( new ColumnInfo("Zip", 7,
                 ExcelHorizontalAlignment.Center,
-                ExcelVerticalAlignment.Top, false);
+                ExcelVerticalAlignment.Top, false));
         }
 
         protected override string[] FetchColumnNames()
         {
-            return this.ColumnInfoArray.Select(ci => ci.Name).ToArray();
+            return this.ColumnInfoList.Select(ci => ci.Name).ToArray();
         }
 
         /// <summary>
@@ -787,4 +785,127 @@ namespace DAO
             return FolderManager.PostcardsAndParticipantsFolder(Year, ServiceType);
         }
     }
+
+    public class ThanksgivingDeliveryList : ListWriter
+    {
+        public string ServiceType { get; set; }
+        public int Year { get; set; }
+
+        public ThanksgivingDeliveryList(BackgroundWorker wk, DBWrapper ctx,
+            int year)
+            : base(wk, ctx)
+        {
+            this.ServiceType = "Thanksgiving basket";
+            this.Year = year;
+            this.Init();
+        }
+
+        /// <summary>
+        /// Specify header text and widths for relevant columns.
+        /// -1 for width means that the
+        /// column's width will be set later based on the
+        /// length of the contents.
+        /// </summary>
+        protected override void PopulateColumnInfo()
+        {
+            this.ColumnInfoList = new List<ColumnInfo>();
+            this.ColumnInfoList.Add( new ColumnInfo("Head of Household", 28,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("Primary Phone", 13,
+                ExcelHorizontalAlignment.Center,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("Address", 22,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("City", 12,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true));
+            this.ColumnInfoList.Add( new ColumnInfo("ST", 4,
+                ExcelHorizontalAlignment.Center,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add( new ColumnInfo("Zip", 7,
+                ExcelHorizontalAlignment.Center,
+                ExcelVerticalAlignment.Top, false));
+            this.ColumnInfoList.Add( new ColumnInfo("Directions/Notes", 35,
+                ExcelHorizontalAlignment.Left,
+                ExcelVerticalAlignment.Top, true));
+        }
+
+        protected override string[] FetchColumnNames()
+        {
+            return this.ColumnInfoList.Select(ci => ci.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Fetch ServicesHouseholdEnrollment objects with
+        /// the appropriate year and service type. Sort the
+        /// list by head of household. Then add each one's
+        /// data to our return list of string arrays.
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        protected override List<string[]> FetchData()
+        {
+            List<string[]> retList = new List<string[]>();
+            var query = context.HoEnrList.Where(
+                s => (s.year == this.Year) &&
+                (s.service_type == this.ServiceType)
+                )
+               .OrderBy(s => s.head_of_household);
+            foreach (ServicesHouseholdEnrollment e in query)
+            {
+                retList.Add(
+                                new string[] { e.head_of_household, e.phone, e.address,
+                                        e.city, e.state_or_province,
+                                        Utils.TextUtils.CanonicalPostalCode(e.postal_code),
+                                ""}
+                            );
+            }
+            return retList;
+        }
+
+        /// <summary>
+        /// ParticipantListWriter header is
+        /// [ <service type>, <year> ]
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        protected override string[] FetchHeaders()
+        {
+            return new string[]
+            {
+                string.Format(GlobRes.ThanksgivingDeliveryListHeader, this.Year)
+            };
+        }
+
+        /// <summary>
+        /// ParticipantListWriter worksheet names
+        /// are the service type, canonicalized.
+        /// </summary>
+        protected override string WorksheetName
+        {
+            get { return GlobRes.ThanksgivingDeliveryListSheetName; }
+        }
+
+        /// <summary>
+        /// Output filespec is constructed from
+        /// year and service type.
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        protected override string GetOutputFileSpec()
+        {
+            string name = string.Format(GlobRes.ThanksgivingDeliveryBaseFilename,
+                this.Year);
+            return Path.Combine(this.TargetFolder(), name);
+        }
+
+        protected override string TargetFolder()
+        {
+            return FolderManager.PostcardsAndParticipantsFolder(Year, ServiceType);
+        }
+    }
+
+
 }

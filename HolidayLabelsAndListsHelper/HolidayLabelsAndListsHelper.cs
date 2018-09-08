@@ -209,6 +209,7 @@ namespace HolidayLabelsAndListsHelper
             retInt += MakeParticipantLists(wk, ctx, year);
             retInt += MakePostcardLabels(wk, ctx, year);
             retInt += MakeParticipantSummaryLabels(wk, ctx, year);
+            retInt += MakeThanksgivingParticipantLists(wk, ctx, year);
             return retInt;
         }
 
@@ -233,6 +234,13 @@ namespace HolidayLabelsAndListsHelper
                 retInt += w.TypeReport();
             }
             return retInt;
+        }
+
+        private static int MakeThanksgivingParticipantLists(BackgroundWorker wk,
+            DBWrapper ctx, int year)
+        {
+            ListWriter w = new ThanksgivingDeliveryList(wk, ctx, year);
+            return w.TypeReport();
         }
 
         /// <summary>
