@@ -15,8 +15,8 @@ namespace HolidayLabelsAndListsHelper
     public static class HllUtils
     {
         private static string[] VALID_HLL_TYPES = new string[]
-            { "BAG", "GIFT", "DONOR", "MASTER", "PARTICIPANT", "PARTICIPANTSUMMARY", "POSTCARD" };
-        private static string[] FILE_TYPES_WITH_NO_DONOR = new string[] { "PARTICIPANT", "PARTICIPANTSUMMARY", "POSTCARD" };
+            { "BAG", "GIFT", "DONOR", "MASTER", "PARTICIPANT", "PARTICIPANTSUMMARY", "POSTCARD", "THANKSGIVINGDELIVERY" };
+        private static string[] FILE_TYPES_WITH_NO_DONOR = new string[] { "PARTICIPANT", "PARTICIPANTSUMMARY", "POSTCARD", "THANKSGIVINGDELIVERY" };
         public static string[] FILE_TYPES_WITH_DONOR = new string[] { "ALL", "BAG", "GIFT", "DONOR", "MASTER" };
         public static string[] LIST_AND_LABEL_EXTENSIONS = new string[] { ".docx", ".xlsx" };
         public const string BACKUP_FILE_REGEX = @".*\.bak\d{4,}$";
@@ -419,6 +419,7 @@ namespace HolidayLabelsAndListsHelper
         PARTICIPANTLIST,
         PARTICIPANTSUMMARYLABEL,
         POSTCARD,
+        THANKSGIVINGDELIVERY,
         INVALID,
     }
 
@@ -430,7 +431,8 @@ namespace HolidayLabelsAndListsHelper
         };
         private output_doc_types[] TypesWithoutDonor = new output_doc_types[]
         {
-            output_doc_types.PARTICIPANTLIST, output_doc_types.PARTICIPANTSUMMARYLABEL, output_doc_types.POSTCARD
+            output_doc_types.PARTICIPANTLIST, output_doc_types.PARTICIPANTSUMMARYLABEL, output_doc_types.POSTCARD,
+            output_doc_types.THANKSGIVINGDELIVERY
         };
         private output_doc_types ty;
         public bool HasDonor()
@@ -466,13 +468,18 @@ namespace HolidayLabelsAndListsHelper
                 this.ty = output_doc_types.PARTICIPANTLIST;
                 return;
             }
-                // For other output_doc_types, only the portion
-                // before the first '_' is significant.
-                s = s.Split('_')[0];
-                // If parsing into one of our output_doc_types works,
-                // use that. Otherwise set to INVALID
-                if (!Enum.TryParse(s, out this.ty))
-                    this.ty = output_doc_types.INVALID;
+            if (s.StartsWith("Thanksgiving_Delivery"))
+            {
+                this.ty = output_doc_types.THANKSGIVINGDELIVERY;
+                return;
+            }
+            // For other output_doc_types, only the portion
+            // before the first '_' is significant.
+            s = s.Split('_')[0];
+            // If parsing into one of our output_doc_types works,
+            // use that. Otherwise set to INVALID
+            if (!Enum.TryParse(s, out this.ty))
+                this.ty = output_doc_types.INVALID;
         }
 
         public bool IsValid {  get { return this.ty != output_doc_types.INVALID; } }
