@@ -100,11 +100,11 @@ namespace HolidayLabelsAndListsHelper
         /// <param name="wk" (BackgroundWorker)></param>
         /// <param name="context" (DBWrapper)></param>
         /// <returns>int</returns>
-        public static int MakeOutputFiles(BackgroundWorker wk, DBWrapper context)
+        public static int MakeOutputFiles(BackgroundWorker wk, int[] years, DBWrapper context)
         {
             int retInt = 0;
             string[] request_types = RequestTypesInDb(context);
-            int[] years = YearsInDb(context);
+            //int[] years = YearsInDb(context);
             foreach (int year in years)
             {
                 foreach (Donor d in context.DonorList)

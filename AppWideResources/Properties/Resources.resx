@@ -337,4 +337,16 @@ The error message was {1}. Here is the stack trace: {2}</value>
   <data name="ThanksgivingDeliveryListSheetName" xml:space="preserve">
     <value>Thanksgiving Delivery List</value>
   </data>
+  <data name="GenerateAllYearsNoButtonText" xml:space="preserve">
+    <value>Only the Two Most Recent Years</value>
+  </data>
+  <data name="GenerateAllYearsPrompt" xml:space="preserve">
+    <value>Would you like to generate all labels and lists, or only those for the two most recent years? Generating them for only the most recent two years saves disk space and is a few seconds faster. (You can always come back later and generate the files for all years.)</value>
+  </data>
+  <data name="GenerateAllYearsTitle" xml:space="preserve">
+    <value>Generate Labels and Lists for Which Years?</value>
+  </data>
+  <data name="GenerateAllYearsYesButtonText" xml:space="preserve">
+    <value>All Years</value>
+  </data>
 </root>

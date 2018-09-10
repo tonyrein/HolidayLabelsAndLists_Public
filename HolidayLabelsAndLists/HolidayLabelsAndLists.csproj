@@ -161,6 +161,10 @@
       <Project>{0e3d4f68-cf96-45c8-a43e-bdb4dd6c4b4d}</Project>
       <Name>HolidayLabelsAndListsHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{c524d67c-4e3c-458c-9e1f-98d069e98461}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VestaImporter\VestaImporter.csproj">
       <Project>{0960b0b0-6ff5-4be8-a1df-996e7bd74f67}</Project>
       <Name>VestaImporter</Name>
