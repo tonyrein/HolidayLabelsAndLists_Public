@@ -156,7 +156,7 @@ namespace HolidayLabelsAndLists.Properties {
         ///&lt;p&gt;The Holiday Labels and Lists program(&quot;HLL&quot;) is meant to be used
         ///in connection with Valley&apos;s holiday programs. It streamlines the
         ///process of creating bag and gift labels, master and donor lists,
-        ///participant [rest of string was truncated]&quot;;.
+        ///participant lists, partic [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Doc_HTML {
             get {
@@ -174,7 +174,7 @@ namespace HolidayLabelsAndLists.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Participant Summary Labels#Postcard Labels.
+        ///   Looks up a localized string similar to All Types#Bag Labels#Gift Labels#Donor and Master Lists#Participant Lists#Participant Summary Labels#Postcard Labels#Thanksgiving Delivery Lists.
         /// </summary>
         internal static string DocumentTypesValues {
             get {

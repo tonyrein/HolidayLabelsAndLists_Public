@@ -468,7 +468,7 @@ namespace HolidayLabelsAndListsHelper
                 this.ty = output_doc_types.PARTICIPANTLIST;
                 return;
             }
-            if (s.StartsWith("Thanksgiving_Delivery"))
+            if (s.StartsWith("THANKSGIVING_DELIVERY"))
             {
                 this.ty = output_doc_types.THANKSGIVINGDELIVERY;
                 return;
