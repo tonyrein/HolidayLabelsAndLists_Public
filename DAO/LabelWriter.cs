@@ -662,19 +662,27 @@ namespace DAO
             wk,
             ctx,
             year,
-            label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
-            label_height: (int)(3.56 * (int)DocPartUnits.CellHeight),
-            horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
-            vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
+            label_width: (int)(3.56 * (int)DocPartUnits.CellWidth),
+            label_height: (int)(3.3333 * (int)DocPartUnits.CellHeight),
+            horizontal_padding: (int)(0.375 * (int)DocPartUnits.CellWidth),
+            vertical_padding: (int)(0 * (int)DocPartUnits.CellHeight),
+            //label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
+            //label_height: (int)(3.56 * (int)DocPartUnits.CellHeight),
+            //horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
+            //vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
             top_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             bottom_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
-            num_label_cols: 3,
-            label_rows_per_page: 2,
-            orientation: Orientation.Landscape,
-            page_width: (int)(11.0 * (int)DocPartUnits.PageWidth),
-            page_height: (int)(8.5 * (int)DocPartUnits.PageHeight)
+            num_label_cols: 2,
+            label_rows_per_page: 3,
+            //num_label_cols: 3,
+            //label_rows_per_page: 2,
+            orientation: Orientation.Portrait,
+            page_width: (int)(8.5 * (int)DocPartUnits.PageWidth),
+            page_height: (int)(11.0 * (int)DocPartUnits.PageHeight)
+            //page_width: (int)(11.0 * (int)DocPartUnits.PageWidth),
+            //page_height: (int)(8.5 * (int)DocPartUnits.PageHeight)
             )
         {
             this.SetItemList();
@@ -731,7 +739,7 @@ namespace DAO
             FamiliesAndKids fk = (FamiliesAndKids)rec;
             c.MarginTop = 0;
             Paragraph p = c.Paragraphs.First();
-            // NovaCode should initialize Cells with one
+            // Xceed.Words.NET should initialize Cells with one
             // paragraph. But, in the unlikeley case
             // that that paragraph isn't there, add one.
             if (p == null)

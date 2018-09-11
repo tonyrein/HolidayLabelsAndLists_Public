@@ -551,7 +551,6 @@ namespace HolidayLabelsAndLists
                 prompt_text: GlobRes.GenerateAllYearsPrompt,
                 button_a_text: GlobRes.GenerateAllYearsYesButtonText,
                 button_b_text: GlobRes.GenerateAllYearsNoButtonText);
-            //MessageBox.Show("Result: " + answer.ToString());
             if (answer == -1) // user clicked "Cancel"
                 return;
             int[] years = HllUtils.YearsInDb(this.Context);
