@@ -497,10 +497,10 @@ namespace HolidayLabelsAndLists
         /// </summary>
         /// <param name="worker"></param>
         /// <returns></returns>
-        private int DoOutputProcessing(BackgroundWorker worker)
+        private int DoOutputProcessing(BackgroundWorker worker, int[]years)
         {
             worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
-            return HllUtils.MakeOutputFiles(worker, this.Context);
+            return HllUtils.MakeOutputFiles(worker, years, this.Context);
         }
 
         private void btnAddVestaReports_Click(object sender, EventArgs e)
@@ -546,10 +546,21 @@ namespace HolidayLabelsAndLists
 
         private void btnCreateOutput_Click(object sender, EventArgs e)
         {
-            CreateOutput(sender, e);
+            int answer = Utils.MessageBoxUtils.GetEitherOrChoice(
+                title: GlobRes.GenerateAllYearsTitle,
+                prompt_text: GlobRes.GenerateAllYearsPrompt,
+                button_a_text: GlobRes.GenerateAllYearsYesButtonText,
+                button_b_text: GlobRes.GenerateAllYearsNoButtonText);
+            if (answer == -1) // user clicked "Cancel"
+                return;
+            int[] years = HllUtils.YearsInDb(this.Context);
+            if (answer == 1) // user wants only most recent two years
+                years = years.Take(2).ToArray();
+
+            CreateOutput(sender, e, years);
         }
 
-        private void CreateOutput(object sender, EventArgs e)
+        private void CreateOutput(object sender, EventArgs e, int[] years)
         {
             try
             {
@@ -570,7 +581,7 @@ namespace HolidayLabelsAndLists
                 ProgressForm.Show();
                 ProgressForm.AddMessage(GlobRes.GeneratingOutputFilesMsg);
                 // start the background work:
-                _bgworker.RunWorkerAsync();
+                _bgworker.RunWorkerAsync(years);
             }
             catch
             {
@@ -660,10 +671,11 @@ namespace HolidayLabelsAndLists
         /// <param name="e"></param>
         private void bgworker_DoGenerateWork(object sender, DoWorkEventArgs e)
         {
+            int[] years = (int[])e.Argument;
             BackgroundWorker wk = sender as BackgroundWorker;
             BGWorkerResult bgRes = new BGWorkerResult();
             bgRes.Type = ProcessingType.GENERATE;
-            bgRes.FilesGeneratedCount = DoOutputProcessing(wk);
+            bgRes.FilesGeneratedCount = DoOutputProcessing(wk, years);
             if (wk.CancellationPending)
                 e.Cancel = true;
             else

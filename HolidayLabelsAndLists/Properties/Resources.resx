@@ -142,7 +142,7 @@
     <value>Document Type(s)</value>
   </data>
   <data name="DocumentTypesValues" xml:space="preserve">
-    <value>All Types#Bag Labels#Gift Labels#Donor and Master List#Participant List#Participant Summary Labels#Postcard Labels</value>
+    <value>All Types#Bag Labels#Gift Labels#Donor and Master Lists#Participant Lists#Participant Summary Labels#Postcard Labels#Thanksgiving Delivery Lists</value>
   </data>
   <data name="ExitBtnCaption" xml:space="preserve">
     <value>Exit</value>

@@ -19,7 +19,7 @@ namespace AppWideResources.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -238,6 +238,42 @@ namespace AppWideResources.Properties {
         public static string FileSpecFilterExcel {
             get {
                 return ResourceManager.GetString("FileSpecFilterExcel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the Two Most Recent Years.
+        /// </summary>
+        public static string GenerateAllYearsNoButtonText {
+            get {
+                return ResourceManager.GetString("GenerateAllYearsNoButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to generate all labels and lists, or only those for the two most recent years? Generating them for only the most recent two years saves disk space and is a few seconds faster. (You can always come back later and generate the files for all years.).
+        /// </summary>
+        public static string GenerateAllYearsPrompt {
+            get {
+                return ResourceManager.GetString("GenerateAllYearsPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate Labels and Lists for Which Years?.
+        /// </summary>
+        public static string GenerateAllYearsTitle {
+            get {
+                return ResourceManager.GetString("GenerateAllYearsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Years.
+        /// </summary>
+        public static string GenerateAllYearsYesButtonText {
+            get {
+                return ResourceManager.GetString("GenerateAllYearsYesButtonText", resourceCulture);
             }
         }
         

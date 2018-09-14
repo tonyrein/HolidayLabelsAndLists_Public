@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Utils
 {
@@ -166,6 +167,55 @@ namespace Utils
                 }
                 return orig_code;
             }
+        }
+    }
+
+    public static class MessageBoxUtils
+    {
+        /// <summary>
+        /// Show a dialog box with specified text.
+        /// Return 0 if first choice is clicked,
+        /// 1 if second choice, and -1 if user
+        /// clicks the Cancel button.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="prompt_text"></param>
+        /// <param name="button_a_text"></param>
+        /// <param name="button_b_text"></param>
+        /// <param name="button_cancel_text"></param>
+        /// <param name="show_cancel_button"></param>
+        public static int GetEitherOrChoice(
+            string title="Title",
+            string prompt_text = "Prompt",
+            string button_a_text = "A",
+            string button_b_text = "B",
+            string button_cancel_text = "Cancel",
+            bool show_cancel_button = true)
+        {
+            int retInt = 0;
+            using (frmEitherOr frm = new frmEitherOr(title, prompt_text, button_a_text,
+                button_b_text, button_cancel_text, show_cancel_button))
+            {
+                DialogResult dres = frm.ShowDialog();
+                switch(dres)
+                {
+                    case DialogResult.Yes:
+                        retInt = 0;
+                        break;
+                    case DialogResult.No:
+                        retInt = 1;
+                        break;
+                    case DialogResult.Cancel:
+                        retInt = -1;
+                        break;
+                    default:
+                        retInt = -1;
+                        break;
+                }
+                
+                
+            }
+            return retInt;
         }
     }
 }
