@@ -137,10 +137,6 @@
     <Compile Include="ListWriter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AppWideResources\AppWideResources.csproj">
-      <Project>{e689d4c7-b3ff-4dd0-bc8e-88aaf6bce089}</Project>
-      <Name>AppWideResources</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{c524d67c-4e3c-458c-9e1f-98d069e98461}</Project>
       <Name>Utils</Name>
