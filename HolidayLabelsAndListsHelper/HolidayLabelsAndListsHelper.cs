@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using DAO;
 using Utils;
 
-using GlobRes = AppWideResources.Properties.Resources;
+//using GlobRes = AppWideResources.Properties.Resources;
 
 namespace HolidayLabelsAndListsHelper
 {
@@ -332,11 +332,11 @@ namespace HolidayLabelsAndListsHelper
         {
             OpenFileDialog d = new OpenFileDialog();
             d.Multiselect = true;
-            d.Filter = GlobRes.FileSpecFilterExcel;
+            d.Filter = Properties.Resources.FileSpecFilterExcel;
             d.FilterIndex = 1;
             d.CheckFileExists = true;
             d.CheckPathExists = true;
-            d.Title = GlobRes.VestaReportSelectTitle;
+            d.Title = Properties.Resources.VestaReportSelectTitle;
             d.InitialDirectory = Properties.Settings.Default.InitialVestaFolder;
             DialogResult dr = d.ShowDialog();
             if (dr == DialogResult.OK)
