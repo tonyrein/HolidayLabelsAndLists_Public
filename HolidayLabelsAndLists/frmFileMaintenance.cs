@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using HolidayLabelsAndListsHelper;
 
-using GlobRes = AppWideResources.Properties.Resources;
+//using GlobRes = AppWideResources.Properties.Resources;
 
 namespace HolidayLabelsAndLists
 {
@@ -65,8 +65,8 @@ namespace HolidayLabelsAndLists
         private void btnDeleteBackups_Click(object sender, EventArgs e)
         {
             var mbRes = MessageBox.Show(
-                GlobRes.DelBackupConfirmPrompt,
-                GlobRes.DelBackupConfirmTitle,
+                Properties.Resources.DelBackupConfirmPrompt,
+                Properties.Resources.DelBackupConfirmTitle,
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
                 );
@@ -83,7 +83,7 @@ namespace HolidayLabelsAndLists
             catch (Exception fe)
             {
                 MessageBox.Show(
-                    string.Format(GlobRes.DelBackupErrorMsg, fe.Message),
+                    string.Format(Properties.Resources.DelBackupErrorMsg, fe.Message),
                     "",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation

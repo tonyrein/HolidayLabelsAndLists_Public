@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using HolidayLabelsAndListsHelper;
-using GlobRes = AppWideResources.Properties.Resources;
+//using GlobRes = AppWideResources.Properties.Resources;
 
 namespace HolidayLabelsAndLists
 {
@@ -42,8 +42,8 @@ namespace HolidayLabelsAndLists
 
         private void SetLabels()
         {
-            this.Text = GlobRes.DeleteOldFilesTitle;
-            this.groupBox1.Text = GlobRes.SelectYears;
+            this.Text =  Properties.Resources.DeleteOldFilesTitle;
+            this.groupBox1.Text = Properties.Resources.SelectYears;
         }
 
         private void frmDeleteOldFiles_Activated(object sender, EventArgs e)
