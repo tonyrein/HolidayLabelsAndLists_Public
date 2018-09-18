@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.IO;
 using DAO;
 
-using GlobRes = AppWideResources.Properties.Resources;
+//using GlobRes = AppWideResources.Properties.Resources;
 
-namespace VestaProcessor
+namespace VestaImporter
 {
     public class VestaImporter
     {
@@ -33,14 +33,14 @@ namespace VestaProcessor
         private void Init()
         {
             worker.ReportProgress(0,
-                string.Format(GlobRes.StartingEachReportMsg, this.filespec)
+                string.Format(Properties.Resources.StartingEachReportMsg, this.filespec)
                 );
             valid_VESTA = true;
             WorkbookWrapper bk = new WorkbookWrapper(this.filespec);
             if (bk == null)
             {
                 worker.ReportProgress(0,
-                    string.Format(GlobRes.InvalidWorksheetMsg, this.filespec)
+                    string.Format(Properties.Resources.InvalidWorksheetMsg, this.filespec)
                     );
                 valid_VESTA = false;
                 return;
@@ -50,7 +50,7 @@ namespace VestaProcessor
             if (this.sheet == null)
             {
                 worker.ReportProgress(0,
-                    string.Format(GlobRes.SheetNotFoundInFileMsg, this.sheet_name, this.filespec)
+                    string.Format(Properties.Resources.SheetNotFoundInFileMsg, this.sheet_name, this.filespec)
                     );
                 valid_VESTA = false;
                 return;
@@ -59,7 +59,7 @@ namespace VestaProcessor
             if (this.report_type == ReportTypes.Unknown)
             {
                 worker.ReportProgress(0,
-                    string.Format(GlobRes.UnknownReportTypeMsg, this.filespec)
+                    string.Format(Properties.Resources.UnknownReportTypeMsg, this.filespec)
                     );
                 valid_VESTA = false;
                 return;
@@ -172,11 +172,11 @@ namespace VestaProcessor
         {
             if (!worker.CancellationPending)
             {
-                worker.ReportProgress(0, GlobRes.SearchingForDataSectionsMsg);
+                worker.ReportProgress(0, Properties.Resources.SearchingForDataSectionsMsg);
                 this.GetHeaderInfo();
                 this.data_section_count = this.FindDataSections();
                 worker.ReportProgress(0,
-                    string.Format(GlobRes.CountOfDataSectionsMsg, data_section_count)
+                    string.Format(Properties.Resources.CountOfDataSectionsMsg, data_section_count)
                     );
             }
         }
@@ -200,20 +200,20 @@ namespace VestaProcessor
                 {
                     i++;
                     worker.ReportProgress(0,
-                        string.Format(GlobRes.SectionXOfYMsg, i, data_section_count)
+                        string.Format(Properties.Resources.SectionXOfYMsg, i, data_section_count)
                         );
                     section.execute(context);
                 }
             }
             if (i == data_section_count)
             {
-                worker.ReportProgress(0, GlobRes.AllSectionsProcessedOKMsg);
+                worker.ReportProgress(0, Properties.Resources.AllSectionsProcessedOKMsg);
                 return 1;
             }
             else
             {
                 worker.ReportProgress(0,
-                    string.Format(GlobRes.SomeSectionsNotProcessedMsg, i, data_section_count)
+                    string.Format(Properties.Resources.SomeSectionsNotProcessedMsg, i, data_section_count)
                         );
                 return 0;
             }

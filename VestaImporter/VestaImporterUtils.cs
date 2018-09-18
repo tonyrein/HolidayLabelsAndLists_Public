@@ -5,7 +5,7 @@ using System.IO;
 using DAO;
 using GlobRes = AppWideResources.Properties.Resources;
 
-namespace VestaProcessor
+namespace VestaImporter
 {
     public enum ReportTypes
     {

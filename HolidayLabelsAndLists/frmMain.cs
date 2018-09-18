@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using DAO;
 using HolidayLabelsAndListsHelper;
-using VestaProcessor;
+using VestaImporter;
 //using GlobRes = AppWideResources.Properties.Resources;
 
 namespace HolidayLabelsAndLists

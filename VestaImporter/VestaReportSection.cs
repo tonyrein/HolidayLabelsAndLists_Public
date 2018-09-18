@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using DAO;
 
-namespace VestaProcessor
+namespace VestaImporter
 {
     public enum LabelType
     {
