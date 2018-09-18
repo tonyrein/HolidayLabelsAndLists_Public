@@ -7,7 +7,7 @@ using System.Text;
 
 using Xceed.Words.NET; //for DocX
 using Utils;
-using GlobRes = AppWideResources.Properties.Resources;
+//using GlobRes = AppWideResources.Properties.Resources;
 namespace DAO
 {
     /// <summary>
@@ -252,7 +252,7 @@ namespace DAO
             string fn = Path.GetFileName(this.GetOutputFileSpec());
             int retInt;
             this.Worker.ReportProgress(0,
-                string.Format(GlobRes.CountWritingMsg,
+                string.Format(Properties.Resources.CountWritingMsg,
                     this.ItemList.Count, "labels", fn)
                     );
             DocX doc = null;
@@ -310,7 +310,7 @@ namespace DAO
                 doc.InsertTable(this.table);
                 doc.Save();
                 this.Worker.ReportProgress(0,
-                    string.Format(GlobRes.FileCreationSuccessMsg, fn)
+                    string.Format(Properties.Resources.FileCreationSuccessMsg, fn)
                     );
                 retInt = 1;
             }
@@ -318,7 +318,7 @@ namespace DAO
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendFormat(
-                    GlobRes.FileExceptionErrorMsg,
+                    Properties.Resources.FileExceptionErrorMsg,
                     fn, e.Message, e.StackTrace
                 );
                 this.Worker.ReportProgress(0, sb.ToString());
@@ -430,7 +430,7 @@ namespace DAO
             p.Append(top_line).Bold()
                 .AppendLine(gli.request_detail);
             if (this.RequestType == "Clothing")
-                p.AppendLine(GlobRes.GiftReceiptRequest);
+                p.AppendLine(Properties.Resources.GiftReceiptRequest);
         }
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace DAO
             string cln_rt = TextUtils.CleanString(this.RequestType);
             string cln_dcd = TextUtils.CleanString(this.Dnr.code).ToUpper();
             string name = string.Format(
-                GlobRes.GiftLabelBaseFilename,
+                Properties.Resources.GiftLabelBaseFilename,
                 this.Year, cln_rt, cln_dcd
                 );
             return Path.Combine(this.TargetFolder, name);
@@ -549,7 +549,7 @@ namespace DAO
             string cln_rt = TextUtils.CleanString(this.RequestType);
             string cln_dcd = TextUtils.CleanString(this.Dnr.code).ToUpper();
             string name = string.Format(
-                GlobRes.BagLabelBaseFilename,
+                Properties.Resources.BagLabelBaseFilename,
                 this.Year, cln_rt, cln_dcd
                 );
             return Path.Combine(this.TargetFolder, name);
@@ -624,7 +624,7 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string name = string.Format(
-                GlobRes.PostcardLabelBaseFilename,
+                Properties.Resources.PostcardLabelBaseFilename,
                 this.Year,
                 Utils.TextUtils.CleanString(this.ServiceType)
                 );
@@ -698,7 +698,7 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string name = string.Format(
-                  GlobRes.ParticipantSummaryLabelsBaseFilename,
+                  Properties.Resources.ParticipantSummaryLabelsBaseFilename,
                   this.Year
                   );
             return Path.Combine(this.TargetFolder, name);

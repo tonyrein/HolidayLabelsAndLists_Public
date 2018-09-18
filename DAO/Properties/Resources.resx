@@ -117,6 +117,87 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CountWritingMsg" xml:space="preserve">
+    <value>Writing {0} {1} to file {2}</value>
+    <comment>0=count; 1="data rows" or "labels"; 2=filename</comment>
+  </data>
+  <data name="FileCreationSuccessMsg" xml:space="preserve">
+    <value>Successfully created file {0} </value>
+    <comment>0=filename</comment>
+  </data>
+  <data name="FileExceptionErrorMsg" xml:space="preserve">
+    <value>An error occurred trying to work with file {0}.
+The error message was {1}. Here is the stack trace: {2}</value>
+    <comment>0=filename; 1= error message text, 2=stack trace</comment>
+  </data>
+  <data name="GiftReceiptRequest" xml:space="preserve">
+    <value>Please include gift receipt.</value>
+  </data>
+  <data name="PageNumbers" xml:space="preserve">
+    <value>&amp;Bpage &amp;P of &amp;N</value>
+  </data>
+  <data name="NoDataMsg" xml:space="preserve">
+    <value>--- NO DATA ---</value>
+  </data>
+  <data name="BagLabelBaseFilename" xml:space="preserve">
+    <value>Bag_Labels_{0}_{1}_{2}.docx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="DonorListBasefilename" xml:space="preserve">
+    <value>Donor_List_{0}_{1}_{2}.xlsx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="DonorListWorksheetName" xml:space="preserve">
+    <value>{0} {1} DL {2}</value>
+    <comment>0=donor name; 1=year; 2=request type</comment>
+  </data>
+  <data name="GiftLabelBaseFilename" xml:space="preserve">
+    <value>Gift_Labels_{0}_{1}_{2}.docx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="MasterListBasefilename" xml:space="preserve">
+    <value>Master_List_{0}_{1}_{2}.xlsx</value>
+    <comment>0=year; 1=request type; 2=donor code</comment>
+  </data>
+  <data name="ParticipantListBasefilename" xml:space="preserve">
+    <value>Participant_List_{0}_{1}.xlsx</value>
+    <comment>0=year; 1=service type</comment>
+  </data>
+  <data name="PostcardLabelBaseFilename" xml:space="preserve">
+    <value>Postcard_Labels_{0}_{1}.docx</value>
+    <comment>0=year; 1=service type</comment>
+  </data>
+  <data name="DonorListHeader" xml:space="preserve">
+    <value>Donor List, {0}, {1}, {2}</value>
+    <comment>0=request type; 1=year; 2=donor name</comment>
+  </data>
+  <data name="MasterListHeader" xml:space="preserve">
+    <value>Master List, {0}, {1}, {2}</value>
+    <comment>0=request type; 1=year; 2=donor name</comment>
+  </data>
+  <data name="MasterListWorksheetName" xml:space="preserve">
+    <value>{0} {1} ML {2}</value>
+    <comment>0=donor code; 1=year; 2=request type</comment>
+  </data>
+  <data name="ParticipantListHeader" xml:space="preserve">
+    <value>Participant List, {0}, {1}</value>
+    <comment>0=service type; 1=year</comment>
+  </data>
+  <data name="ParticipantSummaryLabelsBaseFilename" xml:space="preserve">
+    <value>Participant_Summary_Labels_{0}.docx</value>
+    <comment>0=year</comment>
+  </data>
+  <data name="ThanksgivingDeliveryBaseFilename" xml:space="preserve">
+    <value>Thanksgiving_Delivery_List_{0}.xlsx</value>
+    <comment>0=year</comment>
+  </data>
+  <data name="ThanksgivingDeliveryListHeader" xml:space="preserve">
+    <value>Thanksgiving Delivery List, {0}</value>
+    <comment>0=year</comment>
+  </data>
+  <data name="ThanksgivingDeliveryListSheetName" xml:space="preserve">
+    <value>Thanksgiving Delivery List</value>
+  </data>
   <data name="db_backup_glob" xml:space="preserve">
     <value>*.bak????.*</value>
     <comment>0=db_filename</comment>
