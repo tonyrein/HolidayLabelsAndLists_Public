@@ -8,8 +8,8 @@ using System.Windows.Forms;
 
 using DAO;
 using HolidayLabelsAndListsHelper;
-using VestaProcessor;
-using GlobRes = AppWideResources.Properties.Resources;
+using VestaImporter;
+//using GlobRes = AppWideResources.Properties.Resources;
 
 namespace HolidayLabelsAndLists
 {
@@ -71,8 +71,8 @@ namespace HolidayLabelsAndLists
             // to display in the file list.
             if (lvAvailableFiles.Items.Count == 0)
             {
-                ListViewItem item = new ListViewItem(GlobRes.NoMatchingFilesMsg);
-                item.ToolTipText = GlobRes.NoMatchingFilesTooltip;
+                ListViewItem item = new ListViewItem(Properties.Resources.NoMatchingFilesMsg);
+                item.ToolTipText = Properties.Resources.NoMatchingFilesTooltip;
                 lvAvailableFiles.Items.Add(item);
             }
 
@@ -303,7 +303,7 @@ namespace HolidayLabelsAndLists
         private void ShowNoFilesMessage()
         {
             MessageBox.Show(
-                GlobRes.NoOutputFilesMsg, GlobRes.NoOutputFilesTitle,
+                Properties.Resources.NoOutputFilesMsg, Properties.Resources.NoOutputFilesTitle,
                 MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
         }
@@ -315,7 +315,7 @@ namespace HolidayLabelsAndLists
         private void ShowNothingImportedMessage()
         {
             MessageBox.Show(
-                GlobRes.NothingImportedMsg, GlobRes.NothingImportedTitle,
+                Properties.Resources.NothingImportedMsg, Properties.Resources.NothingImportedTitle,
                 MessageBoxButtons.OK, MessageBoxIcon.Information
                 );
         }
@@ -416,8 +416,8 @@ namespace HolidayLabelsAndLists
                 HllUtils.OpenFile(filespec);
             else
                 MessageBox.Show(
-                    string.Format(GlobRes.FileNotFoundMsg, filespec),
-                    GlobRes.FileNotFoundTitle,
+                    string.Format(Properties.Resources.FileNotFoundMsg, filespec),
+                    Properties.Resources.FileNotFoundTitle,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                     );
@@ -462,7 +462,7 @@ namespace HolidayLabelsAndLists
             frmHelp helpForm = new frmHelp();
             string doc_html = Properties.Resources.Doc_HTML;
             helpForm.HelpText = doc_html;
-            helpForm.Text = GlobRes.DocGeneralTitle;
+            helpForm.Text = Properties.Resources.DocGeneralTitle;
             helpForm.ShowDialog(this);
         }
 
@@ -483,7 +483,7 @@ namespace HolidayLabelsAndLists
             int retInt = 0;
             //this.Context.Clean();
             worker.ReportProgress(0,
-                string.Format(GlobRes.VestaReportCountMsg, report_names.Length)
+                string.Format(Properties.Resources.VestaReportCountMsg, report_names.Length)
                 );
             retInt = VestaImporterUtils.ImportFromVesta(worker, this.Context, report_names);
             return retInt;
@@ -499,7 +499,7 @@ namespace HolidayLabelsAndLists
         /// <returns></returns>
         private int DoOutputProcessing(BackgroundWorker worker, int[]years)
         {
-            worker.ReportProgress(0, GlobRes.GeneratingOutputFilesMsg);
+            worker.ReportProgress(0, Properties.Resources.GeneratingOutputFilesMsg);
             return HllUtils.MakeOutputFiles(worker, years, this.Context);
         }
 
@@ -525,12 +525,13 @@ namespace HolidayLabelsAndLists
                     SetAppState(AppStates.Processing);
                     // create and configure a progress dialog:
                     ProgressForm = new frmProgress();
+                    ProgressForm.Text = Properties.Resources.ProgressProcessingReportsTitle;
                     ProgressForm.Done = false;
                     ProgressForm.Worker = _bgworker;
                     // Hook up "FormClosed" event handler:
                     ProgressForm.FormClosed += ProgressForm_FormClosed;
                     ProgressForm.Show();
-                    ProgressForm.AddMessage(GlobRes.VestaReportProcessingStartMsg);
+                    ProgressForm.AddMessage(Properties.Resources.VestaReportProcessingStartMsg);
                     // start the background work:
                     _bgworker.RunWorkerAsync(report_names);
                 }
@@ -547,10 +548,10 @@ namespace HolidayLabelsAndLists
         private void btnCreateOutput_Click(object sender, EventArgs e)
         {
             int answer = Utils.MessageBoxUtils.GetEitherOrChoice(
-                title: GlobRes.GenerateAllYearsTitle,
-                prompt_text: GlobRes.GenerateAllYearsPrompt,
-                button_a_text: GlobRes.GenerateAllYearsYesButtonText,
-                button_b_text: GlobRes.GenerateAllYearsNoButtonText);
+                title: Properties.Resources.GenerateAllYearsTitle,
+                prompt_text: Properties.Resources.GenerateAllYearsPrompt,
+                button_a_text: Properties.Resources.GenerateAllYearsYesButtonText,
+                button_b_text: Properties.Resources.GenerateAllYearsNoButtonText);
             if (answer == -1) // user clicked "Cancel"
                 return;
             int[] years = HllUtils.YearsInDb(this.Context);
@@ -574,12 +575,13 @@ namespace HolidayLabelsAndLists
                 SetAppState(AppStates.Processing);
                 // create and configure a progress dialog:
                 ProgressForm = new frmProgress();
+                ProgressForm.Text = Properties.Resources.ProgressGeneratingTitle;
                 ProgressForm.Done = false;
                 ProgressForm.Worker = _bgworker;
                 // Hook up "FormClosed" event handler:
                 ProgressForm.FormClosed += ProgressForm_FormClosed;
                 ProgressForm.Show();
-                ProgressForm.AddMessage(GlobRes.GeneratingOutputFilesMsg);
+                ProgressForm.AddMessage(Properties.Resources.GeneratingOutputFilesMsg);
                 // start the background work:
                 _bgworker.RunWorkerAsync(years);
             }
@@ -707,14 +709,14 @@ namespace HolidayLabelsAndLists
                 if (e.Error != null)
                 {
                     ProgressForm.AddMessage(
-                        string.Format(GlobRes.VestaReportExceptionMsg,
+                        string.Format(Properties.Resources.VestaReportExceptionMsg,
                             e.Error.Message)
                             );
                 }
                 else if (e.Cancelled)
                 {
                     ProgressForm.AddMessage(
-                        GlobRes.ProcessingCancelledMsg + GlobRes.OKToCloseMsg
+                        Properties.Resources.ProcessingCancelledMsg + Properties.Resources.OKToCloseMsg
                         );
                 }
                 else
@@ -724,18 +726,18 @@ namespace HolidayLabelsAndLists
                     switch(bgRes.Type)
                     {
                         case ProcessingType.GENERATE:
-                            msg = string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
+                            msg = string.Format(Properties.Resources.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
                             break;
                         case ProcessingType.IMPORT:
-                            msg = string.Format(GlobRes.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount);
+                            msg = string.Format(Properties.Resources.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount);
                             break;
                         case ProcessingType.BOTH:
-                            msg = string.Format(GlobRes.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount) +
-                                Environment.NewLine +  string.Format(GlobRes.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
+                            msg = string.Format(Properties.Resources.VestaReportProcessingSuccessMsg, bgRes.ReportsReadCount) +
+                                Environment.NewLine +  string.Format(Properties.Resources.FileAddingSuccessMsg, bgRes.FilesGeneratedCount);
                             break;
                     }
                     ProgressForm.AddMessage(Environment.NewLine + msg);
-                    ProgressForm.AddMessage(GlobRes.OKToCloseMsg);
+                    ProgressForm.AddMessage(Properties.Resources.OKToCloseMsg);
                     ProgressForm.AddMessage(Environment.NewLine);
                     if (bgRes.FilesGeneratedCount > 0)
                         UpdateView();

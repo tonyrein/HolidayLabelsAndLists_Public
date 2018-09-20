@@ -46,6 +46,11 @@
   <ItemGroup>
     <Compile Include="HolidayLabelsAndListsHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -53,10 +58,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AppWideResources\AppWideResources.csproj">
-      <Project>{e689d4c7-b3ff-4dd0-bc8e-88aaf6bce089}</Project>
-      <Name>AppWideResources</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DAO\DAO.csproj">
       <Project>{a51e52ee-a6f0-429f-8096-108416f2f9e8}</Project>
       <Name>DAO</Name>
@@ -72,6 +73,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

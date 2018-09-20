@@ -7,7 +7,7 @@ using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.ComponentModel;
-using GlobRes = AppWideResources.Properties.Resources;
+//using GlobRes = AppWideResources.Properties.Resources;
 
 namespace DAO
 {
@@ -179,7 +179,7 @@ namespace DAO
             ExcelPackage pkg = null;
             // Tell the world what we're doing:
             this.Worker.ReportProgress(0,
-                String.Format(GlobRes.CountWritingMsg,
+                String.Format(Properties.Resources.CountWritingMsg,
                     this.DataRows.Count, "data rows", fn)
                     );
             try
@@ -194,7 +194,7 @@ namespace DAO
                 this.DoFormatting();
                 pkg.Save();
                 this.Worker.ReportProgress(0,
-                    String.Format(GlobRes.FileCreationSuccessMsg,fn)
+                    String.Format(Properties.Resources.FileCreationSuccessMsg,fn)
                     );
                 retInt = 1;
             }
@@ -202,7 +202,7 @@ namespace DAO
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendFormat(
-                    GlobRes.FileExceptionErrorMsg,
+                    Properties.Resources.FileExceptionErrorMsg,
                     fn, e.Message);
                 this.Worker.ReportProgress(0, sb.ToString());
                 retInt = 0;
@@ -241,9 +241,9 @@ namespace DAO
             // Now do page numbers on right side of header.
             // The below string results in bold text with,
             // for example, "page 3 of 5."
-            this.sh.HeaderFooter.FirstHeader.RightAlignedText = GlobRes.PageNumbers;
-            this.sh.HeaderFooter.EvenHeader.RightAlignedText = GlobRes.PageNumbers;
-            this.sh.HeaderFooter.OddHeader.RightAlignedText = GlobRes.PageNumbers;
+            this.sh.HeaderFooter.FirstHeader.RightAlignedText = Properties.Resources.PageNumbers;
+            this.sh.HeaderFooter.EvenHeader.RightAlignedText = Properties.Resources.PageNumbers;
+            this.sh.HeaderFooter.OddHeader.RightAlignedText = Properties.Resources.PageNumbers;
         }
 
 
@@ -275,7 +275,7 @@ namespace DAO
         protected void TypeNoDataAlert()
         {
             this.CurrentRow = this.TopDataRow;
-            this.WriteRow(new string[] { GlobRes.NoDataMsg });
+            this.WriteRow(new string[] { Properties.Resources.NoDataMsg });
         }
 
         /// <summary>
@@ -435,7 +435,7 @@ namespace DAO
         {
             return new string[]
             {
-                string.Format(GlobRes.DonorListHeader,
+                string.Format(Properties.Resources.DonorListHeader,
                 this.RequestType, this.Year, this.Dnr.name)
             };
         }
@@ -518,7 +518,7 @@ namespace DAO
             get
             {
                 string dn = Utils.TextUtils.CleanString(this.Dnr.code);
-                return string.Format(GlobRes.DonorListWorksheetName,
+                return string.Format(Properties.Resources.DonorListWorksheetName,
                     dn, this.Year, this.RequestType);
             }
         }
@@ -530,7 +530,7 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string dc = Utils.TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = string.Format(GlobRes.DonorListBasefilename,
+            string name = string.Format(Properties.Resources.DonorListBasefilename,
                 this.Year, this.RequestType, dc);
             return Path.Combine(this.TargetFolder(), name);
         }
@@ -567,7 +567,7 @@ namespace DAO
         {
             return new string[]
             {
-                string.Format(GlobRes.MasterListHeader,
+                string.Format(Properties.Resources.MasterListHeader,
                 this.RequestType, this.Year, this.Dnr.name)
             };
         }
@@ -613,7 +613,7 @@ namespace DAO
             get
             {
                 string dc = Utils.TextUtils.CleanString(this.Dnr.code);
-                return string.Format(GlobRes.MasterListWorksheetName,
+                return string.Format(Properties.Resources.MasterListWorksheetName,
                     dc, this.Year, this.RequestType);
             }
         }
@@ -626,7 +626,7 @@ namespace DAO
         protected override string GetOutputFileSpec()
         {
             string dc = Utils.TextUtils.CleanString(this.Dnr.code).ToUpper();
-            string name = string.Format(GlobRes.MasterListBasefilename,
+            string name = string.Format(Properties.Resources.MasterListBasefilename,
                 this.Year, this.RequestType, dc);
             return Path.Combine(this.TargetFolder(), name);
         }
@@ -753,7 +753,7 @@ namespace DAO
         {
             return new string[]
             {
-                string.Format(GlobRes.ParticipantListHeader,
+                string.Format(Properties.Resources.ParticipantListHeader,
                 this.ServiceType, this.Year)
             };
         }
@@ -774,7 +774,7 @@ namespace DAO
         /// <returns></returns>
         protected override string GetOutputFileSpec()
         {
-            string name = string.Format(GlobRes.ParticipantListBasefilename,
+            string name = string.Format(Properties.Resources.ParticipantListBasefilename,
                 this.Year,
                 Utils.TextUtils.CleanString(this.ServiceType));
             return Path.Combine(this.TargetFolder(), name);
@@ -875,7 +875,7 @@ namespace DAO
         {
             return new string[]
             {
-                string.Format(GlobRes.ThanksgivingDeliveryListHeader, this.Year)
+                string.Format(Properties.Resources.ThanksgivingDeliveryListHeader, this.Year)
             };
         }
 
@@ -885,7 +885,7 @@ namespace DAO
         /// </summary>
         protected override string WorksheetName
         {
-            get { return GlobRes.ThanksgivingDeliveryListSheetName; }
+            get { return Properties.Resources.ThanksgivingDeliveryListSheetName; }
         }
 
         /// <summary>
@@ -896,7 +896,7 @@ namespace DAO
         /// 
         protected override string GetOutputFileSpec()
         {
-            string name = string.Format(GlobRes.ThanksgivingDeliveryBaseFilename,
+            string name = string.Format(Properties.Resources.ThanksgivingDeliveryBaseFilename,
                 this.Year);
             return Path.Combine(this.TargetFolder(), name);
         }

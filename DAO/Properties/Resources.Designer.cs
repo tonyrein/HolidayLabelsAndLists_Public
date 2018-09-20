@@ -19,10 +19,10 @@ namespace DAO.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace DAO.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DAO.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace DAO.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,27 @@ namespace DAO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bag_Labels_{0}_{1}_{2}.docx.
+        /// </summary>
+        public static string BagLabelBaseFilename {
+            get {
+                return ResourceManager.GetString("BagLabelBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing {0} {1} to file {2}.
+        /// </summary>
+        public static string CountWritingMsg {
+            get {
+                return ResourceManager.GetString("CountWritingMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to *.bak????.*.
         /// </summary>
-        internal static string db_backup_glob {
+        public static string db_backup_glob {
             get {
                 return ResourceManager.GetString("db_backup_glob", resourceCulture);
             }
@@ -72,9 +90,181 @@ namespace DAO.Properties {
         /// <summary>
         ///   Looks up a localized string similar to hll_data.litedb.
         /// </summary>
-        internal static string db_filename {
+        public static string db_filename {
             get {
                 return ResourceManager.GetString("db_filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donor_List_{0}_{1}_{2}.xlsx.
+        /// </summary>
+        public static string DonorListBasefilename {
+            get {
+                return ResourceManager.GetString("DonorListBasefilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donor List, {0}, {1}, {2}.
+        /// </summary>
+        public static string DonorListHeader {
+            get {
+                return ResourceManager.GetString("DonorListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} DL {2}.
+        /// </summary>
+        public static string DonorListWorksheetName {
+            get {
+                return ResourceManager.GetString("DonorListWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully created file {0} .
+        /// </summary>
+        public static string FileCreationSuccessMsg {
+            get {
+                return ResourceManager.GetString("FileCreationSuccessMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred trying to work with file {0}.
+        ///The error message was {1}. Here is the stack trace: {2}.
+        /// </summary>
+        public static string FileExceptionErrorMsg {
+            get {
+                return ResourceManager.GetString("FileExceptionErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gift_Labels_{0}_{1}_{2}.docx.
+        /// </summary>
+        public static string GiftLabelBaseFilename {
+            get {
+                return ResourceManager.GetString("GiftLabelBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please include gift receipt..
+        /// </summary>
+        public static string GiftReceiptRequest {
+            get {
+                return ResourceManager.GetString("GiftReceiptRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master_List_{0}_{1}_{2}.xlsx.
+        /// </summary>
+        public static string MasterListBasefilename {
+            get {
+                return ResourceManager.GetString("MasterListBasefilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master List, {0}, {1}, {2}.
+        /// </summary>
+        public static string MasterListHeader {
+            get {
+                return ResourceManager.GetString("MasterListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} ML {2}.
+        /// </summary>
+        public static string MasterListWorksheetName {
+            get {
+                return ResourceManager.GetString("MasterListWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to --- NO DATA ---.
+        /// </summary>
+        public static string NoDataMsg {
+            get {
+                return ResourceManager.GetString("NoDataMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Bpage &amp;P of &amp;N.
+        /// </summary>
+        public static string PageNumbers {
+            get {
+                return ResourceManager.GetString("PageNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant_List_{0}_{1}.xlsx.
+        /// </summary>
+        public static string ParticipantListBasefilename {
+            get {
+                return ResourceManager.GetString("ParticipantListBasefilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant List, {0}, {1}.
+        /// </summary>
+        public static string ParticipantListHeader {
+            get {
+                return ResourceManager.GetString("ParticipantListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant_Summary_Labels_{0}.docx.
+        /// </summary>
+        public static string ParticipantSummaryLabelsBaseFilename {
+            get {
+                return ResourceManager.GetString("ParticipantSummaryLabelsBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postcard_Labels_{0}_{1}.docx.
+        /// </summary>
+        public static string PostcardLabelBaseFilename {
+            get {
+                return ResourceManager.GetString("PostcardLabelBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving_Delivery_List_{0}.xlsx.
+        /// </summary>
+        public static string ThanksgivingDeliveryBaseFilename {
+            get {
+                return ResourceManager.GetString("ThanksgivingDeliveryBaseFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving Delivery List, {0}.
+        /// </summary>
+        public static string ThanksgivingDeliveryListHeader {
+            get {
+                return ResourceManager.GetString("ThanksgivingDeliveryListHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thanksgiving Delivery List.
+        /// </summary>
+        public static string ThanksgivingDeliveryListSheetName {
+            get {
+                return ResourceManager.GetString("ThanksgivingDeliveryListSheetName", resourceCulture);
             }
         }
     }
