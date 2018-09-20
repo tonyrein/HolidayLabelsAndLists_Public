@@ -19,7 +19,7 @@ namespace HolidayLabelsAndLists.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -684,6 +684,24 @@ namespace HolidayLabelsAndLists.Properties {
         internal static string ProcessingDataSectionsMsg {
             get {
                 return ResourceManager.GetString("ProcessingDataSectionsMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating Label and List Files ....
+        /// </summary>
+        internal static string ProgressGeneratingTitle {
+            get {
+                return ResourceManager.GetString("ProgressGeneratingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing VESTA Reports ....
+        /// </summary>
+        internal static string ProgressProcessingReportsTitle {
+            get {
+                return ResourceManager.GetString("ProgressProcessingReportsTitle", resourceCulture);
             }
         }
         

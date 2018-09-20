@@ -353,7 +353,7 @@ email him at &lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</value>
   </data>
-   <data name="ChristmasFolderName" xml:space="preserve">
+  <data name="ChristmasFolderName" xml:space="preserve">
     <value>Christmas</value>
   </data>
   <data name="ThanksgivingFolderName" xml:space="preserve">
@@ -584,5 +584,11 @@ The error message was {1}. Here is the stack trace: {2}</value>
   </data>
   <data name="GenerateAllYearsYesButtonText" xml:space="preserve">
     <value>All Years</value>
+  </data>
+  <data name="ProgressGeneratingTitle" xml:space="preserve">
+    <value>Generating Label and List Files ...</value>
+  </data>
+  <data name="ProgressProcessingReportsTitle" xml:space="preserve">
+    <value>Processing VESTA Reports ...</value>
   </data>
 </root>

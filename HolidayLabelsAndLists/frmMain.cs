@@ -525,6 +525,7 @@ namespace HolidayLabelsAndLists
                     SetAppState(AppStates.Processing);
                     // create and configure a progress dialog:
                     ProgressForm = new frmProgress();
+                    ProgressForm.Text = Properties.Resources.ProgressProcessingReportsTitle;
                     ProgressForm.Done = false;
                     ProgressForm.Worker = _bgworker;
                     // Hook up "FormClosed" event handler:
@@ -574,6 +575,7 @@ namespace HolidayLabelsAndLists
                 SetAppState(AppStates.Processing);
                 // create and configure a progress dialog:
                 ProgressForm = new frmProgress();
+                ProgressForm.Text = Properties.Resources.ProgressGeneratingTitle;
                 ProgressForm.Done = false;
                 ProgressForm.Worker = _bgworker;
                 // Hook up "FormClosed" event handler:
