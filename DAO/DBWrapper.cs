@@ -59,13 +59,25 @@ namespace DAO
             return retDonor;
         }
 
-        public void AddOrUpdateDonor(Donor d)
+        public Donor   AddOrUpdateDonor(Donor d)
         {
             Donor dbd = this.MatchingDonor(d);
             if (dbd == null)
             {
-                this.Donors.Insert(d);
+                // not found -- insert the one passed
+                // to us and retrieve ID.
+                var insRet = this.Donors.Insert(d.dao);
+                int insID = insRet.AsInt32;
+                Donor_DAO dao = this.Donors.Find(e => e.Id == insID).FirstOrDefault();
+                dbd = new Donor(dao);
             }
+            else
+            {
+                // found -- set our donor's passed-in id to the id
+                // of the found donor.
+                d.dao.Id = dbd.dao.Id;
+            }
+            return dbd;
         }
     }
 
