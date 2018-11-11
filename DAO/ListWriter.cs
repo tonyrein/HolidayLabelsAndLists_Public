@@ -493,13 +493,13 @@ namespace DAO
         {
             List<string[]> retList = new List<string[]>();
 
-            var query = context.GliList.Where(
+            var query = context.GLIs.Find(
                 s => (s.year == this.Year) &&
                 (s.request_type == this.RequestType) &&
                 (s.donor_code == this.Dnr.code)
                 )
                .OrderBy(s => s.family_id).ThenBy(s => s.child_name);
-            foreach (GiftLabelInfo i in query)
+            foreach (GiftLabelInfo_DAO i in query)
             {
                 retList.Add(
                                 new string[] { i.family_id, i.child_name, i.child_gender,
@@ -588,13 +588,13 @@ namespace DAO
         protected override List<string[]> FetchData()
         {
             List<string[]> retList = new List<string[]>();
-                var query = context.GliList.Where(
+                var query = context.GLIs.Find(
                     s => (s.year == this.Year) &&
                     (s.request_type == this.RequestType) &&
                     (s.donor_code == this.Dnr.code)
                     )
                    .OrderBy(s => s.family_name).ThenBy(s => s.child_name);
-                foreach (GiftLabelInfo i in query)
+                foreach (GiftLabelInfo_DAO i in query)
                 {
                     retList.Add(
                                     new string[] { i.family_id, i.family_name, i.child_name, i.child_gender,
@@ -728,12 +728,12 @@ namespace DAO
         protected override List<string[]> FetchData()
         {
             List<string[]> retList = new List<string[]>();
-                var query = context.HoEnrList.Where(
+                var query = context.Enrollments.Find(
                     s => (s.year == this.Year) &&
                     (s.service_type == this.ServiceType)
                     )
                    .OrderBy(s => s.head_of_household);
-                foreach (ServicesHouseholdEnrollment e in query)
+                foreach (ServicesHouseholdEnrollment_DAO e in query)
                 {
                     retList.Add(
                                     new string[] { e.head_of_household, e.phone, e.address,
@@ -848,12 +848,12 @@ namespace DAO
         protected override List<string[]> FetchData()
         {
             List<string[]> retList = new List<string[]>();
-            var query = context.HoEnrList.Where(
+            var query = context.Enrollments.Find(
                 s => (s.year == this.Year) &&
                 (s.service_type == this.ServiceType)
                 )
                .OrderBy(s => s.head_of_household);
-            foreach (ServicesHouseholdEnrollment e in query)
+            foreach (ServicesHouseholdEnrollment_DAO e in query)
             {
                 retList.Add(
                                 new string[] { e.head_of_household, e.phone, e.address,

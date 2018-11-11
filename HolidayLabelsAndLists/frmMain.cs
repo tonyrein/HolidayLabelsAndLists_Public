@@ -42,7 +42,7 @@ namespace HolidayLabelsAndLists
         public frmMain()
         {
             InitializeComponent();
-            Context.Load();
+            //Context.Load();
             FileListManager = new HllFileListManager(Context);
             PopulateTypeToViewCombo(set_to_zero: true);
             SetCaptions();

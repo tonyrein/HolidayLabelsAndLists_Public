@@ -401,7 +401,7 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-            var query = context.GliList.Where(
+            var query = context.GLIs.Find(
                 s => (s.year == this.Year) &&
                 (s.donor_code == this.Dnr.code) &&
                 (s.donor_name == this.Dnr.name) &&
@@ -497,7 +497,7 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-            var query = context.BliList.Where(
+            var query = context.BLIs.Find(
                 s => (s.year == this.Year) &&
                 (s.donor_code == this.Dnr.code) &&
                 (s.donor_name == this.Dnr.name) &&
@@ -585,7 +585,7 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-            var query = context.HoEnrList.Where(
+            var query = context.Enrollments.Find(
                         s => (s.year == this.Year) &&
                         (s.service_type == this.ServiceType)
                         );
@@ -715,10 +715,10 @@ namespace DAO
         {
             List<object> fkl = new List<object>();
             ServicesHouseholdEnrollment_DAO[] participant_array =
-                this.context.HoEnrList.Select(h => h.dao).Where(h => h.year == this.Year).ToArray();
+                this.context.Enrollments.Find(h => h.year == this.Year).ToArray();
             foreach (ServicesHouseholdEnrollment_DAO participant in participant_array)
             {
-                var gli_array = this.context.GliList.Where(g => (g.year == this.Year && g.family_id == participant.family_id)).ToArray();
+                var gli_array = this.context.GLIs.Find(g => (g.year == this.Year && g.family_id == participant.family_id)).ToArray();
                 if (gli_array.Count() > 0)
                 {
                     FamiliesAndKids fak = new FamiliesAndKids();

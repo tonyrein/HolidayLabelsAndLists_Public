@@ -18,7 +18,7 @@ namespace DAO
     ///  - GiftLabelInfo objects
     ///  - ServicesHouseholdEnrollment objects
     /// </summary>
-    public class DBWrapper2
+    public class DBWrapper
     {
         private LiteDatabase _db;
         private LiteCollection<Donor_DAO> _donorcoll;
@@ -42,21 +42,74 @@ namespace DAO
             this._glicoll.EnsureIndex(g => g.family_id);
             this._henrcoll.EnsureIndex(h => h.family_id);
         }
-        public DBWrapper2()
+        public DBWrapper()
         {
             this._db = DbUtils.GetDatabase();
             this.SetUpCollections();
         }
 
+        public bool IsEmpty
+        {
+            get
+            {
+                return (this.BLIs.Count() == 0) &&
+                    (this.GLIs.Count() == 0) &&
+                    (this.Enrollments.Count() == 0);
+            }
+        }
+
         public Donor MatchingDonor(Donor otherdonor)
         {
-            Donor retDonor = null;
-            Donor_DAO dao = this.Donors.Find(d => d.name == otherdonor.name).FirstOrDefault();
+            return FindDonorByName(otherdonor.name);
+        }
+
+        public BagLabelInfo MatchingBLI(BagLabelInfo otherbli)
+        {
+            BagLabelInfo retBLI = null;
+            BagLabelInfo_DAO dao = this.BLIs.Find(
+                b =>
+                    b.family_id == otherbli.family_id &&
+                    b.year == otherbli.year &&
+                    b.request_type == otherbli.request_type
+                ).FirstOrDefault();
             if (dao != null)
             {
-                retDonor = new Donor(dao);
+                retBLI = new BagLabelInfo(dao);
             }
-            return retDonor;
+            return retBLI;
+        }
+
+        public GiftLabelInfo MatchingGLI(GiftLabelInfo othergli)
+        {
+            GiftLabelInfo retGLI = null;
+            GiftLabelInfo_DAO dao = this.GLIs.Find(
+                g =>
+                    g.family_id == othergli.family_id &&
+                    g.year == othergli.year &&
+                    g.request_type == othergli.request_type &&
+                    g.child_name == othergli.child_name
+                ).FirstOrDefault();
+            if (dao != null)
+            {
+                retGLI = new GiftLabelInfo(dao);
+            }
+            return retGLI;
+        }
+
+        public ServicesHouseholdEnrollment MatchingServicesHouseholdEnrollment(ServicesHouseholdEnrollment otherenroll)
+        {
+            ServicesHouseholdEnrollment retEnr = null;
+            ServicesHouseholdEnrollment_DAO dao = this.Enrollments.Find(
+                e=>
+                    e.family_id == otherenroll.family_id &&
+                    e.year == otherenroll.year &&
+                    e.service_type == e.service_type 
+                ).FirstOrDefault();
+            if (dao != null)
+            {
+                retEnr = new ServicesHouseholdEnrollment(dao);
+            }
+            return retEnr;
         }
 
         public Donor   AddOrUpdateDonor(Donor d)
@@ -76,9 +129,102 @@ namespace DAO
                 // found -- set our donor's passed-in id to the id
                 // of the found donor.
                 d.dao.Id = dbd.dao.Id;
+                // Now update the found donor with the other
+                // attributes of the passed-in donor:
+                dbd.dao = d.dao;
+                // Now the database contains the updated info
+                // for this Donor, but retains the old id.
             }
             return dbd;
         }
+
+        public Donor FindOrCreateDonorByName(string newval)
+        {
+            Donor retDonor = FindDonorByName(newval);
+            if (retDonor == null)
+            {
+                retDonor = AddOrUpdateDonor(new Donor(newval));
+            }
+            return retDonor;
+        }
+        public BagLabelInfo AddOrUpdateBLI(BagLabelInfo bli)
+        {
+            BagLabelInfo dbb = MatchingBLI(bli);
+            if (dbb == null)
+            {
+                var insRet = this.BLIs.Insert(bli.dao);
+                int insID = insRet.AsInt32;
+                BagLabelInfo_DAO dao = this.BLIs.Find(b => b.Id == insID).FirstOrDefault();
+                dbb = new BagLabelInfo(dao);
+            }
+            else
+            {
+                bli.dao.Id = dbb.dao.Id;
+                dbb.dao = bli.dao;
+            }
+            return dbb;
+        }
+
+        public Donor DonorForDonorCode(string code)
+        {
+            Donor retD = null;
+            Donor_DAO dao = this.Donors.Find(d => d.code == code).FirstOrDefault();
+            if (dao != null)
+            {
+                retD = new Donor(dao);
+            }
+            return retD;
+        }
+
+        public GiftLabelInfo AddOrUpdateGLI(GiftLabelInfo gli)
+        {
+            GiftLabelInfo dbg = MatchingGLI(gli);
+            if (dbg == null)
+            {
+                var insRet = this.GLIs.Insert(gli.dao);
+                int insID = insRet.AsInt32;
+                GiftLabelInfo_DAO dao = this.GLIs.Find(b => b.Id == insID).FirstOrDefault();
+                dbg = new GiftLabelInfo(dao);
+            }
+            else
+            {
+                gli.dao.Id = dbg.dao.Id;
+                dbg.dao = gli.dao;
+            }
+            return dbg;
+        }
+
+        public ServicesHouseholdEnrollment AddOrUpdateEnrollment(ServicesHouseholdEnrollment enr)
+        {
+            ServicesHouseholdEnrollment dbe = MatchingServicesHouseholdEnrollment(enr);
+            if (dbe == null)
+            {
+                var insRet = this.Enrollments.Insert(enr.dao);
+                int insID = insRet.AsInt32;
+                ServicesHouseholdEnrollment_DAO dao = this.Enrollments.Find(e => e.Id == insID).FirstOrDefault();
+                dbe = new ServicesHouseholdEnrollment(dao);
+            }
+            else
+            {
+                enr.dao.Id = dbe.dao.Id;
+                dbe.dao = enr.dao;
+            }
+            return dbe;
+        }
+
+
+        public Donor FindDonorByName(string name)
+        {
+            Donor retDonor = null;
+            Donor_DAO dao = this.Donors.Find(d => d.name == name).FirstOrDefault();
+            if (dao != null)
+            {
+                retDonor = new Donor(dao);
+            }
+            return retDonor;
+        }
+       
+
     }
 
 
@@ -94,7 +240,7 @@ namespace DAO
 //    ///  - GiftLabelInfo objects
 //    ///  - ServicesHouseholdEnrollment objects
 //    /// </summary>
-public class DBWrapper
+public class DBWrapper0
 {
     public List<BagLabelInfo> BliList { get; set; }
     public List<Donor> DonorList { get; set; }
@@ -115,7 +261,7 @@ public class DBWrapper
     /// Then add a default set of donors from the values supplied by
     /// the client.
     /// </summary>
-    public DBWrapper()
+    public DBWrapper0()
     {
         BliList = new List<BagLabelInfo>();
         DonorList = new List<Donor>();

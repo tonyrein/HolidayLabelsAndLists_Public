@@ -184,7 +184,7 @@ namespace VestaImporter
 
         protected override void add_or_update(object rec, DBWrapper context)
         {
-            context.AddOrUpdateHoEnr((ServicesHouseholdEnrollment)rec);
+            context.AddOrUpdateEnrollment((ServicesHouseholdEnrollment)rec);
         }
     }
 
@@ -214,7 +214,7 @@ namespace VestaImporter
             BagLabelInfo workObj = new BagLabelInfo();
             workObj.year = year;
             donor_name = row[this.field_indices["Donor Name"]];
-            Donor d = context.FindOrCreateDonor(donor_name);
+            Donor d = context.FindOrCreateDonorByName(donor_name);
             workObj.donor_code = d.code;
             workObj.donor_name = d.name;
             workObj.family_id = row[this.field_indices["Family ID"]];
@@ -233,7 +233,7 @@ namespace VestaImporter
 
         protected override void add_or_update(object rec, DBWrapper context)
         {
-            context.AddOrUpdateBli((BagLabelInfo)rec);
+            context.AddOrUpdateBLI((BagLabelInfo)rec);
         }
     }
 
@@ -258,7 +258,7 @@ namespace VestaImporter
             // column, use that to identify this row's donor.
             // Otherwise, use the "Donor Name" column.
             donor_name = row[this.field_indices["Donor Name"]];
-            Donor d = context.FindOrCreateDonor(donor_name);
+            Donor d = context.FindOrCreateDonorByName(donor_name);
             workObj.donor_code = d.code;
             workObj.donor_name = d.name;
             int child_age;
@@ -288,7 +288,7 @@ namespace VestaImporter
 
         protected override void add_or_update(object rec, DBWrapper context)
         {
-            context.AddOrUpdateGli((GiftLabelInfo)rec);
+            context.AddOrUpdateGLI((GiftLabelInfo)rec);
         }
     }
 

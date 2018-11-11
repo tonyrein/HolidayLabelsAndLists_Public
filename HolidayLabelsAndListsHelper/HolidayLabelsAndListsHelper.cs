@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DAO;
+using LiteDB;
 using Utils;
 
 //using GlobRes = AppWideResources.Properties.Resources;
@@ -33,8 +34,8 @@ namespace HolidayLabelsAndListsHelper
         /// <returns>array of strings representing gift label info and bag label info request output_doc_types</returns>
         public static string[] RequestTypesInDb(DBWrapper context)
         {
-            return (from g in context.GliList select g.request_type).Concat
-                    (from b in context.BliList select b.request_type).Distinct().ToArray();
+            return (from g in context.GLIs.FindAll() select g.request_type).Concat
+                    (from b in context.BLIs.FindAll() select b.request_type).Distinct().ToArray();
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace HolidayLabelsAndListsHelper
         /// <returns>array of string</returns>
         public static string[] ServiceTypesInDb(DBWrapper context)
         {
-            return (from s in context.HoEnrList
+            return (from s in context.Enrollments.FindAll()
                     select s.service_type).Distinct().ToArray();
         }
 
@@ -61,11 +62,11 @@ namespace HolidayLabelsAndListsHelper
         /// <returns>array of int</returns>
         public static int[] YearsInDb(DBWrapper context)
         {
-            int[] intArray = (from g in context.GliList
+            int[] intArray = (from g in context.GLIs.FindAll()
                               select (int)g.year).Concat
-                            (from b in context.BliList
+                            (from b in context.BLIs.FindAll()
                              select (int)b.year).Concat
-                             (from s in context.HoEnrList
+                             (from s in context.Enrollments.FindAll()
                               select (int)s.year).Distinct().ToArray();
             Array.Sort(intArray);
             Array.Reverse(intArray);
@@ -107,8 +108,9 @@ namespace HolidayLabelsAndListsHelper
             //int[] years = YearsInDb(context);
             foreach (int year in years)
             {
-                foreach (Donor d in context.DonorList)
+                foreach (Donor_DAO dao in context.Donors.FindAll().ToList())
                 {
+                    Donor d = new Donor(dao);
                     retInt += MakeOutputForDonor(wk, context, d, request_types, year);
                 }
                 retInt += MakeDonorNeutralDocs(wk, context, year);
@@ -590,7 +592,7 @@ namespace HolidayLabelsAndListsHelper
                 {
                     // add it to datastore as well as to our return list
                     d = new Donor(c, c);
-                    context.DonorList.Add(d);
+                    context.AddOrUpdateDonor(d);
                 }
                 retList.Add(d);
             }
@@ -613,7 +615,7 @@ namespace HolidayLabelsAndListsHelper
                         // Make a new donor using this code.
                         // Add it to data store as well as our return list
                         d = new Donor(c, c);
-                        context.DonorList.Add(d);
+                        context.AddOrUpdateDonor(d);
                     }
                     retList.Add(d);
                 }
