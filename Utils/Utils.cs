@@ -183,7 +183,7 @@ namespace Utils
 
     }
 
-        public static class MessageBoxUtils
+    public static class MessageBoxUtils
     {
         /// <summary>
         /// Show a dialog box with specified text.

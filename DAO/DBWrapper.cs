@@ -47,7 +47,7 @@ namespace DAO
         /////////////////
         public Donor FindDonorByName(string name)
         {
-            return this._donorcoll.Find(d => d.name == name).FirstOrDefault();
+            return this._donorcoll.Find(d => d.name == Utils.TextUtils.CanonicalDonorName(name)).FirstOrDefault();
         }
 
         public Donor FindDonorByCode(string code)
@@ -60,10 +60,10 @@ namespace DAO
             return FindDonorByName(other.name);
         }
 
-        public void AddNewDonor(Donor d)
-        {
-            this._donorcoll.Insert(d);
-        }
+        //public void AddNewDonor(Donor d)
+        //{
+        //    this._donorcoll.Insert(d);
+        //}
 
         public Donor AddOrUpdateDonor(Donor d)
         {
