@@ -31,11 +31,11 @@ namespace HolidayLabelsAndListsHelper
         /// </summary>
         /// <param name="context" (DBWrapper)></param>
         /// <returns>array of strings representing gift label info and bag label info request output_doc_types</returns>
-        public static string[] RequestTypesInDb(DBWrapper context)
-        {
-            return (from g in context.GliList select g.request_type).Concat
-                    (from b in context.BliList select b.request_type).Distinct().ToArray();
-        }
+        //public static string[] RequestTypesInDb(DBWrapper context)
+        //{
+        //    return (from g in context.GliList select g.request_type).Concat
+        //            (from b in context.BliList select b.request_type).Distinct().ToArray();
+        //}
 
         /// <summary>
         /// Get list of the service enrollment output_doc_types contained in the data
@@ -48,30 +48,6 @@ namespace HolidayLabelsAndListsHelper
             return (from s in context.HoEnrList
                     select s.service_type).Distinct().ToArray();
         }
-
-        /// <summary>
-        /// Get list of the years contained in the data read in
-        /// from the VESTA reports.
-        /// 
-        /// Sort the list with most recent year first -- this is
-        /// so that the most recent year will be at the top of the
-        /// year drop-down in the main window.
-        /// </summary>
-        /// <param name="context" (DBWrapper)></param>
-        /// <returns>array of int</returns>
-        public static int[] YearsInDb(DBWrapper context)
-        {
-            int[] intArray = (from g in context.GliList
-                              select (int)g.year).Concat
-                            (from b in context.BliList
-                             select (int)b.year).Concat
-                             (from s in context.HoEnrList
-                              select (int)s.year).Distinct().ToArray();
-            Array.Sort(intArray);
-            Array.Reverse(intArray);
-            return intArray;
-        }
-
 
         /// <summary>
         /// Ask OS to open the given file with the
@@ -103,13 +79,13 @@ namespace HolidayLabelsAndListsHelper
         public static int MakeOutputFiles(BackgroundWorker wk, int[] years, DBWrapper context)
         {
             int retInt = 0;
-            string[] request_types = RequestTypesInDb(context);
+            //string[] request_types = RequestTypesInDb(context);
             //int[] years = YearsInDb(context);
             foreach (int year in years)
             {
                 foreach (Donor d in context.DonorList)
                 {
-                    retInt += MakeOutputForDonor(wk, context, d, request_types, year);
+                    retInt += MakeOutputForDonor(wk, context, d, year);
                 }
                 retInt += MakeDonorNeutralDocs(wk, context, year);
             }
@@ -129,11 +105,11 @@ namespace HolidayLabelsAndListsHelper
         /// <param name="year" (int)></param>
         /// <returns>int</returns>
         private static int MakeOutputForDonor(BackgroundWorker wk,
-            DBWrapper ctx, Donor d, string[] request_types, int year)
+            DBWrapper ctx, Donor d, int year)
         {
             int retInt;
-            retInt = MakeListsForDonor(wk, ctx, d, request_types, year);
-            retInt += MakeLabelsForDonor(wk, ctx, d, request_types, year);
+            retInt = MakeListsForDonor(wk, ctx, d, year);
+            retInt += MakeLabelsForDonor(wk, ctx, d, year);
             return retInt;
         }
 
@@ -150,11 +126,11 @@ namespace HolidayLabelsAndListsHelper
         /// <param name="year" (int)></param>
         /// <returns>int</returns>
         private static int MakeListsForDonor(BackgroundWorker wk,
-            DBWrapper ctx, Donor d, string[] request_types, int year)
+            DBWrapper ctx, Donor d, int year)
         {
             int retInt = 0;
             ListWriter w;
-            foreach (string s in request_types)
+            foreach (string s in ctx.RequestTypesInDb ())
             {
                 w = new MasterListWriter(wk, ctx, d, s, year);
                 retInt += w.TypeReport();
@@ -173,15 +149,14 @@ namespace HolidayLabelsAndListsHelper
         /// <param name="wk" (BackgroundWorker)></param>
         /// <param name="ctx" (DBWrapper)></param>
         /// <param name="d" (Donor)></param>
-        /// <param name="request_types" (array of string></param>
         /// <param name="year" (int)></param>
         /// <returns>int</returns>
         private static int MakeLabelsForDonor(BackgroundWorker wk,
-            DBWrapper ctx, Donor d, string[] request_types, int year)
+            DBWrapper ctx, Donor d, int year)
         {
             int retInt = 0;
             LabelWriter w;
-            foreach (string s in request_types)
+            foreach (string s in ctx.RequestTypesInDb())
             {
                 w = new BagLabelWriter(wk, ctx, d, s, year);
                 retInt += w.TypeAllRecords();
@@ -566,7 +541,7 @@ namespace HolidayLabelsAndListsHelper
         /// in our file list.
         /// </summary>
         /// <returns></returns>
-        public List<Donor> ActiveDonors()
+        public List<Donor> DonorsInFileList()
         {
             List<Donor> retList = new List<Donor>();
             // For each file, if it's of the proper type,
@@ -581,21 +556,20 @@ namespace HolidayLabelsAndListsHelper
             }
             // remove dupes:
             codes = codes.Distinct().ToList();
-
             // Now add donors to our retList, using the codes we found:
             foreach (string c in codes)
             {
-                Donor d = context.DonorForDonorCode(c);
+                Donor d = context.FindDonorByCode(c);
                 if (d == null) // Uh-oh! This is a new donor.
                 {
                     // add it to datastore as well as to our return list
                     d = new Donor(c, c);
-                    context.DonorList.Add(d);
+                    context.AddOrUpdateDonor(d);
                 }
                 retList.Add(d);
             }
             // Sort the list by donor name:
-            return retList.OrderBy(d => d.name).ToList();
+            return retList.OrderBy(d => d.name).Distinct().ToList();
         }
 
 
@@ -607,18 +581,19 @@ namespace HolidayLabelsAndListsHelper
                 if (hfi.IsValidHLL && hfi.HasDonor && hfi.Year == year)
                 {
                     string c = hfi.DonorCode;
-                    Donor d = context.DonorForDonorCode(c);
+                    Donor d = context.FindDonorByCode(c);
                     if (d == null) // new donor! How did this happen?
                     {
                         // Make a new donor using this code.
                         // Add it to data store as well as our return list
                         d = new Donor(c, c);
-                        context.DonorList.Add(d);
+                        context.AddOrUpdateDonor(d);
                     }
                     retList.Add(d);
                 }
             }
-            return retList.Distinct().OrderBy(d => d.name).ToList();
+            return retList.Distinct(new DistinctDonorComparer()).OrderBy(d => d.name).ToList();
+            //return retList.GroupBy(gd => gd.name).Select(sd => sd.FirstOrDefault()).ToList();
         }
 
         /// <summary>
@@ -630,8 +605,10 @@ namespace HolidayLabelsAndListsHelper
         /// year at the top.
         /// </summary>
         /// <returns></returns>
-        public string[] ActiveYears()
+        public string[] YearsInFileList()
         {
+            // HashSet does not allow duplicates, so there
+            // is no need to use Distinct() in the Linq below.
             HashSet<string> allyears = new HashSet<string>();
             foreach (HllFileInfo fi in RegularHllFiles)
             {

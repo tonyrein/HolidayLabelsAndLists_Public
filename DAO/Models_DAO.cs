@@ -61,7 +61,7 @@ namespace DAO
     /// </summary>
     class FamiliesAndKids
     {
-         public ServicesHouseholdEnrollment_DAO dao { get; set; }
+         public ServicesHouseholdEnrollment enr { get; set; }
          public string kids { get; set; }
          public int gift_card_count { get; set; }
      }

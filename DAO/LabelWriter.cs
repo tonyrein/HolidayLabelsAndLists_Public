@@ -497,13 +497,7 @@ namespace DAO
         /// </summary>
         protected override void SetItemList()
         {
-            var query = context.BliList.Where(
-                s => (s.year == this.Year) &&
-                (s.donor_code == this.Dnr.code) &&
-                (s.donor_name == this.Dnr.name) &&
-                (s.request_type == this.RequestType)
-                );
-            this.ItemList = query.ToList<object>();
+            this.ItemList = context.BLIsByYearDonorReqType(this.Year, this.Dnr, this.RequestType).ToList<object>();
         }
 
         /// <summary>
@@ -666,23 +660,15 @@ namespace DAO
             label_height: (int)(3.3333 * (int)DocPartUnits.CellHeight),
             horizontal_padding: (int)(0.375 * (int)DocPartUnits.CellWidth),
             vertical_padding: (int)(0 * (int)DocPartUnits.CellHeight),
-            //label_width: (int)(3.33333 * (int)DocPartUnits.CellWidth),
-            //label_height: (int)(3.56 * (int)DocPartUnits.CellHeight),
-            //horizontal_padding: (int)(0 * (int)DocPartUnits.CellWidth),
-            //vertical_padding: (int)(0.375 * (int)DocPartUnits.CellHeight),
             top_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             bottom_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             left_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             right_margin: (int)(0.5 * (int)DocPartUnits.Margins),
             num_label_cols: 2,
             label_rows_per_page: 3,
-            //num_label_cols: 3,
-            //label_rows_per_page: 2,
             orientation: Orientation.Portrait,
             page_width: (int)(8.5 * (int)DocPartUnits.PageWidth),
             page_height: (int)(11.0 * (int)DocPartUnits.PageHeight)
-            //page_width: (int)(11.0 * (int)DocPartUnits.PageWidth),
-            //page_height: (int)(8.5 * (int)DocPartUnits.PageHeight)
             )
         {
             this.SetItemList();
@@ -714,15 +700,15 @@ namespace DAO
         protected override void SetItemList()
         {
             List<object> fkl = new List<object>();
-            ServicesHouseholdEnrollment_DAO[] participant_array =
-                this.context.HoEnrList.Select(h => h.dao).Where(h => h.year == this.Year).ToArray();
-            foreach (ServicesHouseholdEnrollment_DAO participant in participant_array)
+            ServicesHouseholdEnrollment[] participant_array =
+                this.context.HoEnrList.Select(h => h).Where(h => h.year == this.Year).ToArray();
+            foreach (ServicesHouseholdEnrollment participant in participant_array)
             {
                 var gli_array = this.context.GliList.Where(g => (g.year == this.Year && g.family_id == participant.family_id)).ToArray();
                 if (gli_array.Count() > 0)
                 {
                     FamiliesAndKids fak = new FamiliesAndKids();
-                    fak.dao = participant;
+                    fak.enr  = participant;
                     string[] sa = gli_array.Select(g => g.child_name).Distinct().ToArray();
                     fak.kids = string.Join(", ", sa);
                     fak.gift_card_count = gli_array.Where(g => g.donor_name == "Gift Cards").Count();
@@ -744,13 +730,13 @@ namespace DAO
             // that that paragraph isn't there, add one.
             if (p == null)
                 p = c.InsertParagraph();
-            string zip = Utils.TextUtils.CanonicalPostalCode(fk.dao.postal_code);
+            string zip = Utils.TextUtils.CanonicalPostalCode(fk.enr.postal_code);
             p.SpacingBefore(0);
             p.SpacingAfter(0);
-            p.Append(fk.dao.head_of_household).FontSize(24).Bold()
-                .AppendLine(fk.dao.phone).FontSize(18).Bold()
-                .AppendLine(fk.dao.address).FontSize(16)
-                .AppendLine(fk.dao.city + ", " + fk.dao.state_or_province + " " + zip).FontSize(16)
+            p.Append(fk.enr.head_of_household).FontSize(24).Bold()
+                .AppendLine(fk.enr.phone).FontSize(18).Bold()
+                .AppendLine(fk.enr.address).FontSize(16)
+                .AppendLine(fk.enr.city + ", " + fk.enr.state_or_province + " " + zip).FontSize(16)
                 .AppendLine("Gift Cards: " + fk.gift_card_count.ToString()).FontSize(16)
                 .AppendLine("Number of Bags: ___").FontSize(16)
                 .AppendLine("") // Another blank line before children's names

@@ -214,7 +214,12 @@ namespace VestaImporter
             BagLabelInfo workObj = new BagLabelInfo();
             workObj.year = year;
             donor_name = row[this.field_indices["Donor Name"]];
-            Donor d = context.FindOrCreateDonor(donor_name);
+            Donor d = context.FindDonorByName(donor_name);
+            if (d == null)
+            {
+                d = new Donor(donor_name);
+                context.AddOrUpdateDonor(d);
+            }
             workObj.donor_code = d.code;
             workObj.donor_name = d.name;
             workObj.family_id = row[this.field_indices["Family ID"]];
@@ -233,7 +238,7 @@ namespace VestaImporter
 
         protected override void add_or_update(object rec, DBWrapper context)
         {
-            context.AddOrUpdateBli((BagLabelInfo)rec);
+            context.AddOrUpdateBLI((BagLabelInfo)rec);
         }
     }
 
@@ -258,7 +263,16 @@ namespace VestaImporter
             // column, use that to identify this row's donor.
             // Otherwise, use the "Donor Name" column.
             donor_name = row[this.field_indices["Donor Name"]];
-            Donor d = context.FindOrCreateDonor(donor_name);
+            // We know the donor name, but not code. If there's already
+            // a Donor with this name, we're set -- just use that Donor
+            // along with whatever code it has. Otherwise, make a Donor
+            // from the name and add that to the database.
+            Donor d = context.FindDonorByName(donor_name);
+            if  (d == null)
+            {
+                d = new Donor(donor_name);
+                context.AddOrUpdateDonor(d);
+            }
             workObj.donor_code = d.code;
             workObj.donor_name = d.name;
             int child_age;
@@ -288,7 +302,7 @@ namespace VestaImporter
 
         protected override void add_or_update(object rec, DBWrapper context)
         {
-            context.AddOrUpdateGli((GiftLabelInfo)rec);
+            context.AddOrUpdateGLI((GiftLabelInfo)rec);
         }
     }
 

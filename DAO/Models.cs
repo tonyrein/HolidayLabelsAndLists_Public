@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,38 +23,68 @@ namespace DAO
 {
     public class BagLabelInfo
     {
-        //private BagLabelInfo_DAO _dao = new BagLabelInfo_DAO();
-        public BagLabelInfo_DAO dao { get; set; }
-        //public BagLabelInfo_DAO dao { get { return _dao; } }
+        public int Id { get; set; }
+        private int _year;
+        public string family_id { get; set; }
+        public string family_name { get; set; }
+        public string family_members { get; set; }
+        public string request_type { get; set; }
+        public string donor_code { get; set;  }
+        public string donor_name { get; set; }
         public int year
         {
-            get { return dao.year; }
+            get { return _year; }
             set
             {
                 if (value < 2000) throw new ArgumentException("bag_label_info year must be >= 2000.");
-                dao.year = value;
+                _year = value;
             }
         }
-        public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
-        public string family_name { get { return dao.family_name; } set { dao.family_name = value; } }
-        public string family_members { get { return dao.family_members; } set { dao.family_members = value; } } 
-        public string request_type { get { return dao.request_type; } set { dao.request_type = value; } }
-        public string donor_code { get { return dao.donor_code; } set { dao.donor_code = value; } }
-        public string donor_name { get { return dao.donor_name; } set { dao.donor_name = value; } }
         public BagLabelInfo()
         {
-            this.dao = new BagLabelInfo_DAO();
+            this.year = DateTime.Now.Year;
         }
-        public BagLabelInfo(BagLabelInfo_DAO dao)
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other"></param>
+        public BagLabelInfo(BagLabelInfo other)
         {
-            this.dao = dao;
+            this.donor_code = other.donor_code;
+            this.donor_name = other.donor_name;
+            this.family_id = other.family_id;
+            this.family_members = other.family_members;
+            this.family_name = other.family_name;
+            this.request_type = other.request_type;
+            this.year = other.year;
+        }
+    }
+
+
+    /// <summary>
+    /// This class is used in Linq expressions that return a list
+    /// of Donors with only one Donor per name. That is, if there
+    /// are multiple Donors with the same name, differing in Id,
+    /// treat them as the same in Distinct() expressions.
+    /// </summary>
+    public class DistinctDonorComparer : IEqualityComparer<Donor>
+    {
+        public bool Equals(Donor a, Donor b)
+        {
+            return a.name == b.name;
+        }
+        public int GetHashCode(Donor d)
+        {
+            return d.name.GetHashCode();
         }
     }
 
     public class Donor
     {
-        public Donor_DAO dao { get; set; }
-        //public Donor_DAO dao { get { return _dao; } }
+        public int Id { get; set; }
+        private string _code;
+        private string _name;
         public static string MakeDonorName(string s)
         {
             string scr = Utils.TextUtils.CleanString(s);
@@ -66,23 +97,23 @@ namespace DAO
 
         public string code
         {
-            get { return dao.code; }
+            get { return _code; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
-                    dao.code = Donor.MakeDonorCode(value);
+                    _code = Donor.MakeDonorCode(value);
                 else // generate from name
-                    dao.code = MakeDonorCode(name);
+                    _code = MakeDonorCode(name);
             }
         }
         public string name
         {
-            get { return dao.name; }
+            get { return _name; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
                 {
-                    dao.name = Donor.MakeDonorName(value);
+                    _name = Donor.MakeDonorName(value);
                 }
                 else
                 {
@@ -92,8 +123,13 @@ namespace DAO
         }
         public Donor()
         {
-            this.dao = new Donor_DAO();
         }
+
+        /// <summary>
+        /// Construct a Donor from a code and a name
+        /// </summary>
+        /// <param name="_cd"></param>
+        /// <param name="_nm"></param>
         public Donor(string _cd, string _nm)
             : this()
         {
@@ -101,9 +137,13 @@ namespace DAO
             code = _cd;
         }
 
-        public Donor(Donor_DAO dao)
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other"></param>
+        public Donor(Donor other)
+            : this(other.code , other.name )
         {
-            this.dao = dao;
         }
 
         /// <summary>
@@ -116,106 +156,150 @@ namespace DAO
             : this(_nm, _nm)
         {
         }
-}
+    }
+
     public class GiftLabelInfo
     {
-        public GiftLabelInfo_DAO dao { get; set; }
-        //public GiftLabelInfo_DAO dao { get { return _dao; } }
+        public int Id { get; set; }
+        private int _year;
+        private string _child_gender;
+        private int _child_age;
         private static string[] GENDER_VALUES = new string[] { "F", "M", "NotSpecified" };
         public int year
         {
-            get { return dao.year; }
+            get { return _year; }
             set
             {
-                if (value < 2000) throw new ArgumentException("gift_label_info year must be >= 2000.");
-                dao.year = value;
+                if (value < 2000)
+                    throw new ArgumentException("gift_label_info year must be >= 2000.");
+                else
+                    _year = value;
             }
         }
-        public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
-        public string family_name { get { return dao.family_name; } set { dao.family_name = value; } }
-        public string child_name { get { return dao.child_name; } set { dao.child_name = value; } }
+        public string family_id { get; set; }
+        public string family_name { get; set; }
+        public string child_name { get; set; }
         public string child_gender
         {
-            get { return dao.child_gender; }
+            get { return _child_gender; }
             set
             {
                 if (!GENDER_VALUES.Contains(value))
                     throw new ArgumentException("gift_label_info child gender must be F, M, or NotSpecified");
-                dao.child_gender = value;
+                else
+                    _child_gender = value;
             }
         }
         public int child_age
         {
-            get { return dao.child_age; }
+            get { return _child_age; }
             set
             {
                 if (value < -1)
                     throw new ArgumentException("gift_label_info child age must >= -1");
-                dao.child_age = value;
+                else
+                    _child_age = value;
             }
         }
-        public string request_type { get { return dao.request_type; } set { dao.request_type = value; } }
-        public string request_detail { get { return dao.request_detail; } set { dao.request_detail = value; } }
-        public string donor_code { get { return dao.donor_code; } set { dao.donor_code = value; } }
-        public string donor_name { get { return dao.donor_name; } set { dao.donor_name = value; } }
+        public string request_type { get; set; }
+        public string request_detail { get; set; }
+        public string donor_code { get; set; }
+        public string donor_name { get; set; }
 
         public GiftLabelInfo()
         {
-            this.dao = new GiftLabelInfo_DAO();
+            this.year = DateTime.Now.Year;
         }
-        public GiftLabelInfo(GiftLabelInfo_DAO dao)
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other"></param>
+        public GiftLabelInfo(GiftLabelInfo other)
         {
-            this.dao = dao;
+            this.child_age = other.child_age;
+            this.child_gender = other.child_gender;
+            this.child_name = other.child_name;
+            this.donor_code = other.donor_code;
+            this.donor_name = other.donor_name;
+            this.family_id = other.family_id;
+            this.family_name = other.family_name;
+            this.request_detail = this.request_detail;
+            this.request_type = other.request_type;
+            this.year = other.year;
         }
     }
 
     public class ServicesHouseholdEnrollment
     {
-        public ServicesHouseholdEnrollment_DAO dao { get; set; }
-        //public ServicesHouseholdEnrollment_DAO dao { get { return _dao; } }
-        public string service_type { get { return dao.service_type; } set { dao.service_type = value; } }
+        public int Id { get; set; }
+        private int _year;
+        private int _month;
+        private int _day;
+        public string service_type { get; set; }
         public int year
         {
-            get { return dao.year; }
+            get { return _year; }
             set
             {
-                if (value < 2000) throw new ArgumentException("services_household_enrollment year must be >= 2000.");
-                dao.year = value;
+                if (value < 2000)
+                    throw new ArgumentException("services_household_enrollment year must be >= 2000.");
+                else
+                    _year = value;
             }
         }
         public int month
         {
-            get { return dao.month; }
+            get { return _month; }
             set
             {
-                if (value < 1 || value > 12) throw new ArgumentException("services_household_enrollment month must be between 1 and 12.");
-                dao.month = value;
+                if (value < 1 || value > 12)
+                    throw new ArgumentException("services_household_enrollment month must be between 1 and 12.");
+                else
+                    _month = value;
             }
         }
         public int day
         {
-            get { return dao.day; }
+            get { return _day; }
             set
             {
-                if (value < 1 || value > 31) throw new ArgumentException("services_household_enrollment day must be between 1 and 31.");
-                dao.day = value;
+                if (value < 1 || value > 31)
+                    throw new ArgumentException("services_household_enrollment day must be between 1 and 31.");
+                else
+                    _day = value;
             }
         }
-        public string head_of_household { get { return dao.head_of_household; } set { dao.head_of_household = value; } }
-        public string family_id { get { return dao.family_id; } set { dao.family_id = value; } }
-        public string phone { get { return dao.phone; } set { dao.phone = value; } }
-        public string address { get { return dao.address; } set { dao.address = value; } }
-        public string city { get { return dao.city; } set { dao.city = value; } }
-        public string state_or_province { get { return dao.state_or_province; } set { dao.state_or_province = value; } }
-        public string postal_code { get { return dao.postal_code; } set { dao.postal_code = value; } }
+        public string head_of_household { get; set; }
+        public string family_id { get; set; }
+        public string phone { get; set; }
+        public string address { get; set; }
+        public string city { get; set; }
+        public string state_or_province { get; set; }
+        public string postal_code { get; set; }
 
         public ServicesHouseholdEnrollment()
         {
-            this.dao = new ServicesHouseholdEnrollment_DAO();
+            this.year = DateTime.Now.Year;
         }
-        public ServicesHouseholdEnrollment(ServicesHouseholdEnrollment_DAO dao)
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param></param>
+        public ServicesHouseholdEnrollment(ServicesHouseholdEnrollment other)
         {
-            this.dao = dao;
+            this.address = other.address;
+            this.city = other.city;
+            this.day = other.day;
+            this.family_id = other.family_id;
+            this.head_of_household = other.head_of_household;
+            this.month = other.month;
+            this.phone = other.phone;
+            this.postal_code = other.postal_code;
+            this.service_type = other.service_type;
+            this.state_or_province = other.state_or_province;
+            this.year = other.year;
         }
     }
 

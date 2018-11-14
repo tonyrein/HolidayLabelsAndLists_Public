@@ -42,7 +42,7 @@ namespace HolidayLabelsAndLists
         public frmMain()
         {
             InitializeComponent();
-            Context.Load();
+            //Context.Load();
             FileListManager = new HllFileListManager(Context);
             PopulateTypeToViewCombo(set_to_zero: true);
             SetCaptions();
@@ -93,7 +93,7 @@ namespace HolidayLabelsAndLists
             cmbYear.SelectedIndexChanged -= cmbYear_SelectedIndexChanged;
             // save "before" value:
             string old_value = cmbYear.Text;
-            cmbYear.DataSource = FileListManager.ActiveYears();
+            cmbYear.DataSource = FileListManager.YearsInFileList();
             if (set_to_zero)
             {
                 if (cmbYear.Items.Count > 0)
@@ -134,6 +134,7 @@ namespace HolidayLabelsAndLists
             if (!String.IsNullOrEmpty(year))
             {
                 cmbDonor.DataSource = FileListManager.ActiveDonorsForYear(year);
+                //cmbDonor.DataSource = this.Context.DonorList.Distinct().ToList(); 
                 cmbDonor.DisplayMember = "name";
                 cmbDonor.ValueMember = "code";
                 if (set_to_zero)
@@ -554,10 +555,12 @@ namespace HolidayLabelsAndLists
                 button_b_text: Properties.Resources.GenerateAllYearsNoButtonText);
             if (answer == -1) // user clicked "Cancel"
                 return;
-            int[] years = HllUtils.YearsInDb(this.Context);
+            int[] years = this.Context.YearsInDb();
+            // put into descending order:
+            Array.Sort(years);
+            Array.Reverse(years);
             if (answer == 1) // user wants only most recent two years
                 years = years.Take(2).ToArray();
-
             CreateOutput(sender, e, years);
         }
 
