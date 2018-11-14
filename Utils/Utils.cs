@@ -168,6 +168,19 @@ namespace Utils
                 return orig_code;
             }
         }
+
+
+        public static string CanonicalDonorCode(string orig_code)
+        {
+            return Utils.TextUtils.CleanString(orig_code).ToUpper();
+        }
+
+        public static string CanonicalDonorName(string orig_name)
+        {
+            string s = Utils.TextUtils.CleanString(orig_name);
+            return s.Replace('_', ' ');
+        }
+
     }
 
     public static class MessageBoxUtils

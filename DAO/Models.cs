@@ -95,17 +95,31 @@ namespace DAO
             return Utils.TextUtils.CleanString(s).ToUpper();
         }
 
+        /// <summary>
+        /// Generate code from passed-in value. However, if the
+        /// passed-in value is null or whitespace, generate code
+        /// from this Donor's name.
+        /// </summary>
         public string code
         {
             get { return _code; }
             set
             {
                 if (!String.IsNullOrWhiteSpace(value))
-                    _code = Donor.MakeDonorCode(value);
-                else // generate from name
-                    _code = MakeDonorCode(name);
+                    _code = Utils.TextUtils.CanonicalDonorCode(value);
+                else
+                    _code = Utils.TextUtils.CanonicalDonorCode(name);
+                //if (!String.IsNullOrWhiteSpace(value))
+                //    _code = Donor.MakeDonorCode(value);
+                //else // generate from name
+                //    _code = MakeDonorCode(name);
             }
         }
+
+        /// <summary>
+        /// Generate name from passed-in value. Throw an
+        /// Exception if no name is given.
+        /// </summary>
         public string name
         {
             get { return _name; }
@@ -113,7 +127,8 @@ namespace DAO
             {
                 if (!String.IsNullOrWhiteSpace(value))
                 {
-                    _name = Donor.MakeDonorName(value);
+                    //_name = Donor.MakeDonorName(value);
+                    _name = Utils.TextUtils.CanonicalDonorName(value);
                 }
                 else
                 {

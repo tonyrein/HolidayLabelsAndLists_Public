@@ -47,7 +47,7 @@ namespace DAO
         /////////////////
         public Donor FindDonorByName(string name)
         {
-            return this._donorcoll.Find(d => d.name == name).FirstOrDefault();
+            return this._donorcoll.Find(d => d.name == Utils.TextUtils.CanonicalDonorName(name)).FirstOrDefault();
         }
 
         public Donor FindDonorByCode(string code)
@@ -60,10 +60,10 @@ namespace DAO
             return FindDonorByName(other.name);
         }
 
-        public void AddNewDonor(Donor d)
-        {
-            this._donorcoll.Insert(d);
-        }
+        //public void AddNewDonor(Donor d)
+        //{
+        //    this._donorcoll.Insert(d);
+        //}
 
         public Donor AddOrUpdateDonor(Donor d)
         {
@@ -242,7 +242,7 @@ namespace DAO
         // Public lists:
         ///////////////////
         public List<Donor> DonorList { get { return this._donorcoll.FindAll().ToList(); } }
-        public List<BagLabelInfo> BliList { get { return this._blicoll.FindAll().ToList(); } }
+        //public List<BagLabelInfo> BliList { get { return this._blicoll.FindAll().ToList(); } }
         public List<GiftLabelInfo> GliList { get { return this._glicoll.FindAll().ToList(); } }
         public List<ServicesHouseholdEnrollment> HoEnrList { get { return this._henrcoll.FindAll().ToList(); } }
 
