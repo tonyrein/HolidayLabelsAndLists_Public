@@ -49,12 +49,12 @@ namespace HolidayLabelsAndLists
         private void frmDeleteOldFiles_Activated(object sender, EventArgs e)
         {
             this.FilesChanged = false;
-            // ActiveYears() returns an array. This SHOULD be sorted
+            // YearsInFileList() returns an array. This SHOULD be sorted
             // in descending order, but just to make sure we don't
             // inadvertently delete any files from the current or most
             // recent previous year, sort it again, putting the most recent year at position 0.
             // Then skip the first two elements when assigning list box's data source:
-            string[] sa = this.FileListManager.ActiveYears();
+            string[] sa = this.FileListManager.YearsInFileList();
             Array.Sort(sa);
             Array.Reverse(sa);
             this.lbxYearsToDelete.DataSource = sa.Skip(2).ToArray();

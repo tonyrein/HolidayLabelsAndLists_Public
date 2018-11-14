@@ -448,7 +448,6 @@ namespace DAO
         /// </summary>
         protected override void PopulateColumnInfo()
         {
-            int num_columns = 8;
             this.ColumnInfoList = new List<ColumnInfo>();
             //this.ColumnInfoArray = new ColumnInfo[num_columns];
             this.ColumnInfoList.Add(new ColumnInfo("Fam ID", -1,

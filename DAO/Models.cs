@@ -61,6 +61,25 @@ namespace DAO
         }
     }
 
+
+    /// <summary>
+    /// This class is used in Linq expressions that return a list
+    /// of Donors with only one Donor per name. That is, if there
+    /// are multiple Donors with the same name, differing in Id,
+    /// treat them as the same in Distinct() expressions.
+    /// </summary>
+    public class DistinctDonorComparer : IEqualityComparer<Donor>
+    {
+        public bool Equals(Donor a, Donor b)
+        {
+            return a.name == b.name;
+        }
+        public int GetHashCode(Donor d)
+        {
+            return d.name.GetHashCode();
+        }
+    }
+
     public class Donor
     {
         public int Id { get; set; }

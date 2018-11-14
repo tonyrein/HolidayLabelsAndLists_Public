@@ -54,7 +54,7 @@ namespace HolidayLabelsAndLists
             btnDeleteBackups.Enabled = flm.HasBackupFiles;
             // We can't delete latest year's files -- don't show this
             // button unless there are some years we can delete from:
-            btnDeleteOld.Enabled = flm.ActiveYears().Count() > 0;
+            btnDeleteOld.Enabled = flm.YearsInFileList().Count() > 0;
         }
 
         private void btnDone_Click(object sender, EventArgs e)

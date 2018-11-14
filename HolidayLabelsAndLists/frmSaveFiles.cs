@@ -47,7 +47,7 @@ namespace HolidayLabelsAndLists
 
         private void SetLists()
         {
-            this.lbxYears.DataSource = _flm.ActiveYears();
+            this.lbxYears.DataSource = _flm.YearsInFileList();
             this.lbxDocType.DataSource = Properties.Resources.DocumentTypesValues.Split('#');
         }
         private void SetCombos()

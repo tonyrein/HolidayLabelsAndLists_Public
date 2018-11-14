@@ -73,9 +73,6 @@ namespace VestaImporter
                     retInt += p.execute(context);
                 }
             }
-            // if we read anything in, save the changes to the database:
-            if (retInt > 0)
-                context.Save();
             return retInt;
         }
 
