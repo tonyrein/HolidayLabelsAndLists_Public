@@ -242,7 +242,7 @@ namespace DAO
         // Public lists:
         ///////////////////
         public List<Donor> DonorList { get { return this._donorcoll.FindAll().ToList(); } }
-        public List<BagLabelInfo> BliList { get { return this._blicoll.FindAll().ToList(); } }
+        //public List<BagLabelInfo> BliList { get { return this._blicoll.FindAll().ToList(); } }
         public List<GiftLabelInfo> GliList { get { return this._glicoll.FindAll().ToList(); } }
         public List<ServicesHouseholdEnrollment> HoEnrList { get { return this._henrcoll.FindAll().ToList(); } }
 
